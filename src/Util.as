@@ -2,6 +2,7 @@ package  {
 	import flash.display.Sprite;
 	import org.flixel.FlxGroup;
 	import flash.geom.Rectangle;
+	import org.flixel.FlxObject;
 	import org.flixel.FlxSprite;
 	import flash.display.*;
 	import flash.events.*;
@@ -29,6 +30,10 @@ package  {
                         flash.ui.Mouse.cursor = flash.ui.MouseCursor.AUTO;
                 });
         }
+		
+		public static function flx_group_add(g:FlxGroup, o:FlxObject):FlxObject {
+			g.add(o); return o;
+		}
 		
 
 		static var tf:TextField = new TextField();
@@ -76,14 +81,6 @@ package  {
 			return new Rectangle(o.min_x, o.min_y, o.max_x - o.min_x, o.max_y - o.min_y);
 		}
 		
-		public static function rotate_vector(vec1:b2Vec2, deg:Number) {
-			var mag:Number = vec1.Length();
-			var angle:Number = Math.atan2(vec1.y, vec1.x);
-			angle += d2r(deg);
-			vec1.x = mag * Math.cos(angle);
-			vec1.y = mag * Math.sin(angle);
-		}
-		
 		public static function round_dec(numIn:Number, decimalPlaces:int):Number {
 			var nExp:int = Math.pow(10,decimalPlaces) ;
 			var nRetVal:Number = Math.round(numIn * nExp) / nExp
@@ -98,15 +95,6 @@ package  {
 			} else {
 				return val;
 			}
-		}
-		
-		public static function round_vec(v:b2Vec2, dec:Number=1) {
-			v.x = round_dec(v.x, dec);
-			v.y = round_dec(v.y, dec);
-		}
-		
-		public static function print_vec(v:b2Vec2):String {
-			return "(" + v.x + "," + v.y + ")";
 		}
 		
 		public static function d2r(d:Number):Number {
