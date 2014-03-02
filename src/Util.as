@@ -1,9 +1,7 @@
 package  {
 	import flash.display.Sprite;
-	import org.flixel.FlxGroup;
-	import flash.geom.Rectangle;
-	import org.flixel.FlxObject;
-	import org.flixel.FlxSprite;
+	import org.flixel.*;
+	import flash.geom.*;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.ui.*;
@@ -11,7 +9,6 @@ package  {
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
-	import flash.geom.Matrix;
 	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -22,17 +19,32 @@ package  {
 		public static var WID:Number = 1000;
 		public static var HEI:Number = 500;
 		
-		public static function add_mouse_over(o:DisplayObject) {
-                o.addEventListener(MouseEvent.ROLL_OVER, function():void {
-                        flash.ui.Mouse.cursor = flash.ui.MouseCursor.BUTTON;
-                });
-                o.addEventListener(MouseEvent.ROLL_OUT, function():void {
-                        flash.ui.Mouse.cursor = flash.ui.MouseCursor.AUTO;
-                });
-        }
+		public static var MOVE_LEFT:Vector.<String> = Vector.<String>(["A","LEFT"]);
+		public static var MOVE_RIGHT:Vector.<String> = Vector.<String>(["D","RIGHT"]);
+		public static var MOVE_UP:Vector.<String> = Vector.<String>(["W", "UP"]);
+		public static var MOVE_DOWN:Vector.<String> = Vector.<String>(["S", "DOWN"]);
 		
-		public static function flx_group_add(g:FlxGroup, o:FlxObject):FlxObject {
-			g.add(o); return o;
+		public static function float_random(min:Number, max:Number):Number {
+			return min + Math.random() * (max - min);
+		}
+		
+		public static function int_random(min:int, max:int):int {
+			return Math.floor(float_random(min,max)) as int;
+		}
+		
+		public static function is_key(k:Vector.<String>,jp:Boolean=false):Boolean {
+			for each (var i:String in k) {
+				if (jp) {
+					if (FlxG.keys.justPressed(i)) {
+						return true;
+					}
+				} else {
+					if (FlxG.keys[i]) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 		
 

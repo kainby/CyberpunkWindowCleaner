@@ -155,6 +155,11 @@ package org.flixel
 		 */
 		protected var _matrix:Matrix;
 		
+		public function set_position(x:Number, y:Number):FlxSprite {
+			this.x = x; this.y = y;
+			return this;
+		}
+		
 		/**
 		 * Creates a white 8x8 square <code>FlxSprite</code> at the specified position.
 		 * Optionally can load a simple, one-frame graphic instead.

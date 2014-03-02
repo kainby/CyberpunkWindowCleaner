@@ -8,6 +8,12 @@ package  {
 		[Embed( source = "../resc/city_bg.png" )] public static var IMPORT_CITY_BG:Class;
 		[Embed( source = "../resc/city_fg.png" )] public static var IMPORT_CITY_FG:Class;
 		[Embed( source = "../resc/cleaner_guy.png" )] public static var IMPORT_CLEANER_GUY:Class;
+		[Embed( source = "../resc/cable.png" )] public static var IMPORT_CLEANER_GUY_CABLE:Class;
+		
+//stains
+		[Embed( source = "../resc/stain/stain1.png" )] public static var IMPORT_STAIN_1:Class;
+		[Embed( source = "../resc/stain/stain2.png" )] public static var IMPORT_STAIN_2:Class;
+		[Embed( source = "../resc/stain/stain3.png" )] public static var IMPORT_STAIN_3:Class;
 		
 //floor1
 		[Embed( source = "../resc/floor1/mainbldg_back.png" )] public static var IMPORT_FLOOR1_MAINBLDG_BACK:Class;
