@@ -2,6 +2,7 @@ package {
 	import core.*;
 	import gameobj.BasicStain;
 	import org.flixel.*;
+	import particle.*;
 	
 	public class GameEngine extends FlxState {
 		
@@ -9,6 +10,8 @@ package {
 		public var _mainbldg_objs:FlxGroup = new FlxGroup();
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
+		
+		public var _particles:Vector.<Particle> = new Vector.<Particle>();
 		
 		public override function create():void {
 			super.create();
@@ -32,9 +35,33 @@ package {
 			trace("begin");
 		}
 		
+		public function add_particle(p:Particle):Particle {
+			this._particles.push(p);
+			this.add(p);
+			return p;
+		}
+		
 		private var _is_moving:Boolean = false;
 		public override function update():void {
 			super.update();
+			
+			add_particle(new TestDustParticle(
+				new FlxPoint(_player.x(), _player.y()), 
+				new FlxPoint(Util.float_random( -5, 5), Util.float_random( -5, 5)))
+			);
+			
+			
+			for (var i_particle:int = _particles.length-1; i_particle >= 0; i_particle--) {
+				var itr_particle:Particle = _particles[i_particle];
+				itr_particle.particle_update(this);
+				if (itr_particle.should_remove()) {
+					itr_particle.do_remove();
+					_particles.splice(i_particle, 1);
+					this.remove(itr_particle);
+				}
+			}
+			
+
 			
 			_is_moving = false;
 			
