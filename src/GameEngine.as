@@ -1,9 +1,12 @@
 package {
 	import core.*;
+	import flash.geom.Rectangle;
 	import gameobj.BasicStain;
 	import misc.FlxGroupSprite;
-	import mx.core.FlexSprite;
+	import misc.ScrollingTextBubble;
 	import org.flixel.*;
+	import org.flixel.plugin.photonstorm.FlxBitmapFont;
+	import org.flixel.plugin.photonstorm.FlxScrollingText;
 	import particle.*;
 	import scene.Scene;
 	import scene.TestScene;
@@ -45,7 +48,14 @@ package {
 			_bar_frame = new FlxSprite(375, 0);
 			_bar_frame.loadGraphic(Resource.IMPORT_BAR_FRAME);
 			this.add(_bar_frame);
+			
+			this.add(new FlxScrollingText());
+			
+			test = new ScrollingTextBubble();
+			this.add(test);
 		}
+		
+		var test:ScrollingTextBubble;
 		
 		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
 		public function get_cleaned_pct():Number { 
@@ -62,6 +72,9 @@ package {
 		
 		public override function update():void {
 			super.update();
+			
+			test.set_pos(_player.x(), _player.y());
+			
 			_is_moving = false;
 			
 			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > 0) {

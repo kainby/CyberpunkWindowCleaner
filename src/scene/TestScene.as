@@ -19,7 +19,7 @@ package scene {
 				POSITION:[350, 300]
 			},
 			{
-				PERCENT:0.015,
+				PERCENT:0.02,
 				CHARACTER:CHARACTER_ROMEO,
 				POSITION:[320, 300]
 			},
@@ -29,10 +29,37 @@ package scene {
 				POSITION:[450, 300]
 			},
 			{
-				PERCENT:0.0151,
+				PERCENT:0.06,
 				CHARACTER:CHARACTER_ROMEO,
-				POSITION:[100, 100],
-				SPEED:5
+				POSITION:[400, 300]
+			},
+			{
+				PERCENT:0.06,
+				CHARACTER:CHARACTER_JULIET,
+				POSITION:[600, 300],
+				SPEED: 2
+			},
+			{
+				PERCENT:0.15,
+				CHARACTER:CHARACTER_ROMEO,
+				POSITION:[200, 300]
+			},
+			{
+				PERCENT:0.15,
+				CHARACTER:CHARACTER_JULIET,
+				POSITION:[300, 300],
+				SPEED: 2
+			},
+			{
+				PERCENT:0.25,
+				CHARACTER:CHARACTER_ROMEO,
+				POSITION:[100, 300]
+			},
+			{
+				PERCENT:0.25,
+				CHARACTER:CHARACTER_JULIET,
+				POSITION:[120, 300],
+				SPEED: 2
 			}
 		];
 		

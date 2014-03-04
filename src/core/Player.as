@@ -23,7 +23,6 @@ package core {
 			
 			this.set_pos(Util.WID / 2, Util.HEI / 2);
 		}
-		
 		public override function update_position():void {
 			_cable.set_position(x()+_cable_offset.x, y()+_cable_offset.y);
 			_body.set_position(x(), y());

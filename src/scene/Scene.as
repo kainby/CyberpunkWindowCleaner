@@ -98,17 +98,17 @@ package scene {
 			var rtv:FlxSprite = new FlxSprite();
 			if (name == CHARACTER_ROMEO) {
 				rtv.loadGraphic(Resource.IMPORT_CHARACTER_ROMEO,true,true,12,25);
-				rtv.addAnimation(ANIM_WALK, [0, 1], 20);
+				rtv.addAnimation(ANIM_WALK, [0, 1], 5);
 				rtv.addAnimation(ANIM_STAND, [0], 0);
-				rtv.play(ANIM_STAND);
+				rtv.play(ANIM_WALK);
 				rtv.offset.x = 6;
 				rtv.offset.y = 25;
 				
 			} else if (name == CHARACTER_JULIET) {
 				rtv.loadGraphic(Resource.IMPORT_CHARACTER_JULIET,true,true,13,35);
-				rtv.addAnimation(ANIM_WALK, [0, 1], 20);
+				rtv.addAnimation(ANIM_WALK, [0, 1], 5);
 				rtv.addAnimation(ANIM_STAND, [0], 0);
-				rtv.play(ANIM_STAND);
+				rtv.play(ANIM_WALK);
 				rtv.offset.x = 13/2.0;
 				rtv.offset.y = 35;
 				

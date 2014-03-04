@@ -2,12 +2,27 @@ package  {
 	import flash.display.Bitmap;
     import flash.utils.ByteArray;
 	import flash.media.Sound;
+	import org.flixel.plugin.photonstorm.FlxBitmapFont;
 	public class Resource {
+		
+		
+		[Embed( source = "../resc/mozart_nbp.png" )] public static var IMPORT_GAME_FONT:Class;
+		private static var GAME_BITMAP_FONT:FlxBitmapFont = null;
+		public static function get_bitmap_font():FlxBitmapFont {
+			if (GAME_BITMAP_FONT == null) {
+				GAME_BITMAP_FONT = new FlxBitmapFont(Resource.IMPORT_GAME_FONT, 5, 7, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~", 21, 1);
+				GAME_BITMAP_FONT.customSpacingX = 1;
+				GAME_BITMAP_FONT.autoUpperCase = false;
+			}
+			return GAME_BITMAP_FONT;
+		}
 		
 		[Embed( source = "../resc/sky.png" )] public static var IMPORT_SKY:Class;
 		[Embed( source = "../resc/city_bg.png" )] public static var IMPORT_CITY_BG:Class;
 		[Embed( source = "../resc/city_fg.png" )] public static var IMPORT_CITY_FG:Class;
 		[Embed( source = "../resc/cable.png" )] public static var IMPORT_CLEANER_GUY_CABLE:Class;
+		
+		[Embed( source = "../resc/speechbubble.png" )] public static var IMPORT_SPEECH_BUBBLE:Class;
 		
 // accessories
 		[Embed( source = "../resc/accessories/bar_frame.png" )] public static var IMPORT_BAR_FRAME:Class;
