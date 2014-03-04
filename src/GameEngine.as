@@ -5,58 +5,63 @@ package {
 	import mx.core.FlexSprite;
 	import org.flixel.*;
 	import particle.*;
+	import scene.Scene;
+	import scene.TestScene;
 	
 	public class GameEngine extends FlxState {
 		
 		public var _bgobjs:FlxGroup = new FlxGroup();
-		public var _mainbldg_objs:FlxGroup = new FlxGroup();
+		public var _sceneobjs:FlxGroup = new FlxGroup();
+		
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
 		
-		// public var _particles:FlxGroup = new FlxGroup();
-		public var _particles:Vector.<Particle> = new Vector.<Particle>();
+		public var _particles:FlxGroup = new FlxGroup();
+		
 		public var _bar_frame:FlxSprite;
 		
+		public var _cur_scene:Scene;
+		
 		public override function create():void {
+			trace("game_init");
 			super.create();
 			
-			this.add(_bgobjs.add(new BGObj(Resource.IMPORT_SKY)));
-			this.add(_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG)));
-			this.add(_bgobjs.add(new BGObj(Resource.IMPORT_CITY_FG)));
-		
-			this.add(_mainbldg_objs.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_BACK)));
-			this.add(_mainbldg_objs.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_INTERNAL)));
-			this.add(_mainbldg_objs.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_GLASSCOVER)));
-			this.add(_mainbldg_objs.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_WINDOW)));
+			this.add(_bgobjs);
+			this.add(_sceneobjs);
+			this.add(_stains);
+			this.add(_player);
+			this.add(_particles);
 			
+			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
+			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
+			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_FG));
+			
+			_cur_scene = (new TestScene(this)).init();
 			
 			for (var i:int = 0; i < 50; i++) {
-				_stains.add((new BasicStain(this)).set_position(Util.float_random(0,600),Util.float_random(0,500)));
+				_stains.add((new BasicStain(this)).set_position(Util.float_random(0, 600), Util.float_random(0, 500)));
 			}
-			this.add(_stains);
 			
-			this.add(_player);
-			
-			// cleanness bar
 			_bar_frame = new FlxSprite(375, 0);
 			_bar_frame.loadGraphic(Resource.IMPORT_BAR_FRAME);
 			this.add(_bar_frame);
-			
-			trace("begin");
 		}
 		
-		public function add_particle(p:Particle):Particle {
-			this._particles.push(p);
-			this.add(p);
-			return p;
+		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
+		public function get_cleaned_pct():Number { 
+			if (_stains.length == 0) return 0;
+			var ct:Number = 0;
+			for (var i:int = 0; i < _stains.length; i++) {
+				var itr:BasicStain = _stains.members[i];
+				if (itr._cleaned) ct++;
+			}
+			return ct/_stains.length;
 		}
 		
 		private var _is_moving:Boolean = false;
 		
 		public override function update():void {
 			super.update();
-			
-
 			_is_moving = false;
 			
 			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > 0) {
@@ -80,12 +85,13 @@ package {
 			}
 			
 			_stains.update();
+			_cur_scene.update();
 			
 			if (_is_moving) {
 				FlxG.overlap(_stains, _player._body, function(stain:BasicStain, body:FlxSprite):void {
 					stain.clean_step();
 					
-					if (!stain.cleaned) {
+					if (!stain._cleaned && Util.int_random(0,10) == 0) {
 						add_particle(new DustCleanedParticle(
 							new FlxPoint(_player.x(), _player.y()), 
 							new FlxPoint(Util.float_random(-3, 3), Util.float_random(0, 3)),
@@ -95,32 +101,15 @@ package {
 				});
 			}
 			
-			dust_particle_effect();
-			
-		}
-		
-		public function dust_particle_effect():void {
-			/*
 			for (var i_particle:int = _particles.length-1; i_particle >= 0; i_particle--) {
 				var itr_particle:Particle = _particles.members[i_particle];
 				itr_particle.particle_update(this);
 				if (itr_particle.should_remove()) {
 					itr_particle.do_remove();
-					itr_particle.kill();
+					_particles.remove(itr_particle,true);
 				}
 			}
-			*/
 			
-			for (var i_particle:int = _particles.length-1; i_particle >= 0; i_particle--) {
-				var itr_particle:Particle = _particles[i_particle];
-				itr_particle.particle_update(this);
-				if (itr_particle.should_remove()) {
-					itr_particle.do_remove();
-					_particles.splice(i_particle, 1);
-					this.remove(itr_particle);
-				}
-			}
-				
 		}
 		
 	}
