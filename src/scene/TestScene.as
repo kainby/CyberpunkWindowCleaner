@@ -19,9 +19,20 @@ package scene {
 				POSITION:[350, 300]
 			},
 			{
-				PERCENT:0.05,
+				PERCENT:0.015,
 				CHARACTER:CHARACTER_ROMEO,
 				POSITION:[320, 300]
+			},
+			{
+				PERCENT:0.02,
+				CHARACTER:CHARACTER_JULIET,
+				POSITION:[450, 300]
+			},
+			{
+				PERCENT:0.0151,
+				CHARACTER:CHARACTER_ROMEO,
+				POSITION:[100, 100],
+				SPEED:5
 			}
 		];
 		
