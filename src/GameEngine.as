@@ -18,10 +18,14 @@ package {
 		
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
+		public var _cleaning_bar:FlxSprite = new FlxSprite();
 		
 		public var _particles:FlxGroup = new FlxGroup();
+		public var _bullets:FlxGroup = new FlxGroup();
+		public var _enemies:FlxGroup = new FlxGroup();
 		
-		public var _bar_frame:FlxSprite;
+		public var _bar_frame:FlxSprite = new FlxSprite();
+		public var _score:FlxText;
 		
 		public var _cur_scene:Scene;
 		
@@ -29,10 +33,17 @@ package {
 			trace("game_init");
 			super.create();
 			
+			_score = new FlxText(0, 0, 40, "0%");
+			
 			this.add(_bgobjs);
 			this.add(_sceneobjs);
 			this.add(_stains);
 			this.add(_player);
+			this.add(_enemies);
+			this.add(_bullets);
+			this.add(_cleaning_bar);
+			this.add(_bar_frame);
+			this.add(_score);
 			this.add(_particles);
 			
 			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
@@ -44,9 +55,18 @@ package {
 				_stains.add((new BasicStain(this)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
 			}
 			
-			_bar_frame = new FlxSprite(375, 0);
+			// initialize hp bar
 			_bar_frame.loadGraphic(Resource.IMPORT_BAR_FRAME);
-			this.add(_bar_frame);
+			_bar_frame.set_position((1000 - _bar_frame.width) / 2, 0);
+			_cleaning_bar.scale.x = 0.001;
+			_cleaning_bar.set_position(_bar_frame.x + 126, 3);
+			_cleaning_bar.loadGraphic(Resource.IMPORT_HPBAR);
+			_cleaning_bar.color = 0x4DBFE6;
+			
+			// initialize score
+			// _score.setFormat("Liquid Cyrstal", 18, 0x959FBF);
+			_score.set_position(_bar_frame.x + 280, 2);
+			_score.text = "0%";
 			
 			this.add(new FlxScrollingText());
 			
@@ -106,10 +126,16 @@ package {
 						add_particle(new DustCleanedParticle(
 							new FlxPoint(_player.x(), _player.y()), 
 							new FlxPoint(Util.float_random(-3, 3), Util.float_random(0, 3)),
-							new FlxPoint(500, 0))
+							new FlxPoint(500 + Util.int_random(-20, 20), 0))
 						);
 					}
 				});
+				
+				// update the percentage of cleaning
+				var pct:Number = get_cleaned_pct();
+				_score.text = int(pct * 100) + "%";
+				_cleaning_bar.scale.x = pct;
+				_cleaning_bar.set_position(_bar_frame.x + 126 - (1-pct) * 70, 3);
 			}
 			
 			for (var i_particle:int = _particles.length-1; i_particle >= 0; i_particle--) {

@@ -25,6 +25,7 @@ package  {
 		
 // accessories
 		[Embed( source = "../resc/accessories/bar_frame.png" )] public static var IMPORT_BAR_FRAME:Class;
+		[Embed( source = "../resc/accessories/hpbar.png" )] public static var IMPORT_HPBAR:Class;
 		
 //stains
 		[Embed( source = "../resc/stain/stain1.png" )] public static var IMPORT_STAIN_1:Class;

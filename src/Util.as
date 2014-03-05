@@ -126,7 +126,6 @@ package  {
 		}
 		
 		private static var pixel_meter_ratio:Number = 30;
-		
 	}
 
 }

@@ -11,26 +11,41 @@ package particle
 		private var _vel:FlxPoint;
 		private var _acc:FlxPoint;
 		private var _end:FlxPoint;
+		private var _r:Number;
 		public const ADJ_COE:Number = 50;
 		
 		public function DustCleanedParticle(pos:FlxPoint,vel:FlxPoint, end:FlxPoint) {
 			_ct = 200;
 			this.loadGraphic(Resource.IMPORT_DUST_SPARK);
-			//this.loadGraphic(Resource.IMPORT_STAIN_1);
 			this.x = pos.x;
 			this.y = pos.y;
 			this._vel = vel;
 			this._end = end;
 			this._acc = new FlxPoint(0, 0);
+			
+			this._r = Math.sqrt((_end.x - this.x) * (_end.x - this.x) + (_end.y - this.y) * (_end.y - this.y));
+			
+			// setting a random color
+			var choice:int = Util.int_random(1, 7);
+			switch(choice) {
+				case 1: this.color = 0x80D5D5; break;
+				case 2: this.color = 0xBFEAEA; break;
+				case 3: this.color = 0xFFFFFF; break;
+				case 4: this.color = 0x71DD55; break;
+				case 5: this.color = 0xA6EA95; break;
+				case 6: this.color = 0x9FDFDF; break;
+				case 7: this.color = 0xF1F163; break;
+			}
 		}
 		
 		public override function particle_update(g:GameEngine):void {
+			var r2:Number = (_end.x - this.x) * (_end.x - this.x) + (_end.y - this.y) * (_end.y - this.y);
+			
 			this.x += _vel.x;
 			this.y += _vel.y;
-			this.alpha -= 0.005;
+			this.alpha = Math.sqrt(r2) / _r + 0.25;
 			_ct--;
 			
-			var r2:Number = (_end.x - this.x) * (_end.x - this.x) + (_end.y - this.y) * (_end.y - this.y);
 			if (_ct >= 180) {
 				// smooth curve
 				_acc.x = (_end.x - this.x) / r2 * ADJ_COE;
