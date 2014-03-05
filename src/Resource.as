@@ -19,7 +19,6 @@ package  {
 		
 		[Embed( source = "../resc/sky.png" )] public static var IMPORT_SKY:Class;
 		[Embed( source = "../resc/city_bg.png" )] public static var IMPORT_CITY_BG:Class;
-		[Embed( source = "../resc/city_fg.png" )] public static var IMPORT_CITY_FG:Class;
 		[Embed( source = "../resc/cable.png" )] public static var IMPORT_CLEANER_GUY_CABLE:Class;
 		
 		[Embed( source = "../resc/speechbubble.png" )] public static var IMPORT_SPEECH_BUBBLE:Class;
@@ -36,9 +35,10 @@ package  {
 		[Embed( source = "../resc/spark/dust_spark.png" )] public static var IMPORT_DUST_SPARK:Class;
 		
 //character
-		[Embed( source = "../resc/cleaner_guy.png" )] public static var IMPORT_CLEANER_GUY:Class;
+		[Embed( source = "../resc/character/cleaner_guy.png" )] public static var IMPORT_CLEANER_GUY:Class;
 		[Embed( source = "../resc/character/romeo.png" )] public static var IMPORT_CHARACTER_ROMEO:Class;
 		[Embed( source = "../resc/character/juliet.png" )] public static var IMPORT_CHARACTER_JULIET:Class;
+		[Embed( source = "../resc/character/thug.png" )] public static var IMPORT_CHARACTER_THUG:Class;
 		
 //floor1
 		[Embed( source = "../resc/floor1/mainbldg_back.png" )] public static var IMPORT_FLOOR1_MAINBLDG_BACK:Class;

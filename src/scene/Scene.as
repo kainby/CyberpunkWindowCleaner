@@ -8,9 +8,11 @@ package scene {
 		public static var PERCENT:String = "PERCENT";
 		public static var POSITION:String = "POSITION";
 		public static var SPEED:String = "SPEED";
+		public static var ID:String = "ID";
 		
-		public static var CHARACTER_ROMEO:String = "ROMEO";
-		public static var CHARACTER_JULIET:String = "JULIET";
+		public static var CHARACTER_ROMEO:String = "CHARACTER_ROMEO";
+		public static var CHARACTER_JULIET:String = "CHARACTER_JULIET";
+		public static var CHARACTER_THUG:String = "CHARACTER_THUG";
 		
 		public static var ANIM_STAND:String = "ANIM_STAND";
 		public static var ANIM_WALK:String = "ANIM_WALK";
@@ -23,6 +25,7 @@ package scene {
 		
 		protected var _bg_group:FlxGroup = new FlxGroup();
 		protected var _character_group:FlxGroup = new FlxGroup();
+		protected var _internals_group:FlxGroup = new FlxGroup();
 		protected var _window_group:FlxGroup = new FlxGroup();
 		
 		public function Scene(g:GameEngine) {
@@ -32,6 +35,7 @@ package scene {
 		public function init():Scene {
 			_g._sceneobjs.add(_bg_group);
 			_g._sceneobjs.add(_character_group);
+			_g._sceneobjs.add(_internals_group);
 			_g._sceneobjs.add(_window_group);
 			return this;
 		}
@@ -50,9 +54,11 @@ package scene {
 		public function eval_event(evt:Object):void {
 			trace("event at", evt[PERCENT], _g.get_cleaned_pct());
 			
-			if (_characters[evt[CHARACTER]] == null) {
+			var unique_name:String = evt[CHARACTER] + (evt[ID] == null ? "_0" : "_" + evt[ID]);
+			
+			if (_characters[unique_name] == null) {
 				var spr:FlxSprite = get_sprite_for_character_name(evt[CHARACTER]);
-				_characters[evt[CHARACTER]] = spr;
+				_characters[unique_name] = spr;
 				_character_group.add(spr);
 				spr.set_position(evt[POSITION][0], evt[POSITION][1]);
 			}
@@ -60,7 +66,7 @@ package scene {
 			if (evt[POSITION] != null) {
 				_queued_events.push(new MoveToQueuedEvent(
 					evt[CHARACTER],
-					_characters[evt[CHARACTER]],
+					_characters[unique_name],
 					evt[PERCENT],
 					evt[POSITION],
 					evt[SPEED]==null?1:evt[SPEED]
@@ -111,6 +117,12 @@ package scene {
 				rtv.play(ANIM_WALK);
 				rtv.offset.x = 13/2.0;
 				rtv.offset.y = 35;
+				
+			} else if (name == CHARACTER_THUG) {
+				rtv.loadGraphic(Resource.IMPORT_CHARACTER_THUG);
+				rtv.offset.x = 21.0 / 2;
+				rtv.offset.y = 49;
+				trace("yes");
 				
 			}
 			return rtv;

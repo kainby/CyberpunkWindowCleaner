@@ -37,12 +37,11 @@ package {
 			
 			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
 			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
-			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_FG));
 			
 			_cur_scene = (new TestScene(this)).init();
 			
 			for (var i:int = 0; i < 50; i++) {
-				_stains.add((new BasicStain(this)).set_position(Util.float_random(0, 600), Util.float_random(0, 500)));
+				_stains.add((new BasicStain(this)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
 			}
 			
 			_bar_frame = new FlxSprite(375, 0);
@@ -54,7 +53,6 @@ package {
 			test = new ScrollingTextBubble();
 			this.add(test);
 		}
-		
 		var test:ScrollingTextBubble;
 		
 		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
@@ -77,11 +75,11 @@ package {
 			
 			_is_moving = false;
 			
-			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > 0) {
+			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > 180) {
 				_player.x( -1);
 				_is_moving = true;
 				
-			} else if (Util.is_key(Util.MOVE_RIGHT) && _player.x() < 631) {
+			} else if (Util.is_key(Util.MOVE_RIGHT) && _player.x() < 800) {
 				_player.x(1);
 				_is_moving = true;
 				
