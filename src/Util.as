@@ -19,6 +19,9 @@ package  {
 		public static var WID:Number = 1000;
 		public static var HEI:Number = 500;
 		
+		public static const DEGREE:Number = 180 / Math.PI;
+		public static const RADIAN:Number = Math.PI / 180;
+		
 		public static var MOVE_LEFT:Vector.<String> = Vector.<String>(["A","LEFT"]);
 		public static var MOVE_RIGHT:Vector.<String> = Vector.<String>(["D","RIGHT"]);
 		public static var MOVE_UP:Vector.<String> = Vector.<String>(["W", "UP"]);

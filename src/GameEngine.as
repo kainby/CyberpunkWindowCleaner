@@ -1,9 +1,14 @@
 package {
 	import core.*;
+	import enemies.BaseEnemy;
+	import enemies.SniperEnemy;
 	import flash.geom.Rectangle;
+	import gameobj.BasicBullet;
 	import gameobj.BasicStain;
+	import gameobj.RoundBullet;
 	import misc.FlxGroupSprite;
 	import misc.ScrollingTextBubble;
+	import mx.core.FlexSprite;
 	import org.flixel.*;
 	import org.flixel.plugin.photonstorm.FlxBitmapFont;
 	import org.flixel.plugin.photonstorm.FlxScrollingText;
@@ -70,6 +75,14 @@ package {
 			_score.set_position(_bar_frame.x + 280, 2);
 			_score.text = "0%";
 			
+			// initilize enemies
+			create_sniper_enemy(0, 100, 1);
+			create_sniper_enemy(0, 200, 1);
+			create_sniper_enemy(0, 300, 1);
+			create_sniper_enemy(934, 150, 2);
+			create_sniper_enemy(934, 250, 2);
+			create_sniper_enemy(934, 350, 2);
+			
 			this.add(new FlxScrollingText());
 			
 			test = new ScrollingTextBubble();
@@ -86,6 +99,12 @@ package {
 				if (itr._cleaned) ct++;
 			}
 			return ct/_stains.length;
+		}
+		
+		public function create_sniper_enemy(x:Number, y:Number, team_no:Number):void {
+			var enemy:SniperEnemy = new SniperEnemy(team_no);
+			enemy.set_position(x, y);
+			_enemies.add(enemy);
 		}
 		
 		private var _is_moving:Boolean = false;
@@ -137,7 +156,7 @@ package {
 				var pct:Number = get_cleaned_pct();
 				_score.text = int(pct * 100) + "%";
 				_cleaning_bar.scale.x = pct;
-				_cleaning_bar.set_position(_bar_frame.x + 126 - (1-pct) * 70, 3);
+				_cleaning_bar.set_position(_bar_frame.x + 126 - (1 - pct) * 70, 3);
 			}
 			
 			for (var i_particle:int = _particles.length-1; i_particle >= 0; i_particle--) {
@@ -149,6 +168,35 @@ package {
 				}
 			}
 			
+			// update enemies
+			for (var i_enemy:int = _enemies.length - 1; i_enemy >= 0; i_enemy-- ) {
+				var itr_enemy:BaseEnemy = _enemies.members[i_enemy];
+				itr_enemy.enemy_update(this);
+				
+				if (itr_enemy._shoot) {
+					var dx:Number = (itr_enemy._team_no == 1) ? 60 : 0;
+					var bullet:RoundBullet = new RoundBullet(itr_enemy.x + dx, itr_enemy.y, itr_enemy._angle);
+					_bullets.add(bullet);
+				}
+				
+				if (itr_enemy.should_remove()) {
+					itr_enemy.do_remove();
+					_enemies.remove(itr_enemy, true);
+				}
+			}
+			
+			// update bullets
+			if (_bullets.length > 0) {
+				for (var i_bullet:int = _bullets.length - 1; i_bullet >= 0; i_bullet-- ) {
+					var itr_bullet:BasicBullet = _bullets.members[i_bullet];
+					itr_bullet.bullet_update(this);
+					
+					if (itr_bullet.should_remove()) {
+						itr_bullet.do_remove();
+						_bullets.remove(itr_bullet, true);
+					}
+				}
+			}
 		}
 		
 	}
