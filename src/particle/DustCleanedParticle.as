@@ -36,11 +36,26 @@ package particle
 				case 6: this.color = 0x9FDFDF; break;
 				case 7: this.color = 0xF1F163; break;
 			}
+			
+			this.angle = Util.float_random( -3.14, 3.14);
+			var sc:Number = Util.float_random(0.8, 2);
+			this.scale = new FlxPoint(sc, sc);
+			
+			
+			this._initial_dist = Math.sqrt(Math.pow(_end.x-this.x,2)+Math.pow(_end.y-this.y,2));
+			this._vr = Util.float_random( -45, 45);
+			
 		}
 		
+		private var _vr:Number = 0;
+		private var _initial_dist:Number = 1;
+		
 		public override function particle_update(g:GameEngine):void {
+			
+			
 			var r2:Number = (_end.x - this.x) * (_end.x - this.x) + (_end.y - this.y) * (_end.y - this.y);
 			
+			this.angle += _vr;
 			this.x += _vel.x;
 			this.y += _vel.y;
 			this.alpha = Math.sqrt(r2) / _r + 0.25;

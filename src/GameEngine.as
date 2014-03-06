@@ -141,13 +141,22 @@ package {
 			
 			if (_is_moving) {
 				FlxG.overlap(_stains, _player._body, function(stain:BasicStain, body:FlxSprite):void {
+					var prev_cleaned:Boolean = stain._cleaned;
 					stain.clean_step();
 					
-					if (!stain._cleaned && Util.int_random(0,10) == 0) {
-						add_particle(new DustCleanedParticle(
-							new FlxPoint(_player.x(), _player.y()), 
-							new FlxPoint(Util.float_random(-3, 3), Util.float_random(0, 3)),
-							new FlxPoint(500 + Util.int_random(-20, 20), 0))
+					if (!prev_cleaned && stain._cleaned) {
+						for (var i:uint = 0; i < 5; i++) {
+							add_particle(new DustCleanedParticle(
+								new FlxPoint(_player.x(), _player.y()), 
+								new FlxPoint(Util.float_random(-3, 3), Util.float_random(0, 3)),
+								new FlxPoint(500 + Util.int_random(-20, 20), 0))
+							);
+						}
+						
+					} else if (!stain._cleaned && Util.int_random(0,10) == 0) {
+						add_particle(new FadeOutParticle(
+							(new FlxPoint(_player.x() + Util.float_random( -20, 20), _player.y() + Util.float_random( -20, 20)))
+							).set_vr(Util.float_random( -20, 20)).set_scale(Util.float_random(1,2))
 						);
 					}
 				});

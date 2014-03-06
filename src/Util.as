@@ -53,14 +53,11 @@ package  {
 
 		static var tf:TextField = new TextField();
 		
-		//[Embed(source='../resc/Vanilla.ttf', embedAsCFF="false", fontName='Game', fontFamily="Game", mimeType='application/x-font')]
-		//public static var IMPORT_FONT:Class;
-		
 		public static function render_text(tar:Graphics, text:String, x:Number, y:Number, fontsize:Number = 12, color:uint = 0xFFFFFF):void {
 			tf.autoSize = TextFieldAutoSize.LEFT;
 			tf.textColor = color;
 			tf.embedFonts = true;
-			tf.defaultTextFormat = new TextFormat("Game",fontsize);
+			tf.defaultTextFormat = new TextFormat("gamefont",fontsize);
 			tf.text = text;
 			
 			var text_bitmap:BitmapData = new BitmapData(tf.width, tf.height, true, 0x00000000);
