@@ -6,13 +6,16 @@ package  {
 	public class Resource {
 		
 		
-		[Embed( source = "../resc/mozart_nbp.png" )] public static var IMPORT_GAME_FONT:Class;
+		[Embed(source = '../resc/mozart_nbp.ttf', embedAsCFF="false", fontName='gamefont', fontFamily="gamefont", mimeType='application/x-font')]
+		private var IMPORT_GAME_FONT_TTF:Class;
+		
+		[Embed(source = "../resc/mozart_nbp.png")] public static var IMPORT_GAME_FONT:Class;
 		private static var GAME_BITMAP_FONT:FlxBitmapFont = null;
 		public static function get_bitmap_font():FlxBitmapFont {
 			if (GAME_BITMAP_FONT == null) {
-				GAME_BITMAP_FONT = new FlxBitmapFont(Resource.IMPORT_GAME_FONT, 5, 7, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~", 21, 1);
-				GAME_BITMAP_FONT.customSpacingX = 1;
-				GAME_BITMAP_FONT.autoUpperCase = false;
+			GAME_BITMAP_FONT = new FlxBitmapFont(Resource.IMPORT_GAME_FONT, 5, 7, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~", 21, 1);
+			GAME_BITMAP_FONT.customSpacingX = 1;
+			GAME_BITMAP_FONT.autoUpperCase = false;
 			}
 			return GAME_BITMAP_FONT;
 		}

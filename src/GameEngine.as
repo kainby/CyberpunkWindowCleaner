@@ -33,7 +33,9 @@ package {
 			trace("game_init");
 			super.create();
 			
-			_score = new FlxText(0, 0, 40, "0%");
+			
+			_score = new FlxText(0, 0, 100, "0%", true);
+			_score.setFormat("gamefont", 35);
 			
 			this.add(_bgobjs);
 			this.add(_sceneobjs);
