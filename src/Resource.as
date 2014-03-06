@@ -26,6 +26,8 @@ package  {
 // accessories
 		[Embed( source = "../resc/accessories/bar_frame.png" )] public static var IMPORT_BAR_FRAME:Class;
 		[Embed( source = "../resc/accessories/hpbar.png" )] public static var IMPORT_HPBAR:Class;
+		[Embed( source = "../resc/accessories/bullet_round.png" )] public static var IMPORT_BULLET_ROUND:Class;
+		[Embed( source = "../resc/accessories/laser_sight.png" )] public static var IMPORT_LASER_SIGHT:Class;
 		
 //stains
 		[Embed( source = "../resc/stain/stain1.png" )] public static var IMPORT_STAIN_1:Class;
@@ -40,6 +42,10 @@ package  {
 		[Embed( source = "../resc/character/romeo.png" )] public static var IMPORT_CHARACTER_ROMEO:Class;
 		[Embed( source = "../resc/character/juliet.png" )] public static var IMPORT_CHARACTER_JULIET:Class;
 		[Embed( source = "../resc/character/thug.png" )] public static var IMPORT_CHARACTER_THUG:Class;
+		
+		// enemies
+		[Embed( source = "../resc/character/enemy_red.png" )] public static var IMPORT_ENEMY_RED:Class;
+		[Embed( source = "../resc/character/enemy_blue.png" )] public static var IMPORT_ENEMY_BLUE:Class;
 		
 //floor1
 		[Embed( source = "../resc/floor1/mainbldg_back.png" )] public static var IMPORT_FLOOR1_MAINBLDG_BACK:Class;
