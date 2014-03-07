@@ -1,5 +1,6 @@
 package scene {
 	import flash.utils.Dictionary;
+	import flash.utils.getQualifiedClassName;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxSprite;
 	
@@ -7,6 +8,7 @@ package scene {
 		public static var CHARACTER:String = "CHARACTER"; //NOTE: make sure (name == value)
 		public static var PERCENT:String = "PERCENT";
 		public static var POSITION:String = "POSITION";
+		public static var TEXT:String = "TEXT";
 		public static var SPEED:String = "SPEED";
 		public static var ID:String = "ID";
 		
@@ -25,6 +27,7 @@ package scene {
 		
 		protected var _bg_group:FlxGroup = new FlxGroup();
 		protected var _character_group:FlxGroup = new FlxGroup();
+		protected var _text_group:FlxGroup = new FlxGroup();
 		protected var _internals_group:FlxGroup = new FlxGroup();
 		protected var _window_group:FlxGroup = new FlxGroup();
 		
@@ -35,6 +38,7 @@ package scene {
 		public function init():Scene {
 			_g._sceneobjs.add(_bg_group);
 			_g._sceneobjs.add(_character_group);
+			_g._sceneobjs.add(_text_group);
 			_g._sceneobjs.add(_internals_group);
 			_g._sceneobjs.add(_window_group);
 			return this;
@@ -73,28 +77,42 @@ package scene {
 				));
 			}
 			
+			if (evt[TEXT] != null) {
+				_queued_events.push(new TextQueuedEvent(
+					evt[CHARACTER],
+					_characters[unique_name],
+					evt[PERCENT],
+					evt[TEXT],
+					_text_group
+				));
+			}
+			
 		}
 		
 		public function update():void {
-			for (var i:int = _cur_script.length - 1; i >= 0; i--) {
+			for (var i:int = 0; i < _cur_script.length; i++) {
 				var itr_scrpt:Object = _cur_script[i];
 				if (itr_scrpt[PERCENT] <= _g.get_cleaned_pct()) {
 					_cur_script.splice(i, 1);
 					eval_event(itr_scrpt);
+					i--;
 				}
 			}
 			
 			var name_to_evt:Dictionary = new Dictionary();
-			for (i = _queued_events.length -1; i >= 0; i--) {
+			for (i = 0; i < _queued_events.length; i++) {
 				var itr_evt:QueuedEvent = _queued_events[i];
-				if (name_to_evt[itr_evt._name] == null || name_to_evt[itr_evt._name]._pct > itr_evt._pct) {
-					name_to_evt[itr_evt._name] = itr_evt;
+				var use_name:String = itr_evt._name + getQualifiedClassName(itr_evt);
+				if (name_to_evt[use_name] == null || name_to_evt[use_name]._pct > itr_evt._pct) {
+					name_to_evt[use_name] = itr_evt;
+					
 				}
 			}
 			
 			for each(var itr:QueuedEvent in name_to_evt) {
 			  	itr.update();
 				if (itr.done()) {
+					itr.do_remove();
 					_queued_events.splice(_queued_events.indexOf(itr), 1);
 				}
 			}
@@ -122,7 +140,6 @@ package scene {
 				rtv.loadGraphic(Resource.IMPORT_CHARACTER_THUG);
 				rtv.offset.x = 21.0 / 2;
 				rtv.offset.y = 49;
-				trace("yes");
 				
 			}
 			return rtv;

@@ -11,10 +11,11 @@ package scene
 			_pct = pct;
 			_name = name;
 		}
-		public function update():void {}
+		public function update():void { }
 		public function done():Boolean {
 			return true;
 		}
+		public function do_remove():void {}
 	}
 
 }

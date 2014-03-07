@@ -99,6 +99,8 @@ package org.flixel.plugin.photonstorm
 			
 			members[data.sprite] = data;
 			
+			data.sprite._data = data;
+			
 			return data.sprite;
 		}
 		
@@ -126,13 +128,21 @@ package org.flixel.plugin.photonstorm
 		
 		override public function draw():void
 		{
-			for each (var obj:Object in members)
+			/*for each (var obj:Object in members)
 			{
 				if (obj && (obj.onScreenScroller == true && obj.sprite.onScreen()) && obj.scrolling == true && obj.sprite.exists)
 				{
 					scroll(obj);
 				}
 				//trace(obj, obj.onScreenScroller, obj.sprite.onScreen(), obj.scrolling, obj.sprite.exists);
+			}*/
+		} //to whoever wrote this, this is possibly the most retarded design I've ever seen. please kill yourself
+		
+		public static function update_sprite(spr:FlxSprite):void {
+			for each (var obj:Object in members) {
+				if (obj.sprite == spr) {
+					scroll(obj);
+				}
 			}
 		}
 		

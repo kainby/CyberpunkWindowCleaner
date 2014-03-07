@@ -83,12 +83,8 @@ package {
 			create_sniper_enemy(934, 250, 2);
 			create_sniper_enemy(934, 350, 2);
 			
-			this.add(new FlxScrollingText());
-			
-			test = new ScrollingTextBubble();
-			this.add(test);
+			//this.add(new FlxScrollingText());
 		}
-		var test:ScrollingTextBubble;
 		
 		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
 		public function get_cleaned_pct():Number { 
@@ -107,13 +103,12 @@ package {
 			_enemies.add(enemy);
 		}
 		
-		private var _is_moving:Boolean = false;
+		public var _is_moving:Boolean = false;
 		
 		public override function update():void {
 			super.update();
 			
-			test.set_pos(_player.x(), _player.y());
-			
+			_player.update_player(this);
 			_is_moving = false;
 			
 			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > 180) {
@@ -156,7 +151,7 @@ package {
 					} else if (!stain._cleaned && Util.int_random(0,10) == 0) {
 						add_particle(new FadeOutParticle(
 							(new FlxPoint(_player.x() + Util.float_random( -20, 20), _player.y() + Util.float_random( -20, 20)))
-							).set_vr(Util.float_random( -20, 20)).set_scale(Util.float_random(1,2))
+							).set_vr(Util.float_random( -6, 6)).set_scale(Util.float_random(1,2))
 						);
 					}
 				});
