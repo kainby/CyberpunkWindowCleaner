@@ -9,12 +9,14 @@ package gameobj
 		private var _range:Number;
 		
 		public function RoundBullet(x:Number = 0, y:Number = 0, ang:Number = 0) {
+			// default: damage = 0
 			super(x, y);
 			
 			this._speed = 5;
 			this._angle = ang;
 			this._distance = 0;
 			this._range = 1200;
+			this._damage = 15;
 			
 			this.loadGraphic(Resource.IMPORT_BULLET_ROUND);
 		}

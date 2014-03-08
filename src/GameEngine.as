@@ -24,12 +24,15 @@ package {
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
 		public var _cleaning_bar:FlxSprite = new FlxSprite();
+		public var _hp_bar:FlxSprite = new FlxSprite();
 		
 		public var _particles:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
+		public var _bloods:FlxGroup = new FlxGroup();
 		public var _enemies:FlxGroup = new FlxGroup();
 		
 		public var _bar_frame:FlxSprite = new FlxSprite();
+		public var _hp:Number;
 		public var _score:FlxText;
 		
 		public var _cur_scene:Scene;
@@ -38,7 +41,7 @@ package {
 			trace("game_init");
 			super.create();
 			
-			
+			_hp = 100;
 			_score = new FlxText(0, 0, 100, "0%", true);
 			_score.setFormat("gamefont", 35);
 			
@@ -48,7 +51,9 @@ package {
 			this.add(_player);
 			this.add(_enemies);
 			this.add(_bullets);
+			this.add(_bloods);
 			this.add(_cleaning_bar);
+			this.add(_hp_bar);
 			this.add(_bar_frame);
 			this.add(_score);
 			this.add(_particles);
@@ -69,6 +74,9 @@ package {
 			_cleaning_bar.set_position(_bar_frame.x + 126, 3);
 			_cleaning_bar.loadGraphic(Resource.IMPORT_HPBAR);
 			_cleaning_bar.color = 0x4DBFE6;
+			_hp_bar.set_position(_bar_frame.x + 114, 28);
+			_hp_bar.loadGraphic(Resource.IMPORT_HPBAR);
+			_hp_bar.color = 0xDFDF20;
 			
 			// initialize score
 			// _score.setFormat("Liquid Cyrstal", 18, 0x959FBF);
@@ -101,6 +109,32 @@ package {
 			var enemy:SniperEnemy = new SniperEnemy(team_no);
 			enemy.set_position(x, y);
 			_enemies.add(enemy);
+		}
+		
+		// update the hp bar
+		public function hp_update():void {
+			if (_hp > 100) {
+				_hp = 100;
+			}
+			if (_hp < 0) {
+				_hp = 0;
+			}
+			
+			var pct:Number = _hp / 100;
+			_hp_bar.scale.x = pct;
+			_hp_bar.set_position(_bar_frame.x + 114 - (1 - pct) * 70, 28);
+		}
+		
+		// update the percentage of cleaning
+		public function cleaning_update():void {
+			var pct:Number = get_cleaned_pct();
+			_score.text = int(pct * 100) + "%";
+			_cleaning_bar.scale.x = pct;
+			_cleaning_bar.set_position(_bar_frame.x + 126 - (1 - pct) * 70, 3);
+		}
+		
+		public function die():void {
+			trace("Poor cleaner just died!");
 		}
 		
 		public var _is_moving:Boolean = false;
@@ -156,11 +190,7 @@ package {
 					}
 				});
 				
-				// update the percentage of cleaning
-				var pct:Number = get_cleaned_pct();
-				_score.text = int(pct * 100) + "%";
-				_cleaning_bar.scale.x = pct;
-				_cleaning_bar.set_position(_bar_frame.x + 126 - (1 - pct) * 70, 3);
+				cleaning_update();
 			}
 			
 			for (var i_particle:int = _particles.length-1; i_particle >= 0; i_particle--) {
@@ -178,7 +208,7 @@ package {
 				itr_enemy.enemy_update(this);
 				
 				if (itr_enemy._shoot) {
-					var dx:Number = (itr_enemy._team_no == 1) ? 60 : 0;
+					var dx:Number = (itr_enemy._team_no == 1) ? 60 : -6;
 					var bullet:RoundBullet = new RoundBullet(itr_enemy.x + dx, itr_enemy.y, itr_enemy._angle);
 					_bullets.add(bullet);
 				}
@@ -200,8 +230,39 @@ package {
 						_bullets.remove(itr_bullet, true);
 					}
 				}
+				
+				FlxG.overlap(_bullets, _player._body, function(bullet:BasicBullet, body:FlxSprite):void {
+					var blood:FlxSprite = new FlxSprite(bullet.x, bullet.y);
+					blood.loadGraphic(Resource.IMPORT_BLOOD, true, false, 18, 18);
+					blood.addAnimation("blood_splash", [1, 2, 3], 12, false);
+					blood.play("blood_splash");
+					_bloods.add(blood);
+					
+					_hp -= bullet._damage;
+					hp_update();
+					if (_hp <= 0) {
+						die();
+					}
+					
+					bullet.do_remove();
+					_bullets.remove(bullet, true);
+				});
+				
+				FlxG.overlap(_bullets, _enemies, function(bullet:BasicBullet, enemy:BaseEnemy):void {
+					
+				});
 			}
-		}
+			
+			// remove any blood animation that is finished
+			if (_bloods.length > 0) {
+				for (var i_blood:int = _bloods.length - 1; i_blood >= 0; i_blood-- ) {
+					var itr_blood:FlxSprite = _bloods.members[i_blood];
+					if (itr_blood.finished) {
+						_bloods.remove(itr_blood, true);
+					}
+				}
+			}
+		} // end of update function
 		
 	}
 	

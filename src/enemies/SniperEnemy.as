@@ -60,7 +60,7 @@ package enemies {
 		
 		override public function enemy_update(game:GameEngine):void {
 			var dx:Number = (_team_no == 1) ? 60 : 0;
-			_laser_sight.set_position(this.x + dx - 480, this.y + 12);
+			_laser_sight.set_position(this.x + dx - 320, this.y + 12);
 			game.add(_laser_sight);
 			if (!_hiding) {
 				switch(_tactical_step) {
@@ -92,8 +92,8 @@ package enemies {
 						var goal_angle:Number = Math.atan2(_target.y - this.y, _target.x - this.x) * Util.DEGREE;
 						var err_tol:Number = Util.float_random(0.5, 1.5);
 						if (Math.abs(_angle-goal_angle) <= err_tol) {
+							// aim successful
 							_tactical_step = 4;
-							// trace("aim successful");
 						} else {
 							var dtheta:Number = (goal_angle - _angle) / 10;
 							_angle += dtheta;
@@ -106,7 +106,6 @@ package enemies {
 						if (choice > 3) {
 							// optional tactical hide
 							_hiding = true;
-							// trace("tactical hide");
 						} else {
 							// shoot
 							_shoot = true;
@@ -161,7 +160,6 @@ package enemies {
 					trial++;
 				}
 			}
-			// trace("target locate fail!");
 			return false;
 		}
 		

@@ -66,7 +66,7 @@ package particle
 				_acc.x = (_end.x - this.x) / r2 * ADJ_COE;
 				_acc.y = (_end.y - this.y) / r2 * ADJ_COE;
 			} else {
-				// sharp turn to the end point
+				// sharp turn to straight to end point
 				_acc.x = 0;
 				_acc.y = 0;
 				_vel.x = (_end.x - this.x) / Math.sqrt(r2) * 6;

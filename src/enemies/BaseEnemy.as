@@ -12,7 +12,7 @@ package enemies {
 		public function BaseEnemy(team_no:Number) {
 				super(0, 0);
 				this._team_no = team_no;
-				this._hp = 100;
+				this._hp = 10;
 				this._shoot = false;
 				this._angle = 0;
 		}
@@ -20,6 +20,7 @@ package enemies {
 		
 		public function should_remove():Boolean {
 			return _hp <= 0;
+			trace("enemy died!");
 		}
 		
 		public function do_remove():void { }
