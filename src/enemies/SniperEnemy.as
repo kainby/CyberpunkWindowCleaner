@@ -12,10 +12,10 @@ package enemies {
 		public var _hide_timer_limit:int;
 		public var _vulnerable_timer:int;
 		public var _vulnerable_limit:int;
+		public var _shoot_timer:int;
+		public var _shoot_delay:int;
 		
 		private var _laser_sight:FlxSprite;
-		
-		public var _shoot_timer:int;
 		
 		public var _group:FlxGroup;
 		public var _target:BaseEnemy;
@@ -25,7 +25,7 @@ package enemies {
 		public var _gun_y:Number;
 		
 		public function SniperEnemy(team_no:Number) {
-			// auto: hp=100, shoot=false, angle=0
+			// auto: hp=10, shoot=false, angle=0
 			super(team_no);
 			
 			this._angle = (_team_no == 1) ? 0:(-180);
@@ -36,8 +36,9 @@ package enemies {
 			this._hide_timer_limit = Util.int_random(60, 600);
 			this._shoot = false;
 			this._shoot_timer = 0;
+			this._shoot_delay = Util.int_random(45, 60);
 			this._vulnerable_timer = 0;
-			this._vulnerable_limit = 120;
+			this._vulnerable_limit = 60;
 			this._group = null;
 			this._target = null;
 			
@@ -69,6 +70,7 @@ package enemies {
 						_laser_sight.visible = true;
 						this.visible = true;
 						if (_vulnerable_timer >= _vulnerable_limit) {
+							// vulnerability delay
 							_vulnerable_timer = 0;
 							_tactical_step = 2;
 						} else {
@@ -78,7 +80,7 @@ package enemies {
 					case 2:
 						// finding target; if successfully, go on, otherwise retreat
 						this.visible = true;
-						var search_success:Boolean = search_new_target(game);
+						var search_success:Boolean = search_new_target(game._enemies);
 						if (!search_success) {
 							retreat();
 						} else {
@@ -90,31 +92,47 @@ package enemies {
 						this.visible = true;
 						_laser_sight.angle = _angle;
 						var goal_angle:Number = Math.atan2(_target.y - this.y, _target.x - this.x) * Util.DEGREE;
+						var err:Number = _angle-goal_angle;
 						var err_tol:Number = Util.float_random(0.5, 1.5);
-						if (Math.abs(_angle-goal_angle) <= err_tol) {
-							// aim successful
+						
+						if (Math.abs(err) <= err_tol) {
+							// aim successfully
 							_tactical_step = 4;
 						} else {
+							if (err >= 270) {
+								_angle = _angle - 360;
+							} else if (err <= -270 ) {
+								_angle = _angle + 360;
+							}
 							var dtheta:Number = (goal_angle - _angle) / 10;
 							_angle += dtheta;
 						}
 						break;
 					case 4:
 						this.visible = true;
-						_laser_sight.visible = false;
-						var choice:Number = Util.float_random(0, 4);
-						if (choice > 3) {
-							// optional tactical hide
-							_hiding = true;
+						_shoot_timer++;
+						if (_shoot_timer >= _shoot_delay) {
+							_shoot_timer = 0;
+							
+							_laser_sight.visible = false;
+							var choice:Number = Util.float_random(0, 4);
+							if (choice > 3) {
+								// optional tactical hide
+								_hiding = true;
+							} else {
+								// shoot
+								_shoot = true;
+								_tactical_step = 5;
+							}
 						} else {
-							// shoot
-							_shoot = true;
-							_tactical_step = 5;
+							// in shoot delay
+							_laser_sight.visible = true;
 						}
 						break;
 					case 5:
 						_shoot = false;
 						if (_vulnerable_timer >= _vulnerable_limit) {
+							// post-shoot delay
 							retreat();
 						} else {
 							_vulnerable_timer++;
@@ -140,13 +158,14 @@ package enemies {
 			_shoot = false;
 			_tactical_step = 1;
 			_vulnerable_timer = 0;
-			_vulnerable_limit = Util.int_random(180, 360);
+			_vulnerable_limit = Util.int_random(60, 180);
+			_shoot_timer = 0;
 			_laser_sight.visible = false;
 		}
 		
 		// returns a boolean that indicates whether a target is found
-		public function search_new_target(game:GameEngine):Boolean {
-			_group = game._enemies;
+		public function search_new_target(enemies:FlxGroup):Boolean {
+			_group = enemies;
 			if (_group != null) {
 				// randomly target someone from the group; if it's an enemy, then target succeed
 				var trial:Number = 1;
@@ -169,7 +188,7 @@ package enemies {
 		
 		public function reset_hide_timer():void {
 			_hide_timer = 0;
-			_hide_timer_limit = Util.int_random(300, 600);
+			_hide_timer_limit = Util.int_random(60, 300);
 		}
 	}
 }
