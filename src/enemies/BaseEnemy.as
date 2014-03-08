@@ -8,6 +8,7 @@ package enemies {
 		public var _hp:Number;
 		public var _shoot:Boolean;
 		public var _angle:Number;
+		public var _hiding:Boolean;
 		
 		public function BaseEnemy(team_no:Number) {
 				super(0, 0);
@@ -15,6 +16,7 @@ package enemies {
 				this._hp = 10;
 				this._shoot = false;
 				this._angle = 0;
+				this._hiding = false;
 		}
 		public function enemy_update(game:GameEngine):void { }
 		

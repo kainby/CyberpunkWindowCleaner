@@ -111,6 +111,14 @@ package {
 			_enemies.add(enemy);
 		}
 		
+		public function object_hit(x:Number, y:Number) {
+			var blood:FlxSprite = new FlxSprite(x, y);
+			blood.loadGraphic(Resource.IMPORT_BLOOD, true, false, 18, 18);
+			blood.addAnimation("blood_splash", [1, 2, 3], 12, false);
+			blood.play("blood_splash");
+			_bloods.add(blood);
+		}
+		
 		// update the hp bar
 		public function hp_update():void {
 			if (_hp > 100) {
@@ -214,8 +222,7 @@ package {
 				}
 				
 				if (itr_enemy.should_remove()) {
-					itr_enemy.do_remove();
-					_enemies.remove(itr_enemy, true);
+					itr_enemy.kill();
 				}
 			}
 			
@@ -232,11 +239,7 @@ package {
 				}
 				
 				FlxG.overlap(_bullets, _player._body, function(bullet:BasicBullet, body:FlxSprite):void {
-					var blood:FlxSprite = new FlxSprite(bullet.x, bullet.y);
-					blood.loadGraphic(Resource.IMPORT_BLOOD, true, false, 18, 18);
-					blood.addAnimation("blood_splash", [1, 2, 3], 12, false);
-					blood.play("blood_splash");
-					_bloods.add(blood);
+					object_hit(bullet.x, bullet.y);
 					
 					_hp -= bullet._damage;
 					hp_update();
@@ -249,7 +252,12 @@ package {
 				});
 				
 				FlxG.overlap(_bullets, _enemies, function(bullet:BasicBullet, enemy:BaseEnemy):void {
-					
+					if (!enemy._hiding) {
+						enemy._hp -= bullet._damage;
+						object_hit(bullet.x, bullet.y);
+						bullet.do_remove();
+						_bullets.remove(bullet, true);
+					}
 				});
 			}
 			
