@@ -3,6 +3,8 @@ package core {
 	import core.*;
 	import enemies.BaseEnemy;
 	import enemies.SniperEnemy;
+	import flash.display.Sprite;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import gameobj.BasicBullet;
 	import gameobj.BasicStain;
@@ -21,10 +23,14 @@ package core {
 	public class GameUI extends FlxGroup {
 		
 		public var _cleaning_bar:FlxSprite = new FlxSprite();
-		public var _hp_bar:FlxSprite = new FlxSprite();
+		
+		public var _hp_ui:FlxGroup = new FlxGroup();
+		public static var HPICON_FULL:String = "HPICON_FULL"; 
+		public static var HPICON_EMPTY:String = "HPICON_EMPTY";
+		
 		public var _bar_frame:FlxSprite = new FlxSprite();
 		public var _score:FlxText;
-		
+		public var _tag:FlxSprite;
 		public var _continue:FlxSprite = new FlxSprite();
 		
 		public var _g:GameEngine;
@@ -39,37 +45,92 @@ package core {
 			_continue.visible = false;
 			this.add(_continue);
 			
+			_tag = new FlxSprite(0, 0, Resource.IMPORT_UI_CLEAN_TAG);
+			_tag.offset.x = _tag.width / 2;
+			_tag.offset.y = -CLEANING_BAR.height * 0.8;
+			_tag.scale.x = 1.3;
+			
 			_score = new FlxText(0, 0, 100, "0%", true);
-			_score.setFormat("gamefont", 35);
-			
-			_bar_frame.loadGraphic(Resource.IMPORT_BAR_FRAME);
-			_bar_frame.set_position(0, 0);
-			_cleaning_bar.scale.x = 0.001;
-			_cleaning_bar.set_position(_bar_frame.x + 126, 3);
-			_cleaning_bar.loadGraphic(Resource.IMPORT_HPBAR);
-			_cleaning_bar.color = 0x4DBFE6;
-			_hp_bar.set_position(_bar_frame.x + 114, 28);
-			_hp_bar.loadGraphic(Resource.IMPORT_HPBAR);
-			_hp_bar.color = 0xDFDF20;
-			
-			_score.set_position(_bar_frame.x + 280, 2);
+			_score.setFormat("gamefont", 27);
+			_score.color = 0x000000;
+			_score.offset.x = _tag.width / 2 + 1.5;
+			_score.offset.y = -CLEANING_BAR.height * 0.8 - 3;
 			_score.text = "0%";
 			
-			this.add(_cleaning_bar);
-			this.add(_hp_bar);
+			_bar_frame.loadGraphic(Resource.IMPORT_UI_CLEAN_BACK);
+			_bar_frame.set_position(Util.WID / 2 - _bar_frame.width / 2, 0);
+			
+			_cleaning_bar.loadGraphic(Resource.IMPORT_UI_CLEAN_BAR);
+			_cleaning_bar.set_position(Util.WID / 2 - _cleaning_bar.width / 2, 0);
+			clean_bar_pct(0);
+			
+			for (var i:int = 0; i < Player.MAX_HP; i++) {
+				_hp_ui.add(cons_hpbar_icon(i * 28, Util.HEI - 30));
+			}
+			
+			this.add(_hp_ui);
 			this.add(_bar_frame);
+			this.add(_cleaning_bar);
+			this.add(_tag);
 			this.add(_score);
+		}
+		
+		private function cons_hpbar_icon(x:Number,y:Number):FlxSprite {
+			var rtv:FlxSprite = new FlxSprite();
+			rtv.loadGraphic(Resource.IMPORT_UI_HEART, true, false, 29, 28);
+			rtv.addAnimation(HPICON_FULL, [0]);
+			rtv.addAnimation(HPICON_EMPTY, [1]);
+			rtv.play(HPICON_FULL);
+			return rtv.set_position(x,y);
+		}
+		
+		private static var CLEANING_BAR:FlxSprite = new FlxSprite(0, 0, Resource.IMPORT_UI_CLEAN_BAR);
+		private var _last_pct:Number = -1;
+		private function clean_bar_pct(pct:Number):void {
+			if (pct > 0.8) pct = 0.8;
+			pct = pct / 0.8;
+			
+			if (pct != _last_pct) {
+				_cleaning_bar.framePixels.copyPixels(
+					CLEANING_BAR.framePixels,
+					new Rectangle(0, 0, CLEANING_BAR.width, CLEANING_BAR.height),
+					new Point(0, 0)
+				);
+				_cleaning_bar.framePixels.copyPixels(
+					_bar_frame.framePixels, 
+					new Rectangle(_bar_frame.width * pct, 0, _bar_frame.width - _bar_frame.width * pct, _bar_frame.height), 
+					new Point(_bar_frame.width * pct, 0)
+				);
+				_last_pct = pct;
+			}
+			_tag.x = _cleaning_bar.x + CLEANING_BAR.width * pct;
+			_score.x = _tag.x;
 		}
 		
 		private var _continue_flash_ct:uint = 0;
 		public function ui_update():void {
-			_bar_frame.visible = _g._cur_scene.show_hp_bar();
-			_cleaning_bar.visible = _g._cur_scene.show_hp_bar();
-			_hp_bar.visible = _g._cur_scene.show_hp_bar();
-			_score.visible = _g._cur_scene.show_hp_bar();
+			if (_g._cur_scene.can_continue()) {
+				_bar_frame.visible = false;
+				_cleaning_bar.visible = false;
+				_score.visible = false;
+				_tag.visible = false;
+			} else {
+				_bar_frame.visible = _g._cur_scene.show_hp_bar();
+				_cleaning_bar.visible = _g._cur_scene.show_hp_bar();
+				_score.visible = _g._cur_scene.show_hp_bar();
+				_tag.visible = _g._cur_scene.show_hp_bar();
+			}
 			
-			hp_update();
-			cleaning_update();
+			
+			var pct:Number = _g.get_cleaned_pct();
+			_score.text = int(pct * 100) + "%";
+			clean_bar_pct(pct);
+			
+			for (var i:int = 0; i < Player.MAX_HP; i++) {
+				var itr:FlxSprite = _hp_ui.members[i];
+				itr.play(i + 1 <= _g._hp?HPICON_FULL:HPICON_EMPTY);
+				_hp_ui.members[i].offset.y *= 0.8;
+			}
 			
 			if (_g._cur_scene.can_continue()) {
 				_continue_flash_ct++;
@@ -78,26 +139,6 @@ package core {
 			} else {
 				_continue.visible = false;
 			}
-		}
-		
-		public function hp_update():void {
-			if (_g._hp > 100) {
-				_g._hp = 100;
-			}
-			if (_g._hp < 0) {
-				_g._hp = 0;
-			}
-			
-			var pct:Number = _g._hp / 100;
-			_hp_bar.scale.x = pct;
-			_hp_bar.set_position(_bar_frame.x + 114 - (1 - pct) * 70, 28);
-		}
-		
-		public function cleaning_update():void {
-			var pct:Number = _g.get_cleaned_pct();
-			_score.text = int(pct * 100) + "%";
-			_cleaning_bar.scale.x = pct;
-			_cleaning_bar.set_position(_bar_frame.x + 126 - (1 - pct) * 70, 3);
 		}
 		
 	}

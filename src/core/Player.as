@@ -9,11 +9,16 @@ package core {
 		
 		public static var ANIM_STAND:String = "ANIM_STAND";
 		public static var ANIM_WALK:String = "ANIM_WALK";
+		public static var ANIM_HURT:String = "ANIM_HURT";
+		public static var ANIM_STANDFRONT:String = "ANIM_STANDFRONT";
+		public static var ANIM_SALUTEFRONT:String = "ANIM_SALUTEFRONT";
+		
+		public static var MAX_HP:Number = 10;
+		
+		public var _hurt_ct:Number = 0;
 		
 		public var _cable:FlxSprite = new FlxSprite();
-		
 		public var _body:FlxSprite = new FlxSprite();
-		
 		public var _body_hit_box:FlxSprite = new FlxSprite();
 		public var _wiper_hit_box:FlxSprite = new FlxSprite();
 		
@@ -26,6 +31,9 @@ package core {
 			_body.loadGraphic(Resource.IMPORT_CLEANER_GUY,true,true,37,76);
 			_body.addAnimation(ANIM_WALK, [2, 1, 0, 1], 10);
 			_body.addAnimation(ANIM_STAND, [2], 0);
+			_body.addAnimation(ANIM_HURT, [6,2], 10);
+			_body.addAnimation(ANIM_STANDFRONT, [4], 0);
+			_body.addAnimation(ANIM_SALUTEFRONT, [3, 5], 10);
 			this.continue_animation(ANIM_STAND);
 			this.add(_body);
 			
@@ -56,7 +64,14 @@ package core {
 		}
 		
 		public function update_player(g:GameEngine):void {
-			this.continue_animation(g._is_moving ? ANIM_WALK : ANIM_STAND);
+			_hurt_ct = Math.max(0, _hurt_ct - 1);
+			if (_hurt_ct > 0) {
+				this.continue_animation(ANIM_HURT);
+			} else if (g._is_moving) {
+				this.continue_animation(ANIM_WALK);
+			} else {
+				this.continue_animation(ANIM_STAND);
+			}
 		}
 		
 		

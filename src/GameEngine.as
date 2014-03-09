@@ -43,7 +43,7 @@ package {
 		public var _transition_from_scene:Scene = null;
 		private var _scene_list:Vector.<Scene>;
 		
-		public var _hp:Number = 100;
+		public var _hp:Number = Player.MAX_HP;
 		public var _ui:GameUI;
 		
 		public override function create():void {
@@ -207,21 +207,28 @@ package {
 					}
 				}
 				
-				FlxG.overlap(_bullets, _player._body_hit_box, function(bullet:BasicBullet, body:FlxSprite):void {
-					_particles.add(new BloodParticle(bullet.x, bullet.y));
-					
-					_hp -= bullet._damage;
-					_ui.hp_update();
-					if (_hp <= 0) {
-						die();
-					}
-					
-					bullet.do_remove();
-					_bullets.remove(bullet, true);
-				});
+				if (_player._hurt_ct <= 0) {
+					FlxG.overlap(_bullets, _player._body_hit_box, function(bullet:BasicBullet, body:FlxSprite):void {
+						if (_player._hurt_ct > 0) return;
+						if (_hp <= 0 || _hp - 1 >= _ui._hp_ui.members.length) {
+							trace("HP ERROR");
+							return;
+						}
+						_particles.add(new BloodParticle(bullet.x, bullet.y));
+						
+						_ui._hp_ui.members[_hp-1].offset.y = 15;
+						_hp--;
+						_player._hurt_ct = 50;
+						if (_hp <= 0) {
+							die();
+						}
+						bullet.do_remove();
+						_bullets.remove(bullet, true);
+					});
+				}
 			}
 			
-			if (Util.int_random(0,2000) == 0) {
+			if (Util.int_random(0,1500) == 0 && _hp != Player.MAX_HP) {
 				_powerups.add(new HealthPack(Util.int_random(180, 780)));
 			}
 			if (_powerups.length > 0) {
@@ -235,8 +242,7 @@ package {
 					}
 				}
 				FlxG.overlap(_powerups, _player._body_hit_box, function(p:HealthPack, body:FlxSprite):void {
-					_hp += p._aid;
-					_ui.hp_update();
+					_hp = Math.min(_hp+1,Player.MAX_HP);
 					p.taken();
 					for (var i:int = 1; i <= 8; i++) {
 						add_particle(new HpParticle(
@@ -263,14 +269,3 @@ package {
 		}	
 	}
 }
-
-/*
- FlxG.overlap(_bullets, _enemies, function(bullet:BasicBullet, enemy:BaseEnemy):void {
-	if (!enemy._hiding) {
-		enemy._hp -= bullet._damage;
-		_particles.add(new BloodParticle(bullet.x, bullet.y));
-		bullet.do_remove();
-		_bullets.remove(bullet, true);
-	}
-});
- */

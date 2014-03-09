@@ -30,9 +30,15 @@ package  {
 		
 		[Embed( source = "../resc/25x40.png" )] public static var IMPORT_25x40:Class;
 		[Embed( source = "../resc/12x8.png" )] public static var IMPORT_12x8:Class;
+		
+		[Embed( source = "../resc/ui/empty_bar.png" )] public static var IMPORT_UI_CLEAN_BACK:Class;
+		[Embed( source = "../resc/ui/clean_area.png" )] public static var IMPORT_UI_CLEAN_BAR:Class;
+		[Embed( source = "../resc/ui/percentage_tag.png" )] public static var IMPORT_UI_CLEAN_TAG:Class;
+		[Embed( source = "../resc/ui/heart.png" )] public static var IMPORT_UI_HEART:Class;
+		
 // accessories
-		[Embed( source = "../resc/accessories/bar_frame.png" )] public static var IMPORT_BAR_FRAME:Class;
-		[Embed( source = "../resc/accessories/hpbar.png" )] public static var IMPORT_HPBAR:Class;
+		//[Embed( source = "../resc/accessories/bar_frame.png" )] public static var IMPORT_BAR_FRAME:Class;
+		//[Embed( source = "../resc/accessories/hpbar.png" )] public static var IMPORT_HPBAR:Class;
 		[Embed( source = "../resc/accessories/bullet_round.png" )] public static var IMPORT_BULLET_ROUND:Class;
 		[Embed( source = "../resc/accessories/laser_sight.png" )] public static var IMPORT_LASER_SIGHT:Class;
 		[Embed( source = "../resc/accessories/blood.png" )] public static var IMPORT_BLOOD:Class;
