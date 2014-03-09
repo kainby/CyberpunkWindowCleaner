@@ -2,6 +2,7 @@ package enemies {
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxSprite;
+	import particle.LaserSight;
 	
 	public class SniperEnemy extends BaseEnemy {
 		
@@ -14,7 +15,7 @@ package enemies {
 		public var _shoot_timer:int;
 		public var _shoot_delay:int;
 		
-		private var _laser_sight:FlxSprite;
+		private var _laser_sight:LaserSight;
 		
 		public var _group:FlxGroup;
 		public var _target:BaseEnemy;
@@ -23,7 +24,7 @@ package enemies {
 		public var _gun_x:Number;
 		public var _gun_y:Number;
 		
-		public function SniperEnemy(team_no:Number) {
+		public function SniperEnemy(team_no:Number, g:GameEngine) {
 			// auto: hp=10, shoot=false, angle=0, hiding=false
 			super(team_no);
 			this._angle = (_team_no == 1) ? 0:( -180);
@@ -42,10 +43,11 @@ package enemies {
 			this._target = null;
 			
 			// initialize laser sight
-			this._laser_sight = new FlxSprite();
+			this._laser_sight = new LaserSight();
 			_laser_sight.loadGraphic(Resource.IMPORT_LASER_SIGHT);
 			_laser_sight.visible = false;
 			_laser_sight.angle = _angle;
+			g._particles.add(_laser_sight);
 			
 			if (this._team_no == 1) {
 				this.loadGraphic(Resource.IMPORT_ENEMY_RED);
@@ -60,11 +62,10 @@ package enemies {
 		
 		override public function enemy_update(game:GameEngine):void {
 			if (!this.alive) {
-				game.remove(_laser_sight);
+				_laser_sight.visible = false;
 			} else{
 				var dx:Number = (_team_no == 1) ? 60 : 0;
 				_laser_sight.set_position(this.x + dx - 320, this.y + 12);
-				game.add(_laser_sight);
 				if (!_hiding) {
 					switch(_tactical_step) {
 						case 1:

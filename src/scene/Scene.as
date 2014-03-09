@@ -35,9 +35,34 @@ package scene {
 			_g = g;
 		}
 		
-		public function can_continue():Boolean {
-			return false;
+		public function can_continue():Boolean { return false; }
+		public function get_player_x_min():Number { return 180; }
+		public function get_player_x_max():Number { return 800; }
+		public function get_player_y_min():Number { return 0; }
+		public function get_player_y_max():Number { return 450; }
+		
+		public function set_bg_y(y:Number):void {
+			var groups:Array = [_bg_group, _character_group, _text_group, _internals_group, _window_group];
+			for each(var group:FlxGroup in groups) {
+			}
 		}
+		
+		public function add_offset_to_groups(y:Number) {
+			FlxGroup.add_offset_to_all(_bg_group, 0, y);
+			FlxGroup.add_offset_to_all(_character_group, 0, y);
+			FlxGroup.add_offset_to_all(_text_group, 0, y);
+			FlxGroup.add_offset_to_all(_internals_group, 0, y);
+			FlxGroup.add_offset_to_all(_window_group, 0, y);
+		}
+		
+		public function remove_groups_from_parent(parent:FlxGroup):void {
+			parent.remove(_bg_group);
+			parent.remove(_character_group);
+			parent.remove(_text_group);
+			parent.remove(_internals_group);
+			parent.remove(_window_group);
+		}
+		
 		
 		public function init():Scene {
 			_g._sceneobjs.add(_bg_group);

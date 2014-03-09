@@ -26,6 +26,7 @@ package  {
 		public static var MOVE_RIGHT:Vector.<String> = Vector.<String>(["D","RIGHT"]);
 		public static var MOVE_UP:Vector.<String> = Vector.<String>(["W", "UP"]);
 		public static var MOVE_DOWN:Vector.<String> = Vector.<String>(["S", "DOWN"]);
+		public static var MOVE_JUMP:Vector.<String> = Vector.<String>(["SPACE"]);
 		
 		public static function float_random(min:Number, max:Number):Number {
 			return min + Math.random() * (max - min);
@@ -42,7 +43,7 @@ package  {
 						return true;
 					}
 				} else {
-					if (FlxG.keys[i]) {
+ 					if (FlxG.keys[i]) {
 						return true;
 					}
 				}

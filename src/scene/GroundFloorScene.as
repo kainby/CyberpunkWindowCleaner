@@ -17,13 +17,10 @@ package scene {
 			return this;
 		}
 		
-		public override function show_hp_bar():Boolean {
-			return false;
-		}
-		
-		public override function can_continue():Boolean {
-			return true;
-		}
+		public override function show_hp_bar():Boolean { return false; }
+		public override function can_continue():Boolean { return true; }
+		public override function get_player_x_min():Number { return 1000; }
+		public override function get_player_x_max():Number { return 0; }
 		
 	}
 

@@ -62,20 +62,28 @@ package scene {
 			}
 			
 
-			create_sniper_enemy(0, 100, 1);
-			create_sniper_enemy(0, 200, 1);
-			create_sniper_enemy(0, 300, 1);
-			create_sniper_enemy(934, 150, 2);
-			create_sniper_enemy(934, 250, 2);
-			create_sniper_enemy(934, 350, 2);
+			create_sniper_enemy(0, 100, 1,_g);
+			create_sniper_enemy(0, 200, 1,_g);
+			create_sniper_enemy(0, 300, 1,_g);
+			create_sniper_enemy(934, 150, 2,_g);
+			create_sniper_enemy(934, 250, 2,_g);
+			create_sniper_enemy(934, 350, 2,_g);
 			
 			return this;
 		}
 		
-		public function create_sniper_enemy(x:Number, y:Number, team_no:Number):void {
-			var enemy:SniperEnemy = new SniperEnemy(team_no);
+		public function create_sniper_enemy(x:Number, y:Number, team_no:Number, g:GameEngine):void {
+			var enemy:SniperEnemy = new SniperEnemy(team_no,g);
 			enemy.set_position(x, y);
 			_g._enemies.add(enemy);
+		}
+		
+		public override function show_hp_bar():Boolean {
+			return false;
+		}
+		
+		public override function can_continue():Boolean {
+			return true;
 		}
 		
 	}

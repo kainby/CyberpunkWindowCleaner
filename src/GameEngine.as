@@ -19,17 +19,22 @@ package {
 	
 	public class GameEngine extends FlxState {
 		
-		public var _bgobjs:FlxGroup = new FlxGroup();
-		public var _sceneobjs:FlxGroup = new FlxGroup();
+		public var _is_moving:Boolean = false;
+		private static var MOVE_SPEED:Number = 1;
+		private static var JUMP_SPEED:Number = 5;
 		
+		public var _bgobjs:FlxGroup = new FlxGroup();
+		
+		public var _sceneobjs:FlxGroup = new FlxGroup();
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
-		
 		public var _particles:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
 		public var _enemies:FlxGroup = new FlxGroup();
 				
 		public var _cur_scene:Scene;
+		public var _transition_from_scene:Scene = null;
+		private var _scene_list:Vector.<Scene>;
 		
 		public var _hp:Number = 100;
 		public var _ui:GameUI;
@@ -38,11 +43,20 @@ package {
 			trace("game_init");
 			super.create();
 			
-			//_cur_scene = (new GroundFloorScene(this)).init();
-			_cur_scene = (new TestScene(this)).init();
+			
+			_scene_list = Vector.<Scene>([
+				new GroundFloorScene(this), 
+				new TestScene(this),
+				new TestScene(this),
+				new TestScene(this)
+			]);
+			
+			next_scene();
+			
 			_ui = new GameUI(this);
 			
 			this.add(_bgobjs);
+			
 			this.add(_sceneobjs);
 			this.add(_stains);
 			this.add(_player);
@@ -55,46 +69,74 @@ package {
 			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
 		}
 		
-		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
-		public function get_cleaned_pct():Number { 
-			if (_stains.length == 0) return 0;
-			var ct:Number = 0;
-			for (var i:int = 0; i < _stains.length; i++) {
-				var itr:BasicStain = _stains.members[i];
-				if (itr._cleaned) ct++;
+		private var _transition_ct:Number = 0;
+		private function next_scene():void {
+			if (_scene_list.length == 0) return;
+			var next:Scene = _scene_list.shift();
+			if (_cur_scene == null) {
+				_cur_scene = next;
+				_cur_scene.init();
+				
+			} else {
+				_stains.clear();
+				_enemies.clear();
+				_bullets.clear();
+				_particles.clear();
+				
+				_transition_from_scene = _cur_scene;
+				_cur_scene = next;
+				_cur_scene.init();
+				_cur_scene.add_offset_to_groups( -500);
+				_transition_ct = 500;
+				_stains.visible = false;
 			}
-			return ct/_stains.length;
 		}
-		
-		public function die():void {
-			trace("Poor cleaner just died!");
-		}
-		
-		public var _is_moving:Boolean = false;
 		
 		public override function update():void {
 			super.update();
+			
+			if (_transition_from_scene != null) {
+				_cur_scene.add_offset_to_groups(5);
+				_transition_from_scene.add_offset_to_groups(5);
+				_transition_ct -= 5;
+				_player.y(5);
+				if (_transition_ct <= 0) {
+					_transition_from_scene.remove_groups_from_parent(_bgobjs);
+					_transition_from_scene = null;
+					_stains.visible = true;
+					_player.y( -20);
+				}
+				return;
+			}
 			
 			_ui.ui_update();
 			_player.update_player(this);
 			_is_moving = false;
 			
-			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > 180) {
-				_player.x( -1);
+			if (_cur_scene.can_continue() && _player.y() <= 0) {
+				next_scene();
+				_player._body.play(Scene.ANIM_STAND);
+			}
+			
+			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > _cur_scene.get_player_x_min()) {
+				_player.x( -MOVE_SPEED);
 				_is_moving = true;
 				
-			} else if (Util.is_key(Util.MOVE_RIGHT) && _player.x() < 800) {
-				_player.x(1);
+			} else if (Util.is_key(Util.MOVE_RIGHT) && _player.x() < _cur_scene.get_player_x_max()) {
+				_player.x(MOVE_SPEED);
 				_is_moving = true;
 				
 			} 
 			
-			if (Util.is_key(Util.MOVE_UP) && _player.y() > 0) {
-				_player.y( -1);
+			if (Util.is_key(Util.MOVE_JUMP) && _player.y() < _cur_scene.get_player_y_max()) {
+				_player.y(JUMP_SPEED);
+				
+			} else if (Util.is_key(Util.MOVE_UP) && _player.y() > _cur_scene.get_player_y_min()) {
+				_player.y( -MOVE_SPEED);
 				_is_moving = true;
 				
-			} else if (Util.is_key(Util.MOVE_DOWN) && _player.y() < 458) {
-				_player.y(1);
+			} else if (Util.is_key(Util.MOVE_DOWN) && _player.y() < _cur_scene.get_player_y_max()) {
+				_player.y(MOVE_SPEED);
 				_is_moving = true;
 				
 			}
@@ -134,7 +176,6 @@ package {
 				}
 			}
 			
-			// update enemies
 			for (var i_enemy:int = _enemies.length - 1; i_enemy >= 0; i_enemy-- ) {
 				var itr_enemy:BaseEnemy = _enemies.members[i_enemy];
 				itr_enemy.enemy_update(this);
@@ -184,6 +225,21 @@ package {
 					}
 				});
 			}
+		}
+		
+		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
+		public function get_cleaned_pct():Number { 
+			if (_stains.length == 0) return 0;
+			var ct:Number = 0;
+			for (var i:int = 0; i < _stains.length; i++) {
+				var itr:BasicStain = _stains.members[i];
+				if (itr._cleaned) ct++;
+			}
+			return ct/_stains.length;
+		}
+		
+		public function die():void {
+			trace("Poor cleaner just died!");
 		}
 		
 	}

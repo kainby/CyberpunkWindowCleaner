@@ -1,5 +1,6 @@
 package org.flixel
 {
+	import misc.FlxGroupSprite;
 	/**
 	 * This is an organizational class that can update and render a bunch of <code>FlxBasic</code>s.
 	 * NOTE: Although <code>FlxGroup</code> extends <code>FlxBasic</code>, it will not automatically
@@ -9,6 +10,18 @@ package org.flixel
 	 */
 	public class FlxGroup extends FlxBasic
 	{
+		
+		public static function add_offset_to_all(group:FlxGroup, x:Number, y:Number):void {
+			for each(var o:FlxBasic in group.members) {
+				if (o is FlxSprite) {
+					(o as FlxSprite).x += x;
+					(o as FlxSprite).y += y;
+				} else if (o is FlxGroup) {
+					add_offset_to_all(o as FlxGroup, x, y);
+				}
+			}
+		}
+		
 		/**
 		 * Use with <code>sort()</code> to sort in ascending order.
 		 */
