@@ -1,4 +1,5 @@
 package enemies {
+	import gameobj.RoundBullet;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxSprite;
@@ -29,7 +30,6 @@ package enemies {
 			this._tactical_step = 1;
 			this._hide_timer = 0;
 			this._hide_timer_limit = Util.int_random(60, 600);
-			this._shoot = false;
 			this._shoot_timer = 0;
 			this._shoot_delay = Util.int_random(45, 60);
 			this._vulnerable_timer = 0;
@@ -116,7 +116,10 @@ package enemies {
 									_hiding = true;
 								} else {
 									// shoot
-									_shoot = true;
+									var dx:Number = (this._team_no == 1) ? 60 : -6;
+									var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 12, this._angle);
+									game._bullets.add(bullet);
+									
 									_tactical_step = 5;
 								}
 							} else {
@@ -125,7 +128,6 @@ package enemies {
 							}
 							break;
 						case 5:
-							_shoot = false;
 							if (_vulnerable_timer >= _vulnerable_limit) {
 								// post-shoot delay
 								retreat();
@@ -151,7 +153,6 @@ package enemies {
 		
 		public function retreat():void {
 			_hiding = true;
-			_shoot = false;
 			_tactical_step = 1;
 			_vulnerable_timer = 0;
 			_vulnerable_limit = Util.int_random(60, 180);

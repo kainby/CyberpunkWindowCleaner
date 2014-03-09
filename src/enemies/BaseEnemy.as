@@ -6,7 +6,6 @@ package enemies {
 	public class BaseEnemy extends FlxSprite {
 		public var _team_no:Number;
 		public var _hp:Number;
-		public var _shoot:Boolean;
 		public var _angle:Number;
 		public var _hiding:Boolean;
 		
@@ -14,7 +13,6 @@ package enemies {
 				super(0, 0);
 				this._team_no = team_no;
 				this._hp = 100;
-				this._shoot = false;
 				this._angle = 0;
 				this._hiding = false;
 		}

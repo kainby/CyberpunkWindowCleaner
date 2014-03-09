@@ -148,12 +148,6 @@ package {
 				var itr_enemy:BaseEnemy = _enemies.members[i_enemy];
 				itr_enemy.enemy_update(this);
 				
-				if (itr_enemy._shoot) {
-					var dx:Number = (itr_enemy._team_no == 1) ? 60 : -6;
-					var bullet:RoundBullet = new RoundBullet(itr_enemy.x + dx, itr_enemy.y + 12, itr_enemy._angle);
-					_bullets.add(bullet);
-				}
-				
 				if (itr_enemy.should_remove()) {
 					itr_enemy.kill();
 				}
