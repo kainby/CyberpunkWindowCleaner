@@ -16,7 +16,7 @@ package gameobj
 			this._angle = ang;
 			this._distance = 0;
 			this._range = 1200;
-			this._damage = 15;
+			this._damage = 8;
 			
 			this.loadGraphic(Resource.IMPORT_BULLET_ROUND);
 		}

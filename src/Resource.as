@@ -32,6 +32,7 @@ package  {
 		[Embed( source = "../resc/accessories/bullet_round.png" )] public static var IMPORT_BULLET_ROUND:Class;
 		[Embed( source = "../resc/accessories/laser_sight.png" )] public static var IMPORT_LASER_SIGHT:Class;
 		[Embed( source = "../resc/accessories/blood.png" )] public static var IMPORT_BLOOD:Class;
+		[Embed( source = "../resc/accessories/energy_drink.png" )] public static var IMPORT_ENERGY_DRINK:Class;
 		
 //stains
 		[Embed( source = "../resc/stain/stain1.png" )] public static var IMPORT_STAIN_1:Class;
@@ -40,6 +41,7 @@ package  {
 		
 //sparks
 		[Embed( source = "../resc/spark/dust_spark.png" )] public static var IMPORT_DUST_SPARK:Class;
+		[Embed( source = "../resc/spark/hp_spark.png" )] public static var IMPORT_HP_SPARK:Class;
 		
 //character
 		[Embed( source = "../resc/character/cleaner_guy.png" )] public static var IMPORT_CLEANER_GUY:Class;

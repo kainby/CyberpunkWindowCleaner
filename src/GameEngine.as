@@ -3,8 +3,10 @@ package {
 	import enemies.BaseEnemy;
 	import enemies.SniperEnemy;
 	import flash.geom.Rectangle;
+	import flash.utils.Timer;
 	import gameobj.BasicBullet;
 	import gameobj.BasicStain;
+	import gameobj.HealthPack;
 	import gameobj.RoundBullet;
 	import misc.FlxGroupSprite;
 	import misc.ScrollingTextBubble;
@@ -30,6 +32,9 @@ package {
 		public var _bullets:FlxGroup = new FlxGroup();
 		public var _bloods:FlxGroup = new FlxGroup();
 		public var _enemies:FlxGroup = new FlxGroup();
+		public var _health_packs:FlxGroup = new FlxGroup();
+		
+		public var _aid_timer:Timer;
 		
 		public var _bar_frame:FlxSprite = new FlxSprite();
 		public var _hp:Number;
@@ -57,6 +62,10 @@ package {
 			this.add(_bar_frame);
 			this.add(_score);
 			this.add(_particles);
+			this.add(_health_packs);
+			
+			_aid_timer = new Timer(20);
+			_aid_timer.start();
 			
 			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
 			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
@@ -119,7 +128,7 @@ package {
 			_bloods.add(blood);
 		}
 		
-		// update the hp bar
+		// update the hp bar and keeps the hp value to be in normal range (0..100)
 		public function hp_update():void {
 			if (_hp > 100) {
 				_hp = 100;
@@ -170,7 +179,6 @@ package {
 			} else if (Util.is_key(Util.MOVE_DOWN) && _player.y() < 458) {
 				_player.y(1);
 				_is_moving = true;
-				
 			}
 			
 			_stains.update();
@@ -270,6 +278,37 @@ package {
 					}
 				}
 			}
+			
+			// spawning health pack aid
+			if (_aid_timer.currentCount >= 1500) {
+				// note: according to test, the spawn interval is recommended to be greater than 800
+				_aid_timer.reset();
+				_health_packs.add(new HealthPack(Util.int_random(180, 780)));
+				trace("spawn an aid");
+				_aid_timer.start();
+			}
+			
+			// updating health packs
+			if (_health_packs.length > 0) {
+				var hp_pack:HealthPack = _health_packs.members[0];
+				hp_pack.health_pack_update(this);
+				FlxG.overlap(hp_pack, _player._body, function(pack:HealthPack, body:FlxSprite):void {
+					_hp += hp_pack._aid;
+					hp_update();
+					hp_pack.taken();
+					for (var i:int = 1; i <= 8; i++) {
+						add_particle(new HpParticle(
+						new FlxPoint(_player.x() + Util.float_random(-20, 20), _player.y() + Util.float_random(10, 50))
+						).set_scale(Util.float_random(0.75, 1.25)));
+					}
+				});
+				
+				if (hp_pack.should_remove()) {
+					hp_pack.do_remove();
+					_health_packs.remove(hp_pack, true);
+				}
+			}
+			
 		} // end of update function
 		
 	}

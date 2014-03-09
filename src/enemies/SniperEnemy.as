@@ -19,15 +19,11 @@ package enemies {
 		public var _group:FlxGroup;
 		public var _target:BaseEnemy;
 		
-		// relative position of gun's muzzle
-		public var _gun_x:Number;
-		public var _gun_y:Number;
-		
 		public function SniperEnemy(team_no:Number) {
-			// auto: hp=10, shoot=false, angle=0, hiding=false
+			// auto: hp=100, shoot=false, angle=0, hiding=false
 			super(team_no);
 			this._angle = (_team_no == 1) ? 0:( -180);
-			this._hp = 45;
+			this._hp = 50;
 			
 			this._hiding = true;
 			this._tactical_step = 1;
@@ -49,12 +45,9 @@ package enemies {
 			
 			if (this._team_no == 1) {
 				this.loadGraphic(Resource.IMPORT_ENEMY_RED);
-				this._gun_x = this.width - 5;
 			} else {	// _team_no == 2
 				this.loadGraphic(Resource.IMPORT_ENEMY_BLUE);
-				this._gun_x = 5;
 			}
-			this._gun_y = 12;
 			this.visible = false;
 		}
 		
