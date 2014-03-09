@@ -20,7 +20,7 @@ package enemies {
 		public var _target:BaseEnemy;
 		
 		public function SniperEnemy(team_no:Number) {
-			// auto: hp=100, shoot=false, angle=0, hiding=false
+			// default: hp=100, shoot=false, angle=0, hiding=false
 			super(team_no);
 			this._angle = (_team_no == 1) ? 0:( -180);
 			this._hp = 50;

@@ -14,15 +14,9 @@ package particle
 			this.x = pt.x;
 			this.y = pt.y;
 			this._vy = 2;
-			this._coeff = 0.99;
+			this._coeff = Util.float_random(0.975, 0.995);
 			
 			this.loadGraphic(Resource.IMPORT_HP_SPARK);
-		}
-		
-		public function set_scale(sc:Number):HpParticle {
-			this.scale.x = sc;
-			this.scale.y = sc;
-			return this;
 		}
 		
 		public override function particle_update(g:GameEngine):void {

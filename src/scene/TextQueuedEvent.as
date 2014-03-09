@@ -9,7 +9,7 @@ package scene
 		private var _add_to:FlxGroup;
 		private var _text:String;
 		
-		public function TextQueuedEvent(name:String, character:FlxSprite, pct:Number, text:String, add_to:FlxGroup) {
+		public function TextQueuedEvent(name:String, character:SceneCharacter, pct:Number, text:String, add_to:FlxGroup) {
 			super(name, character, pct);
 			_add_to = add_to;
 			_text = text;
@@ -22,7 +22,7 @@ package scene
 				_text_bubble = new ScrollingTextBubble(_text);
 				_add_to.add(_text_bubble);
 			}
-			_text_bubble.set_pos(_character.x - 9, _character.y - 40);
+			_text_bubble.set_pos(_character.x - _character.frameWidth * 0.1, _character.y - _character.frameHeight * 0.8);
 			_text_bubble.scroll_tick();
 		}
 		

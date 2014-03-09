@@ -35,6 +35,10 @@ package scene {
 			_g = g;
 		}
 		
+		public function can_continue():Boolean {
+			return false;
+		}
+		
 		public function init():Scene {
 			_g._sceneobjs.add(_bg_group);
 			_g._sceneobjs.add(_character_group);
@@ -42,6 +46,10 @@ package scene {
 			_g._sceneobjs.add(_internals_group);
 			_g._sceneobjs.add(_window_group);
 			return this;
+		}
+		
+		public function show_hp_bar():Boolean {
+			return true;
 		}
 		
 		protected function load_script(script:Array):void {
@@ -109,6 +117,10 @@ package scene {
 				}
 			}
 			
+			for each (var sc:SceneCharacter in _characters) {
+				sc._is_moving = false;
+			}
+			
 			for each(var itr:QueuedEvent in name_to_evt) {
 			  	itr.update();
 				if (itr.done()) {
@@ -116,32 +128,49 @@ package scene {
 					_queued_events.splice(_queued_events.indexOf(itr), 1);
 				}
 			}
+			
+			for each(var sc:SceneCharacter in _characters) {
+				if (sc._is_moving) {
+					sc.play(ANIM_WALK);
+				} else {
+					sc.play(ANIM_STAND);
+				}
+			}
+			
 		}
 		
-		private function get_sprite_for_character_name(name:String):FlxSprite {
-			var rtv:FlxSprite = new FlxSprite();
+		private function get_sprite_for_character_name(name:String):SceneCharacter {
+			var rtv:SceneCharacter = new SceneCharacter();
 			if (name == CHARACTER_ROMEO) {
-				rtv.loadGraphic(Resource.IMPORT_CHARACTER_ROMEO,true,true,12,25);
-				rtv.addAnimation(ANIM_WALK, [0, 1], 5);
+				rtv.loadGraphic(Resource.IMPORT_CHARACTER_ROMEO,true,true,27,60);
+				rtv.addAnimation(ANIM_WALK, [1, 2, 3, 4], 5);
 				rtv.addAnimation(ANIM_STAND, [0], 0);
 				rtv.play(ANIM_WALK);
-				rtv.offset.x = 6;
-				rtv.offset.y = 25;
+				rtv.offset.x = 27.0/2;
+				rtv.offset.y = 60;
 				
 			} else if (name == CHARACTER_JULIET) {
-				rtv.loadGraphic(Resource.IMPORT_CHARACTER_JULIET,true,true,13,35);
-				rtv.addAnimation(ANIM_WALK, [0, 1], 5);
-				rtv.addAnimation(ANIM_STAND, [0], 0);
+				rtv.loadGraphic(Resource.IMPORT_CHARACTER_JULIET,true,true,31,58);
+				rtv.addAnimation(ANIM_WALK, [0, 1, 2, 3], 5);
+				rtv.addAnimation(ANIM_STAND, [4], 0);
 				rtv.play(ANIM_WALK);
-				rtv.offset.x = 13/2.0;
-				rtv.offset.y = 35;
+				rtv.offset.x = 31/2.0;
+				rtv.offset.y = 58;
 				
 			} else if (name == CHARACTER_THUG) {
-				rtv.loadGraphic(Resource.IMPORT_CHARACTER_THUG);
-				rtv.offset.x = 21.0 / 2;
-				rtv.offset.y = 49;
+				rtv.loadGraphic(Resource.IMPORT_CHARACTER_THUG_RED, true, true, 57, 69);
+				rtv.addAnimation(ANIM_WALK, [0, 1, 2, 3], 5);
+				rtv.addAnimation(ANIM_STAND, [4], 0);
+				rtv.play(ANIM_WALK);
+				rtv.offset.x = 57.0 / 2;
+				rtv.offset.y = 69;
 				
 			}
+			
+			var scale:Number = 0.8;
+			rtv.set_scale(scale);
+			rtv.offset.x *= scale;
+			rtv.offset.y *= scale;
 			return rtv;
 		}
 		
