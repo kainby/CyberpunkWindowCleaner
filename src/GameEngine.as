@@ -3,8 +3,10 @@ package {
 	import enemies.BaseEnemy;
 	import enemies.SniperEnemy;
 	import flash.geom.Rectangle;
+	import flash.utils.Timer;
 	import gameobj.BasicBullet;
 	import gameobj.BasicStain;
+	import gameobj.HealthPack;
 	import gameobj.RoundBullet;
 	import misc.FlxGroupSprite;
 	import misc.ScrollingTextBubble;
@@ -31,7 +33,10 @@ package {
 		public var _particles:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
 		public var _enemies:FlxGroup = new FlxGroup();
-				
+		
+		public var _health_packs:FlxGroup = new FlxGroup();
+		public var _aid_timer:Timer;
+		
 		public var _cur_scene:Scene;
 		public var _transition_from_scene:Scene = null;
 		private var _scene_list:Vector.<Scene>;
@@ -63,7 +68,11 @@ package {
 			this.add(_enemies);
 			this.add(_bullets);
 			this.add(_particles);
+			this.add(_health_packs);
 			this.add(_ui);
+			
+			_aid_timer = new Timer(20);
+			_aid_timer.start();
 			
 			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
 			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
@@ -180,12 +189,6 @@ package {
 				var itr_enemy:BaseEnemy = _enemies.members[i_enemy];
 				itr_enemy.enemy_update(this);
 				
-				if (itr_enemy._shoot) {
-					var dx:Number = (itr_enemy._team_no == 1) ? 60 : -6;
-					var bullet:RoundBullet = new RoundBullet(itr_enemy.x + dx, itr_enemy.y + 12, itr_enemy._angle);
-					_bullets.add(bullet);
-				}
-				
 				if (itr_enemy.should_remove()) {
 					itr_enemy.kill();
 				}
@@ -224,6 +227,35 @@ package {
 						_bullets.remove(bullet, true);
 					}
 				});
+			}
+			
+			// spawning health pack aid
+			if (_aid_timer.currentCount >= 1500) {
+				// note: according to test, the spawn interval is recommended to be greater than 800
+				_aid_timer.reset();
+				_health_packs.add(new HealthPack(Util.int_random(180, 780)));
+				_aid_timer.start();
+			}
+			
+			// updating health packs
+			if (_health_packs.length > 0) {
+				var hp_pack:HealthPack = _health_packs.members[0];
+				hp_pack.health_pack_update(this);
+				FlxG.overlap(hp_pack, _player._body, function(pack:HealthPack, body:FlxSprite):void {
+					_hp += hp_pack._aid;
+					_ui.hp_update();
+					hp_pack.taken();
+					for (var i:int = 1; i <= 8; i++) {
+						add_particle(new HpParticle(
+						new FlxPoint(_player.x() + Util.float_random(-20, 20), _player.y() + Util.float_random(10, 50)),
+						60));
+					}
+				});
+				
+				if (hp_pack.should_remove()) {
+					hp_pack.do_remove();
+					_health_packs.remove(hp_pack, true);
+				}
 			}
 		}
 		
