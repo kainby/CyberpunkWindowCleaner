@@ -6,7 +6,7 @@ package scene {
 	import org.flixel.*;
 	import particle.*;
 	import enemies.*;
-	public class TestScene extends Scene {
+	public class Floor4Scene extends Scene {
 		
 		private static var SCRIPT:Array = [
 			{PERCENT:0, CHARACTER:CHARACTER_THUG, POSITION:[340, 317], ID:1  },
@@ -45,7 +45,7 @@ package scene {
 			{PERCENT:0.25, CHARACTER:CHARACTER_ROMEO, TEXT:"FUGGEN LEL COMEDY GOLD"},
 		];
 		
-		public function TestScene(g:GameEngine) {
+		public function Floor4Scene(g:GameEngine) {
 			super(g);
 		}
 		
@@ -53,10 +53,10 @@ package scene {
 			super.init();
 			load_script(SCRIPT);
 			
-			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_BACK));
-			_internals_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_INTERNAL));
-			_window_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_WINDOW));
-			_window_group.add(new BGObj(Resource.IMPORT_FLOOR1_SIDEBLDG));
+			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR4_MAINBLDG_BACK));
+			_internals_group.add(new BGObj(Resource.IMPORT_FLOOR4_MAINBLDG_INTERNAL));
+			_window_group.add(new BGObj(Resource.IMPORT_FLOOR4_MAINBLDG_WINDOW));
+			_window_group.add(new BGObj(Resource.IMPORT_FLOOR4_SIDEBLDG));
 			
 			for (var i:int = 0; i < 50; i++) {
 				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
@@ -84,7 +84,7 @@ package scene {
 		}
 		
 		public override function can_continue():Boolean {
-			return true;
+			return false;
 		}
 		
 	}

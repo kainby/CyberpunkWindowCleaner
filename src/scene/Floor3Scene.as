@@ -6,7 +6,7 @@ package scene {
 	import org.flixel.*;
 	import particle.*;
 	import enemies.*;
-	public class TestScene extends Scene {
+	public class Floor3Scene extends Scene {
 		
 		private static var SCRIPT:Array = [
 			{PERCENT:0, CHARACTER:CHARACTER_THUG, POSITION:[340, 317], ID:1  },
@@ -45,7 +45,7 @@ package scene {
 			{PERCENT:0.25, CHARACTER:CHARACTER_ROMEO, TEXT:"FUGGEN LEL COMEDY GOLD"},
 		];
 		
-		public function TestScene(g:GameEngine) {
+		public function Floor3Scene(g:GameEngine) {
 			super(g);
 		}
 		
@@ -53,9 +53,9 @@ package scene {
 			super.init();
 			load_script(SCRIPT);
 			
-			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_BACK));
-			_internals_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_INTERNAL));
-			_window_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_WINDOW));
+			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR3_MAINBLDG_BACK));
+			_internals_group.add(new BGObj(Resource.IMPORT_FLOOR3_MAINBLDG_INTERNAL));
+			_window_group.add(new BGObj(Resource.IMPORT_FLOOR3_MAINBLDG_WINDOW));
 			_window_group.add(new BGObj(Resource.IMPORT_FLOOR1_SIDEBLDG));
 			
 			for (var i:int = 0; i < 50; i++) {

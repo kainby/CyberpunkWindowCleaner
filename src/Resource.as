@@ -64,6 +64,22 @@ package  {
 		[Embed( source = "../resc/floor1/mainbldg_back.png" )] public static var IMPORT_FLOOR1_MAINBLDG_BACK:Class;
 		[Embed( source = "../resc/floor1/mainbldg_internal.png" )] public static var IMPORT_FLOOR1_MAINBLDG_INTERNAL:Class;
 		[Embed( source = "../resc/floor1/mainbldg_window.png" )] public static var IMPORT_FLOOR1_MAINBLDG_WINDOW:Class;
+		[Embed( source = "../resc/floor1/sidebldg.png" )] public static var IMPORT_FLOOR1_SIDEBLDG:Class;
 		
+//floor2
+		[Embed( source = "../resc/floor2/mainbldg_back.png" )] public static var IMPORT_FLOOR2_MAINBLDG_BACK:Class;
+		[Embed( source = "../resc/floor2/mainbldg_internal.png" )] public static var IMPORT_FLOOR2_MAINBLDG_INTERNAL:Class;
+		[Embed( source = "../resc/floor2/mainbldg_window.png" )] public static var IMPORT_FLOOR2_MAINBLDG_WINDOW:Class;
+		
+//floor3
+		[Embed( source = "../resc/floor3/mainbldg_back.png" )] public static var IMPORT_FLOOR3_MAINBLDG_BACK:Class;
+		[Embed( source = "../resc/floor3/mainbldg_internal.png" )] public static var IMPORT_FLOOR3_MAINBLDG_INTERNAL:Class;
+		[Embed( source = "../resc/floor3/mainbldg_window.png" )] public static var IMPORT_FLOOR3_MAINBLDG_WINDOW:Class;
+		
+//floor4
+		[Embed( source = "../resc/floor4/mainbldg_back.png" )] public static var IMPORT_FLOOR4_MAINBLDG_BACK:Class;
+		[Embed( source = "../resc/floor4/mainbldg_internal.png" )] public static var IMPORT_FLOOR4_MAINBLDG_INTERNAL:Class;
+		[Embed( source = "../resc/floor4/mainbldg_window.png" )] public static var IMPORT_FLOOR4_MAINBLDG_WINDOW:Class;
+		[Embed( source = "../resc/floor4/sidebldg.png" )] public static var IMPORT_FLOOR4_SIDEBLDG:Class;
 	}
 }

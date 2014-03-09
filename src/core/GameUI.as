@@ -43,7 +43,7 @@ package core {
 			_score.setFormat("gamefont", 35);
 			
 			_bar_frame.loadGraphic(Resource.IMPORT_BAR_FRAME);
-			_bar_frame.set_position((1000 - _bar_frame.width) / 2, 0);
+			_bar_frame.set_position(0, 0);
 			_cleaning_bar.scale.x = 0.001;
 			_cleaning_bar.set_position(_bar_frame.x + 126, 3);
 			_cleaning_bar.loadGraphic(Resource.IMPORT_HPBAR);

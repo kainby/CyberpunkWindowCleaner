@@ -12,7 +12,7 @@ package gameobj
 			// default: damage = 0
 			super(x, y);
 			
-			this._speed = 5;
+			this._speed = 3.5;
 			this._angle = ang;
 			this._distance = 0;
 			this._range = 1200;

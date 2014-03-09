@@ -6,7 +6,7 @@ package scene {
 	import org.flixel.*;
 	import particle.*;
 	import enemies.*;
-	public class TestScene extends Scene {
+	public class Floor1Scene extends Scene {
 		
 		private static var SCRIPT:Array = [
 			{PERCENT:0, CHARACTER:CHARACTER_THUG, POSITION:[340, 317], ID:1  },
@@ -45,7 +45,7 @@ package scene {
 			{PERCENT:0.25, CHARACTER:CHARACTER_ROMEO, TEXT:"FUGGEN LEL COMEDY GOLD"},
 		];
 		
-		public function TestScene(g:GameEngine) {
+		public function Floor1Scene(g:GameEngine) {
 			super(g);
 		}
 		

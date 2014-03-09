@@ -11,6 +11,7 @@ package gameobj
 		public function BasicBullet(x:Number = 0, y:Number = 0) {
 			super(x, y);
 			_damage = 0;
+			this.set_scale(1.5);
 		}
 		
 		public function bullet_update(game:GameEngine):void { }

@@ -15,6 +15,10 @@ package {
 	import org.flixel.plugin.photonstorm.FlxBitmapFont;
 	import org.flixel.plugin.photonstorm.FlxScrollingText;
 	import particle.*;
+	import scene.Floor1Scene;
+	import scene.Floor2Scene;
+	import scene.Floor3Scene;
+	import scene.Floor4Scene;
 	import scene.GroundFloorScene;
 	import scene.Scene;
 	import scene.TestScene;
@@ -49,9 +53,10 @@ package {
 			
 			_scene_list = Vector.<Scene>([
 				new GroundFloorScene(this), 
-				new TestScene(this),
-				new TestScene(this),
-				new TestScene(this)
+				new Floor1Scene(this),
+				new Floor2Scene(this),
+				new Floor3Scene(this),
+				new Floor4Scene(this)
 			]);
 			
 			next_scene();
@@ -59,7 +64,6 @@ package {
 			_ui = new GameUI(this);
 			
 			this.add(_bgobjs);
-			
 			this.add(_sceneobjs);
 			this.add(_stains);
 			this.add(_player);
@@ -190,7 +194,6 @@ package {
 				}
 			}
 			
-			// update bullets
 			if (_bullets.length > 0) {
 				for (var i_bullet:int = _bullets.length - 1; i_bullet >= 0; i_bullet-- ) {
 					var itr_bullet:BasicBullet = _bullets.members[i_bullet];
@@ -213,15 +216,6 @@ package {
 					
 					bullet.do_remove();
 					_bullets.remove(bullet, true);
-				});
-				
-				FlxG.overlap(_bullets, _enemies, function(bullet:BasicBullet, enemy:BaseEnemy):void {
-					if (!enemy._hiding) {
-						enemy._hp -= bullet._damage;
-						_particles.add(new BloodParticle(bullet.x, bullet.y));
-						bullet.do_remove();
-						_bullets.remove(bullet, true);
-					}
 				});
 			}
 			
@@ -264,8 +258,17 @@ package {
 		
 		public function die():void {
 			trace("Poor cleaner just died!");
-		}
-		
+		}	
 	}
-	
 }
+
+/*
+ FlxG.overlap(_bullets, _enemies, function(bullet:BasicBullet, enemy:BaseEnemy):void {
+	if (!enemy._hiding) {
+		enemy._hp -= bullet._damage;
+		_particles.add(new BloodParticle(bullet.x, bullet.y));
+		bullet.do_remove();
+		_bullets.remove(bullet, true);
+	}
+});
+ */
