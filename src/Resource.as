@@ -20,8 +20,9 @@ package  {
 			return GAME_BITMAP_FONT;
 		}
 		
-		[Embed( source = "../resc/sky.png" )] public static var IMPORT_SKY:Class;
-		[Embed( source = "../resc/city_bg.png" )] public static var IMPORT_CITY_BG:Class;
+		[Embed( source = "../resc/bg/bg_0.png" )] public static var IMPORT_BG_0:Class;
+		[Embed( source = "../resc/bg/bg_1.png" )] public static var IMPORT_BG_1:Class;
+		[Embed( source = "../resc/bg/bg_2.png" )] public static var IMPORT_BG_2:Class;
 		[Embed( source = "../resc/cable.png" )] public static var IMPORT_CLEANER_GUY_CABLE:Class;
 		
 		[Embed( source = "../resc/continue_ui.png" )] public static var IMPORT_CONTINUE:Class;

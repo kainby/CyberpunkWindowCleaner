@@ -52,7 +52,7 @@ package {
 			
 			
 			_scene_list = Vector.<Scene>([
-				new Floor1Scene(this),
+				//new Floor1Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -74,8 +74,9 @@ package {
 			this.add(_powerups);
 			this.add(_ui);
 			
-			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
-			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
+			_bgobjs.add(new BGObj(Resource.IMPORT_BG_0));
+			_bgobjs.add(new BGObj(Resource.IMPORT_BG_1));
+			_bgobjs.add(new BGObj(Resource.IMPORT_BG_2));
 		}
 		
 		private var _transition_ct:Number = 0;
