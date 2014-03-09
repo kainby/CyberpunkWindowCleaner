@@ -21,6 +21,10 @@ package scene {
 			return false;
 		}
 		
+		public override function can_continue():Boolean {
+			return true;
+		}
+		
 	}
 
 }

@@ -27,7 +27,6 @@ package {
 		
 		public var _particles:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
-		public var _bloods:FlxGroup = new FlxGroup();
 		public var _enemies:FlxGroup = new FlxGroup();
 				
 		public var _cur_scene:Scene;
@@ -39,7 +38,8 @@ package {
 			trace("game_init");
 			super.create();
 			
-			_cur_scene = (new GroundFloorScene(this)).init();
+			//_cur_scene = (new GroundFloorScene(this)).init();
+			_cur_scene = (new TestScene(this)).init();
 			_ui = new GameUI(this);
 			
 			this.add(_bgobjs);
@@ -48,20 +48,11 @@ package {
 			this.add(_player);
 			this.add(_enemies);
 			this.add(_bullets);
-			this.add(_bloods);
 			this.add(_particles);
 			this.add(_ui);
 			
 			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
 			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
-			
-			// initilize enemies
-			create_sniper_enemy(0, 100, 1);
-			create_sniper_enemy(0, 200, 1);
-			create_sniper_enemy(0, 300, 1);
-			create_sniper_enemy(934, 150, 2);
-			create_sniper_enemy(934, 250, 2);
-			create_sniper_enemy(934, 350, 2);
 		}
 		
 		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
@@ -73,20 +64,6 @@ package {
 				if (itr._cleaned) ct++;
 			}
 			return ct/_stains.length;
-		}
-		
-		public function create_sniper_enemy(x:Number, y:Number, team_no:Number):void {
-			var enemy:SniperEnemy = new SniperEnemy(team_no);
-			enemy.set_position(x, y);
-			_enemies.add(enemy);
-		}
-		
-		public function object_hit(x:Number, y:Number) {
-			var blood:FlxSprite = new FlxSprite(x, y);
-			blood.loadGraphic(Resource.IMPORT_BLOOD, true, false, 18, 18);
-			blood.addAnimation("blood_splash", [1, 2, 3], 12, false);
-			blood.play("blood_splash");
-			_bloods.add(blood);
 		}
 		
 		public function die():void {
@@ -186,7 +163,7 @@ package {
 				}
 				
 				FlxG.overlap(_bullets, _player._body, function(bullet:BasicBullet, body:FlxSprite):void {
-					object_hit(bullet.x, bullet.y);
+					_particles.add(new BloodParticle(bullet.x, bullet.y));
 					
 					_hp -= bullet._damage;
 					_ui.hp_update();
@@ -201,21 +178,11 @@ package {
 				FlxG.overlap(_bullets, _enemies, function(bullet:BasicBullet, enemy:BaseEnemy):void {
 					if (!enemy._hiding) {
 						enemy._hp -= bullet._damage;
-						object_hit(bullet.x, bullet.y);
+						_particles.add(new BloodParticle(bullet.x, bullet.y));
 						bullet.do_remove();
 						_bullets.remove(bullet, true);
 					}
 				});
-			}
-			
-			// remove any blood animation that is finished
-			if (_bloods.length > 0) {
-				for (var i_blood:int = _bloods.length - 1; i_blood >= 0; i_blood-- ) {
-					var itr_blood:FlxSprite = _bloods.members[i_blood];
-					if (itr_blood.finished) {
-						_bloods.remove(itr_blood, true);
-					}
-				}
 			}
 		}
 		

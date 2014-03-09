@@ -35,6 +35,10 @@ package scene {
 			_g = g;
 		}
 		
+		public function can_continue():Boolean {
+			return false;
+		}
+		
 		public function init():Scene {
 			_g._sceneobjs.add(_bg_group);
 			_g._sceneobjs.add(_character_group);

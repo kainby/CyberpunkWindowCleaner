@@ -5,6 +5,7 @@ package scene {
 	import mx.core.FlexSprite;
 	import org.flixel.*;
 	import particle.*;
+	import enemies.*;
 	public class TestScene extends Scene {
 		
 		private static var SCRIPT:Array = [
@@ -57,10 +58,24 @@ package scene {
 			_window_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_WINDOW));
 			
 			for (var i:int = 0; i < 50; i++) {
-				_stains.add((new BasicStain(this)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
+				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
 			}
 			
+
+			create_sniper_enemy(0, 100, 1);
+			create_sniper_enemy(0, 200, 1);
+			create_sniper_enemy(0, 300, 1);
+			create_sniper_enemy(934, 150, 2);
+			create_sniper_enemy(934, 250, 2);
+			create_sniper_enemy(934, 350, 2);
+			
 			return this;
+		}
+		
+		public function create_sniper_enemy(x:Number, y:Number, team_no:Number):void {
+			var enemy:SniperEnemy = new SniperEnemy(team_no);
+			enemy.set_position(x, y);
+			_g._enemies.add(enemy);
 		}
 		
 	}

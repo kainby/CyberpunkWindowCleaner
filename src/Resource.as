@@ -24,6 +24,7 @@ package  {
 		[Embed( source = "../resc/city_bg.png" )] public static var IMPORT_CITY_BG:Class;
 		[Embed( source = "../resc/cable.png" )] public static var IMPORT_CLEANER_GUY_CABLE:Class;
 		
+		[Embed( source = "../resc/continue_ui.png" )] public static var IMPORT_CONTINUE:Class;
 		[Embed( source = "../resc/speechbubble.png" )] public static var IMPORT_SPEECH_BUBBLE:Class;
 		
 // accessories

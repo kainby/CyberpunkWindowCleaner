@@ -25,12 +25,19 @@ package core {
 		public var _bar_frame:FlxSprite = new FlxSprite();
 		public var _score:FlxText;
 		
+		public var _continue:FlxSprite = new FlxSprite();
+		
 		public var _g:GameEngine;
 		
 		public function GameUI(g:GameEngine) {
 			super();
 			
 			_g = g;
+			
+			_continue.loadGraphic(Resource.IMPORT_CONTINUE);
+			_continue.x = Util.WID / 2 - _continue.width / 2;
+			_continue.visible = false;
+			this.add(_continue);
 			
 			_score = new FlxText(0, 0, 100, "0%", true);
 			_score.setFormat("gamefont", 35);
@@ -54,6 +61,7 @@ package core {
 			this.add(_score);
 		}
 		
+		private var _continue_flash_ct:uint = 0;
 		public function ui_update():void {
 			_bar_frame.visible = _g._cur_scene.show_hp_bar();
 			_cleaning_bar.visible = _g._cur_scene.show_hp_bar();
@@ -62,6 +70,14 @@ package core {
 			
 			hp_update();
 			cleaning_update();
+			
+			if (_g._cur_scene.can_continue()) {
+				_continue_flash_ct++;
+				if (_continue_flash_ct % 15 == 0) _continue.visible = !_continue.visible;
+				
+			} else {
+				_continue.visible = false;
+			}
 		}
 		
 		public function hp_update():void {
