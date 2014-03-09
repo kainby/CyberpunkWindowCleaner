@@ -8,13 +8,15 @@ package scene {
 		public static var CHARACTER:String = "CHARACTER"; //NOTE: make sure (name == value)
 		public static var PERCENT:String = "PERCENT";
 		public static var POSITION:String = "POSITION";
+		public static var MILLTO:String = "MILLTO";
 		public static var TEXT:String = "TEXT";
 		public static var SPEED:String = "SPEED";
 		public static var ID:String = "ID";
 		
 		public static var CHARACTER_ROMEO:String = "CHARACTER_ROMEO";
 		public static var CHARACTER_JULIET:String = "CHARACTER_JULIET";
-		public static var CHARACTER_THUG:String = "CHARACTER_THUG";
+		public static var CHARACTER_THUG_RED:String = "CHARACTER_THUG_RED";
+		public static var CHARACTER_THUG_BLUE:String = "CHARACTER_THUG_BLUE";
 		
 		public static var ANIM_STAND:String = "ANIM_STAND";
 		public static var ANIM_WALK:String = "ANIM_WALK";
@@ -100,9 +102,18 @@ package scene {
 				spr.set_position(evt[POSITION][0], evt[POSITION][1]);
 			}
 			
+			if (evt[MILLTO] != null) {
+				_queued_events.push(new MillAroundQueuedEvent(
+					unique_name,
+					_characters[unique_name],
+					evt[PERCENT],
+					evt[MILLTO]
+				));
+			}
+			
 			if (evt[POSITION] != null) {
 				_queued_events.push(new MoveToQueuedEvent(
-					evt[CHARACTER],
+					unique_name,
 					_characters[unique_name],
 					evt[PERCENT],
 					evt[POSITION],
@@ -112,7 +123,7 @@ package scene {
 			
 			if (evt[TEXT] != null) {
 				_queued_events.push(new TextQueuedEvent(
-					evt[CHARACTER],
+					unique_name,
 					_characters[unique_name],
 					evt[PERCENT],
 					evt[TEXT],
@@ -182,7 +193,7 @@ package scene {
 				rtv.offset.x = 31/2.0;
 				rtv.offset.y = 58;
 				
-			} else if (name == CHARACTER_THUG) {
+			} else if (name == CHARACTER_THUG_RED) {
 				rtv.loadGraphic(Resource.IMPORT_CHARACTER_THUG_RED, true, true, 57, 69);
 				rtv.addAnimation(ANIM_WALK, [0, 1, 2, 3], 5);
 				rtv.addAnimation(ANIM_STAND, [4], 0);
@@ -190,6 +201,13 @@ package scene {
 				rtv.offset.x = 57.0 / 2;
 				rtv.offset.y = 69;
 				
+			} else if (name == CHARACTER_THUG_BLUE) {
+				rtv.loadGraphic(Resource.IMPORT_CHARACTER_THUG_BLUE, true, true, 57, 69);
+				rtv.addAnimation(ANIM_WALK, [0, 1, 2, 3], 5);
+				rtv.addAnimation(ANIM_STAND, [4], 0);
+				rtv.play(ANIM_WALK);
+				rtv.offset.x = 57.0 / 2;
+				rtv.offset.y = 69;
 			}
 			
 			var scale:Number = 0.8;
