@@ -26,6 +26,7 @@ package {
 	public class GameEngine extends FlxState {
 		
 		public var _is_moving:Boolean = false;
+		public var _is_falling:Boolean = false;
 		private static var MOVE_SPEED:Number = 1;
 		private static var JUMP_SPEED:Number = 5;
 		
@@ -123,6 +124,7 @@ package {
 			_ui.ui_update();
 			_player.update_player(this);
 			_is_moving = false;
+			_is_falling = false;
 			
 			if (_cur_scene.can_continue() && _player.y() <= 0) {
 				next_scene();
@@ -141,6 +143,7 @@ package {
 			
 			if (Util.is_key(Util.MOVE_JUMP) && _player.y() < _cur_scene.get_player_y_max()) {
 				_player.y(JUMP_SPEED);
+				_is_falling = true;
 				
 			} else if (Util.is_key(Util.MOVE_UP) && _player.y() > _cur_scene.get_player_y_min()) {
 				_player.y( -MOVE_SPEED);

@@ -4,11 +4,13 @@ package core {
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import flash.display.Bitmap;
+	import scene.GroundFloorScene;
 	
 	public class Player extends FlxGroupSprite {
 		
 		public static var ANIM_STAND:String = "ANIM_STAND";
 		public static var ANIM_WALK:String = "ANIM_WALK";
+		public static var ANIM_FALL:String = "ANIM_FALL";
 		public static var ANIM_HURT:String = "ANIM_HURT";
 		public static var ANIM_STANDFRONT:String = "ANIM_STANDFRONT";
 		public static var ANIM_SALUTEFRONT:String = "ANIM_SALUTEFRONT";
@@ -28,12 +30,13 @@ package core {
 			_cable.loadGraphic(Resource.IMPORT_CLEANER_GUY_CABLE);
 			this.add(_cable);
 			
-			_body.loadGraphic(Resource.IMPORT_CLEANER_GUY,true,true,37,76);
+			_body.loadGraphic(Resource.IMPORT_CLEANER_GUY,true,true,35,69);
 			_body.addAnimation(ANIM_WALK, [2, 1, 0, 1], 10);
 			_body.addAnimation(ANIM_STAND, [2], 0);
-			_body.addAnimation(ANIM_HURT, [6,2], 10);
+			_body.addAnimation(ANIM_FALL, [0], 0);
+			_body.addAnimation(ANIM_HURT, [2,5], 10);
 			_body.addAnimation(ANIM_STANDFRONT, [4], 0);
-			_body.addAnimation(ANIM_SALUTEFRONT, [3, 5], 10);
+			_body.addAnimation(ANIM_SALUTEFRONT, [4, 3], 10);
 			this.continue_animation(ANIM_STAND);
 			this.add(_body);
 			
@@ -45,10 +48,10 @@ package core {
 			_wiper_hit_box.alpha = 0;
 			this.add(_wiper_hit_box);
 			
-			this.set_pos(Util.WID / 2, Util.HEI / 2);
+			this.set_pos(Util.WID / 2, 390);
 		}
 		public override function update_position():void {
-			_cable.set_position(x()+5, y()-460);
+			_cable.set_position(x()+8, y()-460);
 			_body.set_position(x(), y());
 			_body_hit_box.set_position(x()+4, y()+25);
 			_wiper_hit_box.set_position(x()+15, y()-1);
@@ -65,8 +68,12 @@ package core {
 		
 		public function update_player(g:GameEngine):void {
 			_hurt_ct = Math.max(0, _hurt_ct - 1);
-			if (_hurt_ct > 0) {
+			if (g._cur_scene is GroundFloorScene && this.y() >= 390) {
+				this.continue_animation(ANIM_STANDFRONT);
+			} else if (_hurt_ct > 0) {
 				this.continue_animation(ANIM_HURT);
+			} else if (g._is_falling) {
+				this.continue_animation(ANIM_FALL);
 			} else if (g._is_moving) {
 				this.continue_animation(ANIM_WALK);
 			} else {
