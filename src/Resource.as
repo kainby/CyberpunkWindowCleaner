@@ -45,6 +45,7 @@ package  {
 //sparks
 		[Embed( source = "../resc/spark/dust_spark.png" )] public static var IMPORT_DUST_SPARK:Class;
 		[Embed( source = "../resc/spark/hp_spark.png" )] public static var IMPORT_HP_SPARK:Class;
+		[Embed( source = "../resc/spark/rocket_spark.png" )] public static var IMPORT_ROCKET_SPARK:Class;
 		
 //character
 		[Embed( source = "../resc/character/cleaner_guy.png" )] public static var IMPORT_CLEANER_GUY:Class;
@@ -52,6 +53,8 @@ package  {
 		[Embed( source = "../resc/character/juliet.png" )] public static var IMPORT_CHARACTER_JULIET:Class;
 		[Embed( source = "../resc/character/thug_red.png" )] public static var IMPORT_CHARACTER_THUG_RED:Class;
 		[Embed( source = "../resc/character/thug_blue.png" )] public static var IMPORT_CHARACTER_THUG_BLUE:Class;
+		[Embed( source = "../resc/character/thug_jetpack_red.png" )] public static var IMPORT_JETPACK_THUG_RED:Class;
+		[Embed( source = "../resc/character/thug_jetpack_blue.png" )] public static var IMPORT_JETPACK_THUG_BLUE:Class;
 		
 		// enemies
 		[Embed( source = "../resc/character/enemy_red.png" )] public static var IMPORT_ENEMY_RED:Class;
