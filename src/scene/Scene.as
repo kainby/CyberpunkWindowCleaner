@@ -44,6 +44,10 @@ package scene {
 			return this;
 		}
 		
+		public function show_hp_bar():Boolean {
+			return true;
+		}
+		
 		protected function load_script(script:Array):void {
 			for (var i:int = 0; i < script.length; i++) {
 				var itr:Object = script[i];

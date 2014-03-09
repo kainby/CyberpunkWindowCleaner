@@ -1,5 +1,5 @@
 package scene {
-	import core.*;
+	import core.BGObj;
 	import gameobj.BasicStain;
 	import misc.FlxGroupSprite;
 	import mx.core.FlexSprite;
@@ -55,6 +55,10 @@ package scene {
 			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_BACK));
 			_internals_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_INTERNAL));
 			_window_group.add(new BGObj(Resource.IMPORT_FLOOR1_MAINBLDG_WINDOW));
+			
+			for (var i:int = 0; i < 50; i++) {
+				_stains.add((new BasicStain(this)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
+			}
 			
 			return this;
 		}

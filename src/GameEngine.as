@@ -13,6 +13,7 @@ package {
 	import org.flixel.plugin.photonstorm.FlxBitmapFont;
 	import org.flixel.plugin.photonstorm.FlxScrollingText;
 	import particle.*;
+	import scene.GroundFloorScene;
 	import scene.Scene;
 	import scene.TestScene;
 	
@@ -23,27 +24,23 @@ package {
 		
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
-		public var _cleaning_bar:FlxSprite = new FlxSprite();
-		public var _hp_bar:FlxSprite = new FlxSprite();
 		
 		public var _particles:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
 		public var _bloods:FlxGroup = new FlxGroup();
 		public var _enemies:FlxGroup = new FlxGroup();
-		
-		public var _bar_frame:FlxSprite = new FlxSprite();
-		public var _hp:Number;
-		public var _score:FlxText;
-		
+				
 		public var _cur_scene:Scene;
+		
+		public var _hp:Number = 100;
+		public var _ui:GameUI;
 		
 		public override function create():void {
 			trace("game_init");
 			super.create();
 			
-			_hp = 100;
-			_score = new FlxText(0, 0, 100, "0%", true);
-			_score.setFormat("gamefont", 35);
+			_cur_scene = (new GroundFloorScene(this)).init();
+			_ui = new GameUI(this);
 			
 			this.add(_bgobjs);
 			this.add(_sceneobjs);
@@ -52,36 +49,11 @@ package {
 			this.add(_enemies);
 			this.add(_bullets);
 			this.add(_bloods);
-			this.add(_cleaning_bar);
-			this.add(_hp_bar);
-			this.add(_bar_frame);
-			this.add(_score);
 			this.add(_particles);
+			this.add(_ui);
 			
 			_bgobjs.add(new BGObj(Resource.IMPORT_SKY));
 			_bgobjs.add(new BGObj(Resource.IMPORT_CITY_BG));
-			
-			_cur_scene = (new TestScene(this)).init();
-			
-			for (var i:int = 0; i < 50; i++) {
-				_stains.add((new BasicStain(this)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
-			}
-			
-			// initialize hp bar
-			_bar_frame.loadGraphic(Resource.IMPORT_BAR_FRAME);
-			_bar_frame.set_position((1000 - _bar_frame.width) / 2, 0);
-			_cleaning_bar.scale.x = 0.001;
-			_cleaning_bar.set_position(_bar_frame.x + 126, 3);
-			_cleaning_bar.loadGraphic(Resource.IMPORT_HPBAR);
-			_cleaning_bar.color = 0x4DBFE6;
-			_hp_bar.set_position(_bar_frame.x + 114, 28);
-			_hp_bar.loadGraphic(Resource.IMPORT_HPBAR);
-			_hp_bar.color = 0xDFDF20;
-			
-			// initialize score
-			// _score.setFormat("Liquid Cyrstal", 18, 0x959FBF);
-			_score.set_position(_bar_frame.x + 280, 2);
-			_score.text = "0%";
 			
 			// initilize enemies
 			create_sniper_enemy(0, 100, 1);
@@ -90,8 +62,6 @@ package {
 			create_sniper_enemy(934, 150, 2);
 			create_sniper_enemy(934, 250, 2);
 			create_sniper_enemy(934, 350, 2);
-			
-			//this.add(new FlxScrollingText());
 		}
 		
 		public function add_particle(p:Particle):Particle { _particles.add(p); return p; }
@@ -119,28 +89,6 @@ package {
 			_bloods.add(blood);
 		}
 		
-		// update the hp bar
-		public function hp_update():void {
-			if (_hp > 100) {
-				_hp = 100;
-			}
-			if (_hp < 0) {
-				_hp = 0;
-			}
-			
-			var pct:Number = _hp / 100;
-			_hp_bar.scale.x = pct;
-			_hp_bar.set_position(_bar_frame.x + 114 - (1 - pct) * 70, 28);
-		}
-		
-		// update the percentage of cleaning
-		public function cleaning_update():void {
-			var pct:Number = get_cleaned_pct();
-			_score.text = int(pct * 100) + "%";
-			_cleaning_bar.scale.x = pct;
-			_cleaning_bar.set_position(_bar_frame.x + 126 - (1 - pct) * 70, 3);
-		}
-		
 		public function die():void {
 			trace("Poor cleaner just died!");
 		}
@@ -150,6 +98,7 @@ package {
 		public override function update():void {
 			super.update();
 			
+			_ui.ui_update();
 			_player.update_player(this);
 			_is_moving = false;
 			
@@ -197,8 +146,6 @@ package {
 						);
 					}
 				});
-				
-				cleaning_update();
 			}
 			
 			for (var i_particle:int = _particles.length-1; i_particle >= 0; i_particle--) {
@@ -242,7 +189,7 @@ package {
 					object_hit(bullet.x, bullet.y);
 					
 					_hp -= bullet._damage;
-					hp_update();
+					_ui.hp_update();
 					if (_hp <= 0) {
 						die();
 					}
@@ -270,7 +217,7 @@ package {
 					}
 				}
 			}
-		} // end of update function
+		}
 		
 	}
 	
