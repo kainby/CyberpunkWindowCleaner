@@ -193,7 +193,7 @@ package {
 					} else if (!stain._cleaned && Util.int_random(0,10) == 0) {
 						add_particle(new FadeOutParticle(
 							(new FlxPoint(_player.x() + Util.float_random( -20, 20), _player.y() + Util.float_random( -20, 20)))
-							).set_vr(Util.float_random( -6, 6)).set_scale(Util.float_random(1,2))
+							).set_vr(Util.float_random( -6, 6)).set_scale(Util.float_random(1,2)) as FadeOutParticle
 						);
 					}
 				});

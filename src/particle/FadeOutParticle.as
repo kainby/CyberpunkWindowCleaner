@@ -32,12 +32,6 @@ package particle
 			return this;
 		}
 		
-		public function set_scale(sc:Number):FadeOutParticle {
-			this.scale.x = sc;
-			this.scale.y = sc;
-			return this;
-		}
-		
 		public override function particle_update(g:GameEngine):void {
 			_ct--;
 			var pct:Number = _ct / _ct_max;

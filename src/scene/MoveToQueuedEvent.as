@@ -1,6 +1,7 @@
 package scene {
 	import flash.geom.Vector3D;
 	import org.flixel.FlxSprite;
+	import org.flixel.FlxObject;
 
 	public class MoveToQueuedEvent extends QueuedEvent {
 		
@@ -9,7 +10,7 @@ package scene {
 		public var _dp:Vector3D = new Vector3D(0, 0, 0);
 		public var _dv:Vector3D = new Vector3D(0, 0, 0);
 		
-		public function MoveToQueuedEvent(name:String, character:FlxSprite, pct:Number, position:Array, speed:Number = 1) {
+		public function MoveToQueuedEvent(name:String, character:SceneCharacter, pct:Number, position:Array, speed:Number = 1) {
 			super(name, character, pct);
 			_target[0] = position[0];
 			_target[1] = position[1];
@@ -35,6 +36,12 @@ package scene {
 				_dp.scaleBy(_speed);
 				_character.x += _dp.x;
 				_character.y += _dp.y;
+			}
+			_character._is_moving = true;
+			if (_dp.x < 0) {
+				_character.facing = FlxObject.RIGHT;
+			} else {
+				_character.facing = FlxObject.LEFT;
 			}
 		}
 		

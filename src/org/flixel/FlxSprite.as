@@ -162,6 +162,12 @@ package org.flixel
 			return this;
 		}
 		
+		public function set_scale(sc:Number):FlxSprite {
+			this.scale.x = sc;
+			this.scale.y = sc;
+			return this;
+		}
+		
 		/**
 		 * Creates a white 8x8 square <code>FlxSprite</code> at the specified position.
 		 * Optionally can load a simple, one-frame graphic instead.
