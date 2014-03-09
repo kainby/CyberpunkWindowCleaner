@@ -5,18 +5,19 @@ package enemies {
 	import org.flixel.FlxPoint;
 	
 	public class JetPackEnemy extends BaseEnemy {
-		public var _position:FlxPoint;
 		public var _destination:FlxPoint;
+		public var _tactical_step:Number;
 		
 		public function JetPackEnemy(team_no:Number) {
 			// default: hp=100, shoot=false, angle=0, hiding=false
 			super(team_no);
-			_position = new FlxPoint();
 			_destination = new FlxPoint();
+			_tactical_step = 1;
 		}
 		
 		public function set_position(x:Number, y:Number):JetPackEnemy {
-			_position = _position.make(x, y);
+			this.x = x;
+			this.y = y;
 			return this;
 		}
 		
@@ -26,11 +27,17 @@ package enemies {
 		}
 		
 		public function in_position():Boolean {
-			return _position.x == _destination.x && _position.y == _destination.y;
+			return this.x == _destination.x && this.y == _destination.y;
 		}
 		
 		override public function enemy_update(game:GameEngine):void {
-			
+			if (!in_position()) {
+				this.x += (_destination.x - this.x) / 10;
+				this.y += (_destination.y - this.y) / 10;
+			} else {
+				// shoot logic
+				
+			}
 		}
 	}
 }

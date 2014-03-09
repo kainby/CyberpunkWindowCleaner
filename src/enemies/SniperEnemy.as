@@ -60,9 +60,12 @@ package enemies {
 		override public function enemy_update(game:GameEngine):void {
 			if (!this.alive) {
 				_laser_sight.visible = false;
-			} else{
-				var dx:Number = (_team_no == 1) ? 60 : 0;
-				_laser_sight.set_position(this.x + dx - 320, this.y + 12);
+			} else {
+				var team_sign = (_team_no == 1) ? 1:( -1);
+				var dx:Number = (_team_no == 1) ? 62 : 0;
+				var dy:Number = 25.71 * Math.sin(Math.atan(6 / 25) - this.angle * Util.RADIAN * team_sign);
+				_laser_sight.y = this.y + 14 - dy;
+				_laser_sight.set_position(this.x + dx - 320, _laser_sight.y);
 				if (!_hiding) {
 					switch(_tactical_step) {
 						case 1:
@@ -106,6 +109,14 @@ package enemies {
 								}
 								var dtheta:Number = (goal_angle - _angle) / 10;
 								_angle += dtheta;
+								if (this._team_no == 1) {
+									this.angle = _angle;
+								} else {
+									// _team_no == 2
+									this.angle = _angle + 180;
+								}
+								var dy:Number = 25.71 * Math.sin(Math.atan(6 / 25) - this.angle * Util.RADIAN * team_sign);
+								_laser_sight.y = this.y + 14 - dy;
 							}
 							break;
 						case 4:
@@ -121,7 +132,7 @@ package enemies {
 									_hiding = true;
 								} else {
 									// shoot
-									var dx:Number = (this._team_no == 1) ? 60 : -6;
+									var dx:Number = (this._team_no == 1) ? 62 : -6;
 									var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 12, this._angle);
 									game._bullets.add(bullet);
 									
