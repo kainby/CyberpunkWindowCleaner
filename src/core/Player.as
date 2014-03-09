@@ -11,9 +11,12 @@ package core {
 		public static var ANIM_WALK:String = "ANIM_WALK";
 		
 		public var _cable:FlxSprite = new FlxSprite();
-		public var _cable_offset:FlxPoint = new FlxPoint(5, -470);
+		public var _cable_offset:FlxPoint = new FlxPoint(5, -465);
 		
 		public var _body:FlxSprite = new FlxSprite();
+		
+		public var _body_hit_box:FlxSprite = new FlxSprite();
+		public var _wiper_hit_box:FlxSprite = new FlxSprite();
 		
 		public function Player() {
 			super();
@@ -27,11 +30,21 @@ package core {
 			this.continue_animation(ANIM_STAND);
 			this.add(_body);
 			
+			_body_hit_box.loadGraphic(Resource.IMPORT_25x40);
+			_body_hit_box.alpha = 0;
+			this.add(_body_hit_box);
+			
+			_wiper_hit_box.loadGraphic(Resource.IMPORT_12x8);
+			_wiper_hit_box.alpha = 0;
+			this.add(_wiper_hit_box);
+			
 			this.set_pos(Util.WID / 2, Util.HEI / 2);
 		}
 		public override function update_position():void {
 			_cable.set_position(x()+_cable_offset.x, y()+_cable_offset.y);
 			_body.set_position(x(), y());
+			_body_hit_box.set_position(x()+4, y()+25);
+			_wiper_hit_box.set_position(x()+15, y()-1);
 			
 		}
 		

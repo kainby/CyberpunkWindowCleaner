@@ -21,6 +21,7 @@ package scene {
 		public override function can_continue():Boolean { return true; }
 		public override function get_player_x_min():Number { return 1000; }
 		public override function get_player_x_max():Number { return 0; }
+		public override function get_player_y_max():Number { return 390; }
 		
 	}
 

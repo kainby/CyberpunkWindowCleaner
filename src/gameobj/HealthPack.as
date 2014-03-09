@@ -21,7 +21,7 @@ package gameobj
 			this.play("spin");
 		}
 		
-		public function health_pack_update(game:GameEngine):void {
+		public function powerup_update(game:GameEngine):void {
 			this.y += 1;
 		}
 		

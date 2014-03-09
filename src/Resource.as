@@ -27,6 +27,8 @@ package  {
 		[Embed( source = "../resc/continue_ui.png" )] public static var IMPORT_CONTINUE:Class;
 		[Embed( source = "../resc/speechbubble.png" )] public static var IMPORT_SPEECH_BUBBLE:Class;
 		
+		[Embed( source = "../resc/25x40.png" )] public static var IMPORT_25x40:Class;
+		[Embed( source = "../resc/12x8.png" )] public static var IMPORT_12x8:Class;
 // accessories
 		[Embed( source = "../resc/accessories/bar_frame.png" )] public static var IMPORT_BAR_FRAME:Class;
 		[Embed( source = "../resc/accessories/hpbar.png" )] public static var IMPORT_HPBAR:Class;

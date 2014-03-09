@@ -17,6 +17,7 @@ package particle
 			this._coeff = Util.float_random(0.975, 0.995);
 			
 			this.loadGraphic(Resource.IMPORT_HP_SPARK);
+			this.color = 0x00FF00;
 		}
 		
 		public override function particle_update(g:GameEngine):void {
