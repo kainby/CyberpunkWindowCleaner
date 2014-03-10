@@ -78,22 +78,30 @@ package scene {
 			
 
 			//create_sniper_enemy(0, 100, 1,_g);
-			create_sniper_enemy(0, 200, 1,_g);
+			create_sniper_enemy(1, _g, [
+				72, 94, 
+				72, 234, 
+				72, 382
+			]);
 			//create_sniper_enemy(0, 300, 1,_g);
 			//create_sniper_enemy(934, 150, 2,_g);
-			create_sniper_enemy(934, 250, 2,_g);
+			create_sniper_enemy(2, _g, [
+				915, 382, 
+				915, 234,
+				915, 94
+			]);
 			//create_sniper_enemy(934, 350, 2, _g);
-			
-			
 			//create_jetpack_enemy(72, 1, _g);
 			//create_jetpack_enemy(863, 2, _g);
 			
 			return this;
 		}
 		
-		public function create_sniper_enemy(x:Number, y:Number, team_no:Number, g:GameEngine):void {
+		public function create_sniper_enemy(team_no:Number, g:GameEngine, positions:Array):void {
 			var enemy:SniperEnemy = new SniperEnemy(team_no,g);
-			enemy.set_position(x, y);
+			for (var i:int = 0; i < positions.length; i += 2) {
+				enemy.add_position(positions[i] -10, positions[i + 1] - 25);
+			}
 			_g._enemies.add(enemy);
 		}
 		

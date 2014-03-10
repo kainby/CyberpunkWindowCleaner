@@ -55,19 +55,19 @@ package scene {
 			}
 			
 
-			create_sniper_enemy(0, 100, 1,_g);
-			create_sniper_enemy(0, 200, 1,_g);
-			create_sniper_enemy(0, 300, 1,_g);
-			create_sniper_enemy(934, 150, 2,_g);
-			create_sniper_enemy(934, 250, 2,_g);
-			create_sniper_enemy(934, 350, 2,_g);
+			create_sniper_enemy(72, 94, 1,_g);
+			create_sniper_enemy(72, 234, 1,_g);
+			create_sniper_enemy(72, 382, 1,_g);
+			create_sniper_enemy(915, 382, 2,_g);
+			create_sniper_enemy(915, 234, 2,_g);
+			create_sniper_enemy(915, 92, 2,_g);
 			
 			return this;
 		}
 		
 		public function create_sniper_enemy(x:Number, y:Number, team_no:Number, g:GameEngine):void {
 			var enemy:SniperEnemy = new SniperEnemy(team_no,g);
-			enemy.set_position(x, y);
+			enemy.set_position(x-10, y-25);
 			_g._enemies.add(enemy);
 		}
 		

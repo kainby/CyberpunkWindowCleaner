@@ -118,15 +118,9 @@ package  {
 			return r * (180 / Math.PI);
 		}
 		
-		public static function p2m(p:Number):Number {
-			return p / pixel_meter_ratio;
+		public static function point_dist(ax:Number, ay:Number, bx:Number, by:Number):Number {
+			return Math.sqrt(Math.pow(by - ay, 2) + Math.pow(bx - ax, 2));
 		}
-		
-		public static function m2p(m:Number):Number {
-			return m * pixel_meter_ratio;
-		}
-		
-		private static var pixel_meter_ratio:Number = 30;
 	}
 
 }

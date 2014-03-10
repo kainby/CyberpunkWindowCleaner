@@ -53,7 +53,7 @@ package {
 			
 			
 			_scene_list = Vector.<Scene>([
-				//new Floor1Scene(this),
+				new Floor2Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -66,10 +66,10 @@ package {
 			_ui = new GameUI(this);
 			
 			this.add(_bgobjs);
+			this.add(_enemies);
 			this.add(_sceneobjs);
 			this.add(_stains);
 			this.add(_player);
-			this.add(_enemies);
 			this.add(_bullets);
 			this.add(_particles);
 			this.add(_powerups);

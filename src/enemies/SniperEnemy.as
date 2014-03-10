@@ -1,7 +1,9 @@
 package enemies {
+	import flash.geom.Point;
 	import gameobj.RoundBullet;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import particle.LaserSight;
 	
@@ -19,7 +21,7 @@ package enemies {
 		private var _laser_sight:LaserSight;
 		
 		public var _group:FlxGroup;
-		public var _target:BaseEnemy;
+		public var _target:Point = new Point();
 		
 		// relative position of gun's muzzle
 		public var _gun_x:Number;
@@ -40,7 +42,6 @@ package enemies {
 			this._vulnerable_timer = 0;
 			this._vulnerable_limit = 60;
 			this._group = null;
-			this._target = null;
 			
 			// initialize laser sight
 			this._laser_sight = new LaserSight();
@@ -83,12 +84,8 @@ package enemies {
 						case 2:
 							// finding target; if successfully, go on, otherwise retreat
 							this.visible = true;
-							var search_success:Boolean = search_new_target(game._enemies);
-							if (!search_success) {
-								retreat();
-							} else {
-								_tactical_step = 3;
-							}
+							search_new_target(game._enemies);
+							_tactical_step = 3;
 							break;
 						case 3:
 							// aim
@@ -126,18 +123,13 @@ package enemies {
 								_shoot_timer = 0;
 								
 								_laser_sight.visible = false;
-								var choice:Number = Util.float_random(0, 4);
-								if (choice > 3) {
-									// optional tactical hide
-									_hiding = true;
-								} else {
-									// shoot
-									var dx:Number = (this._team_no == 1) ? 62 : -6;
-									var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 12, this._angle);
-									game._bullets.add(bullet);
-									
-									_tactical_step = 5;
-								}
+								var choice:Number = 1;
+								// shoot
+								var dx:Number = (this._team_no == 1) ? 62 : -6;
+								var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 12, this._angle);
+								game._bullets.add(bullet);
+								_tactical_step = 5;
+								
 							} else {
 								// in shoot delay
 								_laser_sight.visible = true;
@@ -146,7 +138,8 @@ package enemies {
 						case 5:
 							if (_vulnerable_timer >= _vulnerable_limit) {
 								// post-shoot delay
-								retreat();
+								retreat(game._enemies);
+								
 							} else {
 								_vulnerable_timer++;
 							}
@@ -167,13 +160,38 @@ package enemies {
 			}
 		}
 		
-		public function retreat():void {
+		public function retreat(enemies_group:FlxGroup):void {
 			_hiding = true;
 			_tactical_step = 1;
 			_vulnerable_timer = 0;
 			_vulnerable_limit = Util.int_random(60, 180);
 			_shoot_timer = 0;
 			_laser_sight.visible = false;
+			this.visible = false;
+			move_to_a_location(enemies_group);
+		}
+		
+		private var _positions:Vector.<Point> = new Vector.<Point>();
+		public function add_position(x:Number, y:Number):void {
+			if (_positions.length == 0) set_position(x, y);
+			_positions.push(new Point(x, y));
+		}
+		public function move_to_a_location(enemy_group:FlxGroup):void {
+			if (_positions.length == 0) return;
+			for each(var p:Point in _positions) {
+				var too_close:Boolean = false;
+				for each(var e:BaseEnemy in enemy_group.members) {
+					if (e != this && Util.point_dist(p.x, p.y, e.x, e.y) < 10) {
+						too_close = true;
+						break;
+					}
+				}
+				if (!too_close) {
+					set_position(p.x, p.y);
+					_positions.push(_positions.shift());
+					return;
+				}
+			}
 		}
 		
 		// returns a boolean that indicates whether a target is found
@@ -185,8 +203,9 @@ package enemies {
 				var max_trial:Number = Util.int_random(10, 15);
 				while (trial <= max_trial) {
 					var possible_target:BaseEnemy = _group.getRandom() as BaseEnemy;
-					if (possible_target._team_no != this._team_no && possible_target.visible && possible_target.alive) {
-						_target = possible_target;
+					if (possible_target._team_no != this._team_no /*&& possible_target.visible && possible_target.alive*/) {
+						_target.x = possible_target.x;
+						_target.y = possible_target.y;
 						return true;
 					}
 					trial++;
