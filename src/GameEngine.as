@@ -54,7 +54,7 @@ package {
 			
 			
 			_scene_list = Vector.<Scene>([
-				new Floor3Scene(this),
+				new Floor4Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -96,6 +96,7 @@ package {
 				_bullets.clear();
 				_particles.clear();
 				_powerups.clear();
+				_behind.clear();
 				
 				_transition_from_scene = _cur_scene;
 				_cur_scene = next;
