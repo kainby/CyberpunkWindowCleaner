@@ -15,6 +15,8 @@ package enemies {
 		public var _mag:int;
 		public var _destination:FlxPoint;
 		public var _crash_mode:Boolean;
+		public var _crashed:Boolean;
+		public var _currloc:FlxPoint;
 		
 		public var _reassign_countdown:Number;
 		public var _debut:Boolean;
@@ -24,8 +26,8 @@ package enemies {
 		
 		public var RPM:int = 6;	// 600 RPM
 		public var MAG:int = 12;	// adjust this for the number of bullets
-		public var SPD:Number = 3;
-		public var GRAVITY:Number = 1.5;
+		public var SPD:Number = 2;
+		public var GRAVITY:Number = 0.25;
 		
 		public function HelicopterEnemy(team_no:Number, init_x:Number = 0, init_y:Number = 0) {
 			// default: hp=100, angle=0, hiding=false
@@ -39,11 +41,13 @@ package enemies {
 			this.x = init_x;
 			this.y = 500;
 			this._crash_mode = false;
+			this._crashed = false;
 			this._reassign_countdown = Util.int_random(1, 3);
 			this._dx = 75;
 			this._dy = 100;
 			this._vy = 0;
 			this._debut = true;
+			this._currloc = new FlxPoint();
 			
 			if (_team_no == 1) {
 				this._angle = 0;
@@ -60,28 +64,36 @@ package enemies {
 		
 		override public function enemy_update(game:GameEngine):void {
 			// reach the assigned point
-			if (!in_position()) {
+			if (!in_position() && !_crashed) {
 				if (_debut) {
 					// decelerate to the assigned position
-					this.x += (_destination.x - this.x) / 25;
-					this.y += (_destination.y - this.y) / 25;
-				} else {
+					this.x += (_destination.x - this.x) / 50;
+					this.y += (_destination.y - this.y) / 50;
+				} else if (!_crash_mode) {
 					// move to reassigned location with constant speed
 					var ang:Number = Math.atan2(_destination.y - this.y, _destination.x - this.x);
 					this.x += SPD * Math.cos(ang);
 					this.y += SPD * Math.sin(ang);
+				} else {
+					var vx = (_destination.x - _currloc.x) / 90;
+					var vy = (_destination.y - _currloc.y) / 90;
+					this.x += vx;
+					this.y += vy;
 				}
 				return;
 			} else {
 				_debut = false;
 				if (_crash_mode) {
 					// free-fall
+					_crashed = true;
 					var vx:Number = (_team_no == 1) ? -1:1;
 					_vy += GRAVITY;
-					this.x += vx;
+					this.x += vx * 4;
 					this.y += _vy;
+					this.angle += 2 * vx;
 				}
 			}
+			if (_crashed) return;
 			
 			_shoot_timer++;
 			if (_shoot_timer >= _shoot_delay) {
@@ -95,9 +107,8 @@ package enemies {
 								var target:HelicopterEnemy = game._enemies_front.members[i];
 								if (target._team_no != this._team_no) {
 									var ang:Number = Math.atan2(target.y - this.y, target.x - this.x) * Util.DEGREE;
-									if ((ang > 0 && ang < 90) || (ang > -180 && ang < -90)) {
-										_angle = ang;
-									}
+									// if ((ang > 0 && ang < 90) || (ang > -180 && ang < -90)) _angle = ang;
+									if (ang > 0 && ang < 180) _angle = ang;
 								}
 							}
 						}
@@ -132,6 +143,8 @@ package enemies {
 		
 		public function crash(crash_point:FlxPoint):void {
 			_crash_mode = true;
+			_debut = false;
+			_currloc = _currloc.make(this.x, this.y);
 			set_destination(crash_point.x, crash_point.y);
 		}
 		
