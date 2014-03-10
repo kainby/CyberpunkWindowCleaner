@@ -67,6 +67,10 @@ package  {
 		[Embed( source = "../resc/character/enemy_red.png" )] public static var IMPORT_ENEMY_RED:Class;
 		[Embed( source = "../resc/character/enemy_blue.png" )] public static var IMPORT_ENEMY_BLUE:Class;
 		
+		// helicopter
+		[Embed( source = "../resc/helicopter/helicopter_red_sheet.png" )] public static var IMPORT_HELI_RED:Class;
+		[Embed( source = "../resc/helicopter/helicopter_blue_sheet.png" )] public static var IMPORT_HELI_BLUE:Class;
+		
 // sound
 		[Embed( source = "../resc/sound/shoot1.mp3" )] public static var IMPORT_SOUND_SNIPER_SHOOT:Class;
 		[Embed( source = "../resc/sound/shoot2.mp3" )] public static var IMPORT_SOUND_JETPACK_SHOOT:Class;

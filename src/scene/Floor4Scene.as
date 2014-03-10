@@ -80,6 +80,9 @@ package scene {
 			for (var i:int = 0; i < 50; i++) {
 				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(200, 750), Util.float_random(150, 450)));
 			}
+
+			create_heli_enemy(1, 72, 30, _g);
+			create_heli_enemy(2, 840, 160, _g);
 			return this;
 		}
 		
@@ -114,6 +117,11 @@ package scene {
 		}
 		private function passed_mark(pct:Number):Boolean {
 			return _last_cleaned_pct < pct && _g.get_cleaned_pct() >= pct;
+		}
+		
+		public function create_heli_enemy(team_no:Number, x:Number, y:Number, g:GameEngine) {
+			var enemy:HelicopterEnemy = new HelicopterEnemy(team_no, x, y);
+			_g._enemies.add(enemy);
 		}
 		
 		public override function show_hp_bar():Boolean {

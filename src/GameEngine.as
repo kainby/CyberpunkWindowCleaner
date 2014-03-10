@@ -56,7 +56,7 @@ package {
 			
 			
 			_scene_list = Vector.<Scene>([
-				//new Floor4Scene(this),
+				new Floor4Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
