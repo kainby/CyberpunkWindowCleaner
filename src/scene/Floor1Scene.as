@@ -77,7 +77,7 @@ package scene {
 			_window_group.add(new BGObj(Resource.IMPORT_FLOOR1_SIDEBLDG));
 			
 			for (var i:int = 0; i < 50; i++) {
-				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
+				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(180, 750), Util.float_random(50, 450)));
 			}
 			
 			create_sniper_enemy(1, _g, [

@@ -88,13 +88,13 @@ package scene {
 			
 			for (var i:int = 0; i < 20; i++) {
 				_g._stains.add((new BasicStain(_g)).set_position(
-					Util.float_random(200, 800), 
+					Util.float_random(200, 750), 
 					Util.float_random(15, 180)
 				));
 			}
 			for (var i:int = 0; i < 20; i++) {
 				_g._stains.add((new BasicStain(_g)).set_position(
-					Util.float_random(200, 800), 
+					Util.float_random(200, 750), 
 					Util.float_random(335, 450)
 				));
 			}

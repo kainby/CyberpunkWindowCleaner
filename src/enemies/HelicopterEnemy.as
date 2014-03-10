@@ -111,8 +111,8 @@ package enemies {
 								var target:HelicopterEnemy = game._enemies_front.members[i];
 								if (target._team_no != this._team_no) {
 									var ang:Number = Math.atan2(target.y - this.y, target.x - this.x) * Util.DEGREE;
-									if ((this._team_no == 1 && (ang > -90 && ang < 90))
-									|| (this._team_no != 1 && (ang > 90 || ang < -90))) _angle = ang;
+									if ((this._team_no == 1 && (ang > -60 && ang < 60))
+									|| (this._team_no != 1 && (ang > 120 || ang < -120))) _angle = ang;
 								}
 							}
 						}
