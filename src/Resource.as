@@ -57,6 +57,7 @@ package  {
 		[Embed( source = "../resc/spark/dust_spark.png" )] public static var IMPORT_DUST_SPARK:Class;
 		[Embed( source = "../resc/spark/hp_spark.png" )] public static var IMPORT_HP_SPARK:Class;
 		[Embed( source = "../resc/spark/rocket_spark.png" )] public static var IMPORT_ROCKET_SPARK:Class;
+		[Embed( source = "../resc/spark/explosion.png" )] public static var IMPORT_EXPLOSION:Class;
 		
 //character
 		[Embed( source = "../resc/character/cleaner_guy.png" )] public static var IMPORT_CLEANER_GUY:Class;

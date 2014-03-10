@@ -127,7 +127,7 @@ package enemies {
 								var choice:Number = 1;
 								// shoot
 								var dx:Number = (this._team_no == 1) ? 62 : -6;
-								var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 12, this._angle);
+								var bullet:RoundBullet = new RoundBullet(this.x + dx, _laser_sight.y - 5, this._angle);
 								game._bullets.add(bullet);
 								FlxG.play(Resource.IMPORT_SOUND_SNIPER_SHOOT, 0.8);
 								_tactical_step = 5;

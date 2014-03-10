@@ -83,10 +83,13 @@ package scene {
 
 			_heli1 = create_heli_enemy(1, 72, 30, _g);
 			_heli2 = create_heli_enemy(2, 840, 160, _g);
+			_explosion = new Explosion(0, 0, _heli1.DELAY);
+			_g._particles.add(_explosion);
 			return this;
 		}
 		
 		private var _heli1:HelicopterEnemy, _heli2:HelicopterEnemy;
+		private var _explosion:Explosion;
 		
 		public function create_sniper_enemy(x:Number, y:Number, team_no:Number, g:GameEngine):void {
 			var enemy:SniperEnemy = new SniperEnemy(team_no,g);
@@ -106,6 +109,7 @@ package scene {
 			if (passed_mark(0.8)) {
 				_heli1.crash(new FlxPoint(Util.WID / 2, 0));
 				_heli2.crash(new FlxPoint(Util.WID / 2, 0));
+				_explosion.set_location(Util.WID / 2 - 53, 0).explode();
 			}
 			
 			if (passed_mark(0.0)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);

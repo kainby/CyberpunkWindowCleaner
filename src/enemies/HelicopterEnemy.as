@@ -24,17 +24,18 @@ package enemies {
 		public var _dy:Number;
 		public var _vy:Number;
 		
-		public var RPM:int = 6;	// 600 RPM
+		public var RPM:int = 6;		// 600 RPM
 		public var MAG:int = 12;	// adjust this for the number of bullets
-		public var SPD:Number = 2;
-		public var GRAVITY:Number = 0.25;
+		public const SPD:Number = 2;
+		public const GRAVITY:Number = 0.25;
+		public var DELAY:Number = 90;
 		
 		public function HelicopterEnemy(team_no:Number, init_x:Number = 0, init_y:Number = 0) {
 			// default: hp=100, angle=0, hiding=false
 			super(team_no);
 			
-			this._shoot_timer = 60;	// so the debut shoot will happen faster
-			this._shoot_delay = Util.int_random(150, 210);
+			this._shoot_timer = 150;	// so the debut shoot will happen faster
+			this._shoot_delay = Util.int_random(150, 200);
 			this._mag = MAG;
 			this._rpm = RPM;
 			this._destination = new FlxPoint(init_x, init_y);
@@ -70,16 +71,16 @@ package enemies {
 			if (!in_position() && !_crashed) {
 				if (_debut) {
 					// decelerate to the assigned position
-					this.x += (_destination.x - this.x) / 50;
-					this.y += (_destination.y - this.y) / 50;
+					this.x += (_destination.x - this.x) / 60;
+					this.y += (_destination.y - this.y) / 60;
 				} else if (!_crash_mode) {
 					// move to reassigned location with constant speed
 					var ang:Number = Math.atan2(_destination.y - this.y, _destination.x - this.x);
 					this.x += SPD * Math.cos(ang);
 					this.y += SPD * Math.sin(ang);
 				} else {
-					var vx = (_destination.x - _currloc.x) / 90;
-					var vy = (_destination.y - _currloc.y) / 90;
+					var vx:Number = (_destination.x - _currloc.x) / DELAY;
+					var vy:Number = (_destination.y - _currloc.y) / DELAY;
 					this.x += vx;
 					this.y += vy;
 				}
@@ -110,8 +111,8 @@ package enemies {
 								var target:HelicopterEnemy = game._enemies_front.members[i];
 								if (target._team_no != this._team_no) {
 									var ang:Number = Math.atan2(target.y - this.y, target.x - this.x) * Util.DEGREE;
-									// if ((ang > 0 && ang < 90) || (ang > -180 && ang < -90)) _angle = ang;
-									if (ang > 0 && ang < 180) _angle = ang;
+									if ((this._team_no == 1 && (ang > -90 && ang < 90))
+									|| (this._team_no != 1 && (ang > 90 || ang < -90))) _angle = ang;
 								}
 							}
 						}
