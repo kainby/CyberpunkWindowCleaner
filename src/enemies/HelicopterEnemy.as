@@ -3,6 +3,7 @@ package enemies {
 	import misc.FlxGroupSprite;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import particle.RocketParticle;
@@ -14,22 +15,29 @@ package enemies {
 		public var _mag:int;
 		public var _destination:FlxPoint;
 		public var _crash_mode:Boolean;
+		public var _angle:Number;
+		public var _reset_dest_timer:Number;
+		public var _reset_dest_delay:Number;
 		
 		public var RPM:int = 4;	// 900 RPM
 		public var MAG:int = 20;
+		public var SPD:Number = 3;
 		
 		public function HelicopterEnemy(team_no:Number, init_x:Number = 0, init_y:Number = 0) {
 			// default: hp=100, shoot=false, angle=0, hiding=false
 			super(team_no);
 			
 			_shoot_timer = 0;
-			_shoot_delay = Util.int_random(100, 125);
+			_shoot_delay = Util.int_random(60, 90);
 			_mag = MAG;
 			_rpm = RPM;
 			_destination = new FlxPoint(init_x, init_y);
 			this.x = (_team_no == 1) ? -102:1000;
 			this.y = -87;
 			_crash_mode = false;
+			
+			_reset_dest_timer = 0;
+			_reset_dest_delay = Util.int_random(600, 720);
 			
 			if (_team_no == 1) {
 				this._angle = 0;
@@ -47,30 +55,24 @@ package enemies {
 		override public function enemy_update(game:GameEngine):void {
 			// reach the assigned point
 			if (!in_position()) {
-				this.x += (_destination.x - this.x) / 25;
-				this.y += (_destination.y - this.y) / 25;
+				var ang:Number = Math.atan2(_destination.x - this.x, _destination.y - this.y);
+				this.x += SPD * Math.cos(ang);
+				this.y += SPD * Math.sin(ang);
 				return;
 			}
-			// rocket particle
-			/*
-			for (var i:int = 1; i <= 3; i++ ) {
-				var dx = (_team_no == 1) ? 0 : 51;
-				var x_loc = this.x + Util.float_random(3, 9) + dx;
-				var y_loc = this.y + Util.float_random(47,51);
-				var rocket_spark:RocketParticle = new RocketParticle(new FlxPoint(x_loc, y_loc));
-				game._particles.add(rocket_spark);
-			}
-			*/
+			
+			// auto reassign location?
 			
 			_shoot_timer++;
 			if (_shoot_timer >= _shoot_delay) {
 				if (_mag > 0) {
 					if (_rpm <= 0) {
-						var dx:Number = (_team_no == 1) ? 65:(-3);
-						var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 23, _angle + Util.float_random(-5,5));
+						var dx:Number = (_team_no == 1) ? 84:12;
+						var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 84, _angle + Util.float_random(-7,7));
 						game._bullets.add(bullet);
 						_mag--;
 						_rpm = RPM;
+						FlxG.play(Resource.IMPORT_SOUND_HELI_SHOOT);
 					} else {
 						_rpm--;
 					}
@@ -95,7 +97,7 @@ package enemies {
 		}
 		
 		override public function should_remove():Boolean {
-			return this.y <= -100;
+			return in_position() && _crash_mode;
 		}
 	}
 }
