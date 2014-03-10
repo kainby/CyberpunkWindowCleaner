@@ -23,6 +23,9 @@ package enemies {
 		public var _dx:Number;
 		public var _dy:Number;
 		public var _vy:Number;
+		private var y0:Number;
+		private var _dfloat:Number;
+		private var _ct:Number;
 		
 		public var RPM:int = 6;		// 600 RPM
 		public var MAG:int = 12;	// adjust this for the number of bullets
@@ -40,7 +43,10 @@ package enemies {
 			this._rpm = RPM;
 			this._destination = new FlxPoint(init_x, init_y);
 			this.x = init_x;
-			this.y = 500;
+			this.y = 550;
+			this.y0 = 550;
+			this._ct = 0;
+			this._dfloat = 0;
 			this._crash_mode = false;
 			this._crashed = false;
 			this._reassign_countdown = Util.int_random(1, 3);
@@ -67,22 +73,29 @@ package enemies {
 		
 		override public function enemy_update(game:GameEngine):void {
 			_g = game;
+			
+			// floating effect
+			_ct = (_ct + 1) % 314159;
+			var team_dev:Number = (_team_no == 1) ? 0:(Math.PI / 2);
+			_dfloat = 20 * Math.sin(0.02 * _ct - team_dev);
+			this.y = this.y0 + _dfloat;
+			
 			// reach the assigned point
 			if (!in_position() && !_crashed) {
 				if (_debut) {
 					// decelerate to the assigned position
 					this.x += (_destination.x - this.x) / 60;
-					this.y += (_destination.y - this.y) / 60;
+					this.y0 += (_destination.y - this.y0) / 60;
 				} else if (!_crash_mode) {
 					// move to reassigned location with constant speed
-					var ang:Number = Math.atan2(_destination.y - this.y, _destination.x - this.x);
+					var ang:Number = Math.atan2(_destination.y - this.y0, _destination.x - this.x);
 					this.x += SPD * Math.cos(ang);
-					this.y += SPD * Math.sin(ang);
+					this.y0 += SPD * Math.sin(ang);
 				} else {
 					var vx:Number = (_destination.x - _currloc.x) / DELAY;
 					var vy:Number = (_destination.y - _currloc.y) / DELAY;
 					this.x += vx;
-					this.y += vy;
+					this.y0 += vy;
 				}
 				return;
 			} else {
@@ -93,7 +106,7 @@ package enemies {
 					var vx:Number = (_team_no == 1) ? -1:1;
 					_vy += GRAVITY;
 					this.x += vx * 4;
-					this.y += _vy;
+					this.y0 += _vy;
 					this.angle += 2 * vx;
 				}
 			}
@@ -110,7 +123,7 @@ package enemies {
 							if (game._enemies_front.members[i] instanceof HelicopterEnemy) {
 								var target:HelicopterEnemy = game._enemies_front.members[i];
 								if (target._team_no != this._team_no) {
-									var ang:Number = Math.atan2(target.y - this.y, target.x - this.x) * Util.DEGREE;
+									var ang:Number = Math.atan2(target.y0 - this.y0, target.x - this.x) * Util.DEGREE;
 									if ((this._team_no == 1 && (ang > -60 && ang < 60))
 									|| (this._team_no != 1 && (ang > 120 || ang < -120))) _angle = ang;
 								}
@@ -136,10 +149,10 @@ package enemies {
 				_reassign_countdown = Util.int_random(1, 3);
 				var sign:Number = (Util.int_random(0, 1) == 1) ? ( -1):1;
 				var new_x:Number = this.x + Util.float_random(-_dx, _dx);
-				var new_y:Number = this.y + Util.float_random(-_dx, _dy);
+				var new_y:Number = this.y0 + Util.float_random(-_dx, _dy);
 				if ((new_x <= 0 || new_y <= 0 || new_x >= 900 || new_y >= 400)) {
 					new_x = this.x;
-					new_y = this.y;
+					new_y = this.y0;
 				}
 				set_destination(new_x, new_y);
 			}
@@ -148,7 +161,7 @@ package enemies {
 		public function crash(crash_point:FlxPoint):void {
 			_crash_mode = true;
 			_debut = false;
-			_currloc = _currloc.make(this.x, this.y);
+			_currloc = _currloc.make(this.x, this.y0);
 			set_destination(crash_point.x, crash_point.y);
 		}
 		
@@ -171,7 +184,7 @@ package enemies {
 		}
 		
 		public function in_position():Boolean {
-			return Math.abs(this.x - _destination.x) <= 3 && Math.abs(this.y - _destination.y) <= 3;
+			return Math.abs(this.x - _destination.x) <= 3 && Math.abs(this.y0 - _destination.y) <= 3;
 		}
 		
 		override public function should_remove():Boolean {
