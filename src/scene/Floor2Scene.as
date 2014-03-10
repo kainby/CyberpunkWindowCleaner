@@ -93,7 +93,7 @@ package scene {
 		}
 		
 		public override function can_continue():Boolean {
-			return true;
+			return _g.get_cleaned_pct() >= 0.8;
 		}
 		
 	}

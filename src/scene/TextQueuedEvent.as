@@ -38,6 +38,10 @@ package scene
 			_text_bubble.end();
 		}
 		
+		public override function get_category_name():String {
+			return "TEXT";
+		}
+		
 	}
 
 }

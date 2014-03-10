@@ -50,6 +50,10 @@ package scene {
 			return _dp.length == 0;
 		}
 		
+		public override function get_category_name():String {
+			return "MOVE";
+		}
+		
 	}
 
 }

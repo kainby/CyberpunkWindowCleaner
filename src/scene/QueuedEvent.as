@@ -15,7 +15,10 @@ package scene
 		public function done():Boolean {
 			return true;
 		}
-		public function do_remove():void {}
+		public function do_remove():void { }
+		public function get_category_name():String {
+			return "NONE";
+		}
 	}
 
 }

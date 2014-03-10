@@ -2,10 +2,12 @@ package enemies {
 	import gameobj.RoundBullet;
 	import misc.FlxGroupSprite;
 	import org.flixel.FlxBasic;
+	import org.flixel.FlxEmitter;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import particle.RocketParticle;
+	import org.flixel.FlxParticle;
 	
 	public class JetPackEnemy extends BaseEnemy {
 		public var _shoot_timer:int;
@@ -17,9 +19,15 @@ package enemies {
 		public var RPM:int = 5;
 		public var MAG:int = 5;
 		
-		public function JetPackEnemy(team_no:Number, init_x:Number) {
+		public var _emitter:FlxEmitter;
+		
+		public var _g:GameEngine;
+		
+		public function JetPackEnemy(team_no:Number, init_x:Number, g:GameEngine) {
 			// default: hp=100, shoot=false, angle=0, hiding=false
 			super(team_no);
+			
+			_g = g;
 			
 			this.x = init_x;
 			this.y = 500;
@@ -38,19 +46,42 @@ package enemies {
 				this._angle = -180;
 				this.loadGraphic(Resource.IMPORT_JETPACK_THUG_BLUE);
 			}
+			
+			var emitter:FlxEmitter = new FlxEmitter();
+			_emitter = emitter;
+			var particles:int = 5;
+			emitter.setXSpeed( -16, 16);
+			emitter.setYSpeed(60, 80);
+			emitter.width = 20;
+			emitter.height = 20;
+			for(var i:int = 0; i < 130; i++) {
+				var p:FlxParticle = new RocketParticle();
+				emitter.add(p);
+			}
+			emitter.start(false, 1, 0.01);
+			g._behind.add(_emitter);
+		}
+		
+		override public function do_remove():void {
+			_g._behind.remove(_emitter);
+			_emitter.destroy();
+			_emitter = null;
 		}
 		
 		override public function enemy_update(game:GameEngine):void {
 			this.y -= 1;
 			
+			_emitter.x = (this._team_no == 1) ? this.x+15 : this.x+25;
+			_emitter.y = this.y + 50; 
+			
 			// rocket particle
-			for (var i:int = 1; i <= 3; i++ ) {
+			/*for (var i:int = 1; i <= 3; i++ ) {
 				var dx = (_team_no == 1) ? 0 : 51;
 				var x_loc = this.x + Util.float_random(3, 9) + dx;
 				var y_loc = this.y + Util.float_random(47,51);
 				var rocket_spark:RocketParticle = new RocketParticle(new FlxPoint(x_loc, y_loc));
 				game._particles.add(rocket_spark);
-			}
+			}*/
 			
 			_shoot_timer++;
 			if (_shoot_timer >= _shoot_delay) {
@@ -76,7 +107,7 @@ package enemies {
 		}
 		
 		override public function should_remove():Boolean {
-			return this.y <= -100;
+			return this.y <= -200;
 		}
 	}
 }

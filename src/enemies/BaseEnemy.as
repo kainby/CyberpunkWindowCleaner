@@ -1,4 +1,5 @@
 package enemies {
+	import org.flixel.FlxGroup;
 	import org.flixel.FlxSprite;
 	/**
 	 * @author spotco

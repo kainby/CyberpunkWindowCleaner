@@ -11,6 +11,7 @@ package scene {
 		public static var POSITION:String = "POSITION";
 		public static var MILLTO:String = "MILLTO";
 		public static var TEXT:String = "TEXT";
+		public static var REMOVE:String = "REMOVE";
 		public static var SPEED:String = "SPEED";
 		public static var ID:String = "ID";
 		
@@ -104,16 +105,22 @@ package scene {
 				spr.set_position(evt[POSITION][0], evt[POSITION][1]);
 			}
 			
-			if (evt[MILLTO] != null) {
+			if (evt[REMOVE] != null) {
+				_queued_events.push(new RemoveCharacterQueuedEvent(
+					unique_name,
+					_characters[unique_name],
+					evt[PERCENT]
+				));
+				
+			} else if (evt[MILLTO] != null) {
 				_queued_events.push(new MillAroundQueuedEvent(
 					unique_name,
 					_characters[unique_name],
 					evt[PERCENT],
 					evt[MILLTO]
 				));
-			}
-			
-			if (evt[POSITION] != null) {
+				
+			} else if (evt[POSITION] != null) {
 				_queued_events.push(new MoveToQueuedEvent(
 					unique_name,
 					_characters[unique_name],
@@ -121,9 +128,8 @@ package scene {
 					evt[POSITION],
 					evt[SPEED]==null?1:evt[SPEED]
 				));
-			}
-			
-			if (evt[TEXT] != null) {
+				
+			} else if (evt[TEXT] != null) {
 				_queued_events.push(new TextQueuedEvent(
 					unique_name,
 					_characters[unique_name],
@@ -148,7 +154,7 @@ package scene {
 			var name_to_evt:Dictionary = new Dictionary();
 			for (i = 0; i < _queued_events.length; i++) {
 				var itr_evt:QueuedEvent = _queued_events[i];
-				var use_name:String = itr_evt._name + getQualifiedClassName(itr_evt);
+				var use_name:String = itr_evt._name + itr_evt.get_category_name();
 				if (name_to_evt[use_name] == null || name_to_evt[use_name]._pct > itr_evt._pct) {
 					name_to_evt[use_name] = itr_evt;
 					
@@ -161,6 +167,15 @@ package scene {
 			
 			for each(var itr:QueuedEvent in name_to_evt) {
 			  	itr.update();
+				
+				if (itr is RemoveCharacterQueuedEvent) {
+					var tar:SceneCharacter = itr._character;
+					_character_group.remove(tar, true);
+					_characters[itr._name] = null;
+					delete _characters[itr._name];
+					(itr as RemoveCharacterQueuedEvent)._removed = true;
+				}
+				
 				if (itr.done()) {
 					itr.do_remove();
 					_queued_events.splice(_queued_events.indexOf(itr), 1);

@@ -86,6 +86,10 @@ package scene {
 			return false;
 		}
 		
+		public override function get_category_name():String{
+			return "MOVE";
+		}
+		
 	}
 
 }

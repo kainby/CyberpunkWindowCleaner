@@ -33,6 +33,7 @@ package {
 		public var _bgobjs:FlxGroup = new FlxGroup();
 		
 		public var _sceneobjs:FlxGroup = new FlxGroup();
+		public var _behind:FlxGroup = new FlxGroup();
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
 		public var _particles:FlxGroup = new FlxGroup();
@@ -53,7 +54,6 @@ package {
 			
 			
 			_scene_list = Vector.<Scene>([
-				new Floor2Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -66,6 +66,7 @@ package {
 			_ui = new GameUI(this);
 			
 			this.add(_bgobjs);
+			this.add(_behind);
 			this.add(_enemies);
 			this.add(_sceneobjs);
 			this.add(_stains);
@@ -195,7 +196,8 @@ package {
 				itr_enemy.enemy_update(this);
 				
 				if (itr_enemy.should_remove()) {
-					itr_enemy.kill();
+					itr_enemy.do_remove();
+					_enemies.remove(itr_enemy, true);
 				}
 			}
 			
@@ -245,12 +247,14 @@ package {
 					}
 				}
 				FlxG.overlap(_powerups, _player._body_hit_box, function(p:HealthPack, body:FlxSprite):void {
-					_hp = Math.min(_hp+1,Player.MAX_HP);
-					p.taken();
-					for (var i:int = 1; i <= 8; i++) {
-						add_particle(new HpParticle(
-							new FlxPoint(_player.x() + Util.float_random(-20, 20), _player.y() + Util.float_random(10, 50)),
-						60));
+					if (!p.taken()) {
+						_hp = Math.min(_hp+1,Player.MAX_HP);
+						p.taken();
+						for (var i:int = 1; i <= 8; i++) {
+							add_particle(new HpParticle(
+								new FlxPoint(_player.x() + Util.float_random(-20, 20), _player.y() + Util.float_random(10, 50)),
+							60));
+						}
 					}
 				});
 			}
