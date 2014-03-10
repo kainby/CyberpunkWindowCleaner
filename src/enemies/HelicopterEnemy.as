@@ -153,6 +153,7 @@ package enemies {
 		}
 		
 		public function set_destination(x:Number, y:Number):void {
+			_shoot_timer = 0;
 			_destination = _destination.make(x, y);
 		}
 		

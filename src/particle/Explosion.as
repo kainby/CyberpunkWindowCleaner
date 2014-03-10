@@ -25,6 +25,7 @@ package particle {
 				this.visible = true;
 				this.play("boom");
 				FlxG.play(Resource.IMPORT_SOUND_EXPLOSION, 4);
+				FlxG.flash();
 				_ct = 0;
 				_explode = false;
 			} else if (_explode) {
