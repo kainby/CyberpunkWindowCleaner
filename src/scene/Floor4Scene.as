@@ -62,12 +62,20 @@ package scene {
 			create_sniper_enemy(934, 250, 2,_g);
 			create_sniper_enemy(934, 350, 2,_g);
 			
+			create_heli_enemy(1, 72, 30, _g);
+			create_heli_enemy(2, 840, 160, _g);
+			
 			return this;
 		}
 		
 		public function create_sniper_enemy(x:Number, y:Number, team_no:Number, g:GameEngine):void {
 			var enemy:SniperEnemy = new SniperEnemy(team_no,g);
 			enemy.set_position(x, y);
+			_g._enemies.add(enemy);
+		}
+		
+		public function create_heli_enemy(team_no:Number, x:Number, y:Number, g:GameEngine) {
+			var enemy:HelicopterEnemy = new HelicopterEnemy(team_no, x, y);
 			_g._enemies.add(enemy);
 		}
 		

@@ -15,38 +15,44 @@ package enemies {
 		public var _mag:int;
 		public var _destination:FlxPoint;
 		public var _crash_mode:Boolean;
-		public var _angle:Number;
-		public var _reset_dest_timer:Number;
-		public var _reset_dest_delay:Number;
 		
-		public var RPM:int = 4;	// 900 RPM
-		public var MAG:int = 20;
+		public var _reassign_countdown:Number;
+		public var _debut:Boolean;
+		public var _dx:Number;
+		public var _dy:Number;
+		public var _vy:Number;
+		
+		public var RPM:int = 6;	// 600 RPM
+		public var MAG:int = 12;	// adjust this for the number of bullets
 		public var SPD:Number = 3;
+		public var GRAVITY:Number = 1.5;
 		
 		public function HelicopterEnemy(team_no:Number, init_x:Number = 0, init_y:Number = 0) {
-			// default: hp=100, shoot=false, angle=0, hiding=false
+			// default: hp=100, angle=0, hiding=false
 			super(team_no);
 			
-			_shoot_timer = 0;
-			_shoot_delay = Util.int_random(60, 90);
-			_mag = MAG;
-			_rpm = RPM;
-			_destination = new FlxPoint(init_x, init_y);
-			this.x = (_team_no == 1) ? -102:1000;
-			this.y = -87;
-			_crash_mode = false;
-			
-			_reset_dest_timer = 0;
-			_reset_dest_delay = Util.int_random(600, 720);
+			this._shoot_timer = 60;	// so the debut shoot will happen faster
+			this._shoot_delay = Util.int_random(150, 210);
+			this._mag = MAG;
+			this._rpm = RPM;
+			this._destination = new FlxPoint(init_x, init_y);
+			this.x = init_x;
+			this.y = 500;
+			this._crash_mode = false;
+			this._reassign_countdown = Util.int_random(1, 3);
+			this._dx = 75;
+			this._dy = 100;
+			this._vy = 0;
+			this._debut = true;
 			
 			if (_team_no == 1) {
 				this._angle = 0;
-				this.loadGraphic(Resource.IMPORT_HELI_RED, true);
+				this.loadGraphic(Resource.IMPORT_HELI_RED, true, false, 102, 87);
 				this.addAnimation("Propeller_red", [1, 2, 3, 4, 5, 6], 20);
 				this.play("Propeller_red");
 			} else {
 				this._angle = -180;
-				this.loadGraphic(Resource.IMPORT_HELI_BLUE, true);
+				this.loadGraphic(Resource.IMPORT_HELI_BLUE, true, false, 102, 87);
 				this.addAnimation("Propeller_blue", [1, 2, 3, 4, 5, 6], 20);
 				this.play("Propeller_blue");
 			}
@@ -55,20 +61,47 @@ package enemies {
 		override public function enemy_update(game:GameEngine):void {
 			// reach the assigned point
 			if (!in_position()) {
-				var ang:Number = Math.atan2(_destination.x - this.x, _destination.y - this.y);
-				this.x += SPD * Math.cos(ang);
-				this.y += SPD * Math.sin(ang);
+				if (_debut) {
+					// decelerate to the assigned position
+					this.x += (_destination.x - this.x) / 25;
+					this.y += (_destination.y - this.y) / 25;
+				} else {
+					// move to reassigned location with constant speed
+					var ang:Number = Math.atan2(_destination.y - this.y, _destination.x - this.x);
+					this.x += SPD * Math.cos(ang);
+					this.y += SPD * Math.sin(ang);
+				}
 				return;
+			} else {
+				_debut = false;
+				if (_crash_mode) {
+					// free-fall
+					var vx:Number = (_team_no == 1) ? -1:1;
+					_vy += GRAVITY;
+					this.x += vx;
+					this.y += _vy;
+				}
 			}
-			
-			// auto reassign location?
 			
 			_shoot_timer++;
 			if (_shoot_timer >= _shoot_delay) {
 				if (_mag > 0) {
 					if (_rpm <= 0) {
 						var dx:Number = (_team_no == 1) ? 84:12;
-						var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 84, _angle + Util.float_random(-7,7));
+						
+						// search and aim
+						for (var i:int = 0; i < game._enemies.length; i++) {
+							if (game._enemies.members[i] instanceof HelicopterEnemy) {
+								var target:HelicopterEnemy = game._enemies.members[i];
+								if (target._team_no != this._team_no) {
+									var ang:Number = Math.atan2(target.y - this.y, target.x - this.x) * Util.DEGREE;
+									if ((ang > 0 && ang < 90) || (ang > -180 && ang < -90)) {
+										_angle = ang;
+									}
+								}
+							}
+						}
+						var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 84, _angle + Util.float_random(-6,6));
 						game._bullets.add(bullet);
 						_mag--;
 						_rpm = RPM;
@@ -79,7 +112,21 @@ package enemies {
 				} else {
 					_mag = MAG;
 					_shoot_timer = 0;
+					_reassign_countdown--;
 				}
+			}
+			
+			// re-assign location
+			if (_reassign_countdown <= 0) {
+				_reassign_countdown = Util.int_random(1, 3);
+				var sign:Number = (Util.int_random(0, 1) == 1) ? ( -1):1;
+				var new_x:Number = this.x + Util.float_random(-_dx, _dx);
+				var new_y:Number = this.y + Util.float_random(-_dx, _dy);
+				if ((new_x <= 0 || new_y <= 0 || new_x >= 900 || new_y >= 400)) {
+					new_x = this.x;
+					new_y = this.y;
+				}
+				set_destination(new_x, new_y);
 			}
 		}
 		
@@ -92,12 +139,25 @@ package enemies {
 			_destination = _destination.make(x, y);
 		}
 		
+		// customize location auto reassign range, at least 10 for each number
+		public function set_move_range(dx:Number, dy:Number):HelicopterEnemy {
+			if (dx < 10) {
+				dx = 10;
+			}
+			if (dy < 10) {
+				dy = 10;
+			}
+			this._dx = dx;
+			this._dy = dy;
+			return this;
+		}
+		
 		public function in_position():Boolean {
-			return Math.abs(this.x - _destination.x) <= 0.5 && Math.abs(this.y - _destination.y) <= 0.5;
+			return Math.abs(this.x - _destination.x) <= 3 && Math.abs(this.y - _destination.y) <= 3;
 		}
 		
 		override public function should_remove():Boolean {
-			return in_position() && _crash_mode;
+			return this.y >= 600 && _crash_mode;
 		}
 	}
 }
