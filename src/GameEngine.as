@@ -44,7 +44,7 @@ package {
 		public var _bullets:FlxGroup = new FlxGroup();
 		public var _powerups:FlxGroup = new FlxGroup();
 		
-		public var _death_fadeout:Boolean = false, _death_fadein = false;
+		public var _death_fadeout:Boolean = false, _death_fadein = false, _end_out = false;
 		
 		public var _cur_scene:Scene;
 		public var _transition_from_scene:Scene = null;
@@ -106,10 +106,23 @@ package {
 			_player.set_pos(Util.WID / 2, 390);
 		}
 		
+		public function end_out():void {
+			if (!_end_out) {
+				_end_out = true;
+				_ui._fadeout.alpha = 0;
+				_ui._fadeout.visible = true;
+			}
+		}
+		
 		public override function update():void {
 			super.update();
 			
-			if (_transition_from_scene != null) {
+			if (_end_out) {
+				_ui._fadeout.alpha += 0.005;
+				if (_ui._fadeout.alpha >= 1) {
+					FlxG.switchState(new GameEndMenu());
+				}
+			} else if (_transition_from_scene != null) {
 				_cur_scene.add_offset_to_groups(5);
 				_transition_from_scene.add_offset_to_groups(5);
 				_transition_ct -= 5;
@@ -211,6 +224,7 @@ package {
 				}
 				
 				FlxG.overlap(_bullets, _player._body_hit_box, function(bullet:BasicBullet, body:FlxSprite):void {
+					if (_end_out) return;
 					if (_player._hurt_ct <= 0) {
 						if (_hp <= 0 || _hp - 1 >= _ui._hp_ui.members.length) {
 							trace("HP ERROR");

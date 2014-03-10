@@ -20,6 +20,8 @@ package  {
 			return GAME_BITMAP_FONT;
 		}
 		
+		[Embed( source = "../resc/lastpicture.png" )] public static var IMPORT_LASTPICTURE:Class;
+		
 		[Embed( source = "../resc/bg/bg_0.png" )] public static var IMPORT_BG_0:Class;
 		[Embed( source = "../resc/bg/bg_1.png" )] public static var IMPORT_BG_1:Class;
 		[Embed( source = "../resc/bg/bg_2.png" )] public static var IMPORT_BG_2:Class;
