@@ -215,18 +215,18 @@ package {
 				
 				if (_player._hurt_ct <= 0) {
 					FlxG.overlap(_bullets, _player._body_hit_box, function(bullet:BasicBullet, body:FlxSprite):void {
-						if (_player._hurt_ct > 0) return;
-						if (_hp <= 0 || _hp - 1 >= _ui._hp_ui.members.length) {
-							trace("HP ERROR");
-							return;
-						}
-						_particles.add(new BloodParticle(bullet.x, bullet.y));
-						
-						_ui._hp_ui.members[_hp-1].offset.y = 15;
-						_hp--;
-						_player._hurt_ct = 50;
-						if (_hp <= 0) {
-							die();
+						if (_player._hurt_ct <= 0) {
+							if (_hp <= 0 || _hp - 1 >= _ui._hp_ui.members.length) {
+								trace("HP ERROR");
+								return;
+							}
+							_particles.add(new BloodParticle(bullet.x, bullet.y));
+							FlxG.play(Resource.IMPORT_SOUND_HIT);
+							
+							_ui._hp_ui.members[_hp-1].offset.y = 15;
+							_hp--;
+							_player._hurt_ct = 50;
+							if (_hp <= 0) die();
 						}
 						bullet.do_remove();
 						_bullets.remove(bullet, true);
@@ -273,6 +273,7 @@ package {
 		}
 		
 		public function die():void {
+			FlxG.play(Resource.IMPORT_SOUND_GAME_OVER, 1.25);
 			trace("Poor cleaner just died!");
 		}	
 	}

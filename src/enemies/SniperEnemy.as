@@ -3,6 +3,7 @@ package enemies {
 	import gameobj.RoundBullet;
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import particle.LaserSight;
@@ -128,6 +129,7 @@ package enemies {
 								var dx:Number = (this._team_no == 1) ? 62 : -6;
 								var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 12, this._angle);
 								game._bullets.add(bullet);
+								FlxG.play(Resource.IMPORT_SOUND_SNIPER_SHOOT, 0.8);
 								_tactical_step = 5;
 								
 							} else {

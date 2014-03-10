@@ -4,6 +4,7 @@ package enemies {
 	import org.flixel.FlxBasic;
 	import org.flixel.FlxEmitter;
 	import org.flixel.FlxGroup;
+	import org.flixel.FlxG;
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import particle.RocketParticle;
@@ -16,7 +17,7 @@ package enemies {
 		public var _mag:int;
 		public var _chance:int;
 		
-		public var RPM:int = 5;
+		public var RPM:int = 5;	// 720 RPM
 		public var MAG:int = 5;
 		
 		public var _emitter:FlxEmitter;
@@ -69,7 +70,11 @@ package enemies {
 		}
 		
 		override public function enemy_update(game:GameEngine):void {
-			this.y -= 1;
+			if (!this.alive) {
+				return;
+			}
+			
+			this.y--;
 			
 			_emitter.x = (this._team_no == 1) ? this.x+15 : this.x+25;
 			_emitter.y = this.y + 50; 
@@ -89,16 +94,17 @@ package enemies {
 					if (_rpm <= 0) {
 						var dx1:Number = (_team_no == 1) ? 65:(-3);
 						var dx2:Number = (_team_no == 1) ? 34:25;
-						var bullet1:RoundBullet = new RoundBullet(this.x + dx1, this.y + 23, _angle + Util.float_random(-5,5));
-						var bullet2:RoundBullet = new RoundBullet(this.x + dx2, this.y + 26, _angle + Util.float_random(-5,5));
+						var bullet1:RoundBullet = new RoundBullet(this.x + dx1, this.y + 23, _angle + Util.float_random(-5,5), 3);
+						var bullet2:RoundBullet = new RoundBullet(this.x + dx2, this.y + 26, _angle + Util.float_random(-5,5), 3);
 						game._bullets.add(bullet1);
 						game._bullets.add(bullet2);
 						_mag--;
 						_rpm = RPM;
+						FlxG.play(Resource.IMPORT_SOUND_JETPACK_SHOOT);
 					} else {
 						_rpm--;
 					}
-				} else {	// mag used up
+				} else {
 					_mag = MAG;
 					_shoot_timer = 0;
 					_chance--;
