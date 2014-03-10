@@ -54,7 +54,7 @@ package {
 			
 			
 			_scene_list = Vector.<Scene>([
-				new Floor4Scene(this),
+				new Floor3Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -173,6 +173,7 @@ package {
 								new FlxPoint(500 + Util.int_random(-20, 20), 0))
 							);
 						}
+						FlxG.play(Resource.IMPORT_SOUND_PICKUP_FULL);
 						
 					} else if (!stain._cleaned && Util.int_random(0,10) == 0) {
 						add_particle(new FadeOutParticle(

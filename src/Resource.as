@@ -76,6 +76,8 @@ package  {
 		[Embed( source = "../resc/sound/powerup.mp3" )] public static var IMPORT_SOUND_POWER_UP:Class;
 		[Embed( source = "../resc/sound/continue.mp3" )] public static var IMPORT_SOUND_CONTINUE:Class;
 		
+		[Embed( source = "../resc/sound/sfx_pickup_full.mp3" )] public static var IMPORT_SOUND_PICKUP_FULL:Class;
+		
 //floor0
 		[Embed( source = "../resc/floor0/bg.png" )] public static var IMPORT_FLOOR0_BG:Class;
 
