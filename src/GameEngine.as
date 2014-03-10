@@ -218,6 +218,7 @@ package {
 							return;
 						}
 						_particles.add(new BloodParticle(bullet.x, bullet.y));
+						FlxG.play(Resource.IMPORT_SOUND_HIT);
 						
 						_ui._hp_ui.members[_hp-1].offset.y = 15;
 						_hp--;
@@ -268,6 +269,7 @@ package {
 		}
 		
 		public function die():void {
+			FlxG.play(Resource.IMPORT_SOUND_GAME_OVER, 1.25);
 			trace("Poor cleaner just died!");
 		}	
 	}

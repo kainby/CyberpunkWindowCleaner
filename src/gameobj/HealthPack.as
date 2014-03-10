@@ -1,6 +1,7 @@
 package gameobj 
 {
 	import org.flixel.FlxSprite;
+	import org.flixel.FlxG;
 	/**
 	 * ...
 	 * @author ...
@@ -13,7 +14,7 @@ package gameobj
 		public function HealthPack(x:Number = 0) {
 			super(x, -64);
 			
-			this._aid = 20 + Util.int_random(0, 5);
+			this._aid = Util.int_random(15, 20);
 			this._taken = false;
 			
 			this.loadGraphic(Resource.IMPORT_ENERGY_DRINK, true, false, 20, 48);
@@ -27,6 +28,7 @@ package gameobj
 		
 		public function taken():void {
 			this._taken = true;
+			FlxG.play(Resource.IMPORT_SOUND_POWER_UP);
 		}
 		
 		public function do_remove():void { }
