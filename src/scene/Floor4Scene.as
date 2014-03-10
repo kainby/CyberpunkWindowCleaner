@@ -81,10 +81,12 @@ package scene {
 				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(200, 750), Util.float_random(150, 450)));
 			}
 
-			create_heli_enemy(1, 72, 30, _g);
-			create_heli_enemy(2, 840, 160, _g);
+			_heli1 = create_heli_enemy(1, 72, 30, _g);
+			_heli2 = create_heli_enemy(2, 840, 160, _g);
 			return this;
 		}
+		
+		private var _heli1:HelicopterEnemy, _heli2:HelicopterEnemy;
 		
 		public function create_sniper_enemy(x:Number, y:Number, team_no:Number, g:GameEngine):void {
 			var enemy:SniperEnemy = new SniperEnemy(team_no,g);
@@ -100,6 +102,11 @@ package scene {
 		private var _last_cleaned_pct:Number = -1;
 		public override function update():void {
 			super.update();
+			
+			if (passed_mark(0.02)) {
+				_heli1.crash(new FlxPoint(Util.WID / 2, 0));
+				_heli2.crash(new FlxPoint(Util.WID / 2, 0));
+			}
 			
 			if (passed_mark(0.0)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);
 			if (passed_mark(0.02)) this.create_jetpack_enemy(Util.float_random(840, 870), 2, _g);
@@ -119,9 +126,10 @@ package scene {
 			return _last_cleaned_pct < pct && _g.get_cleaned_pct() >= pct;
 		}
 		
-		public function create_heli_enemy(team_no:Number, x:Number, y:Number, g:GameEngine) {
+		public function create_heli_enemy(team_no:Number, x:Number, y:Number, g:GameEngine):HelicopterEnemy {
 			var enemy:HelicopterEnemy = new HelicopterEnemy(team_no, x, y);
 			_g._enemies.add(enemy);
+			return enemy;
 		}
 		
 		public override function show_hp_bar():Boolean {
