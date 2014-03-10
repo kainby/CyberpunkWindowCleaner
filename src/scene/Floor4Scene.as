@@ -128,7 +128,7 @@ package scene {
 		
 		public function create_heli_enemy(team_no:Number, x:Number, y:Number, g:GameEngine):HelicopterEnemy {
 			var enemy:HelicopterEnemy = new HelicopterEnemy(team_no, x, y);
-			_g._enemies.add(enemy);
+			_g._enemies_front.add(enemy);
 			return enemy;
 		}
 		

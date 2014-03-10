@@ -90,9 +90,9 @@ package enemies {
 						var dx:Number = (_team_no == 1) ? 84:12;
 						
 						// search and aim
-						for (var i:int = 0; i < game._enemies.length; i++) {
-							if (game._enemies.members[i] instanceof HelicopterEnemy) {
-								var target:HelicopterEnemy = game._enemies.members[i];
+						for (var i:int = 0; i < game._enemies_front.length; i++) {
+							if (game._enemies_front.members[i] instanceof HelicopterEnemy) {
+								var target:HelicopterEnemy = game._enemies_front.members[i];
 								if (target._team_no != this._team_no) {
 									var ang:Number = Math.atan2(target.y - this.y, target.x - this.x) * Util.DEGREE;
 									if ((ang > 0 && ang < 90) || (ang > -180 && ang < -90)) {

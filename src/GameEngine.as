@@ -36,11 +36,12 @@ package {
 		
 		public var _sceneobjs:FlxGroup = new FlxGroup();
 		public var _behind:FlxGroup = new FlxGroup();
+		public var _enemies:FlxGroup = new FlxGroup();
 		public var _player:Player = new Player();
 		public var _stains:FlxGroup = new FlxGroup();
 		public var _particles:FlxGroup = new FlxGroup();
+		public var _enemies_front:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
-		public var _enemies:FlxGroup = new FlxGroup();
 		public var _powerups:FlxGroup = new FlxGroup();
 		
 		public var _cur_scene:Scene;
@@ -74,6 +75,7 @@ package {
 			this.add(_sceneobjs);
 			this.add(_stains);
 			this.add(_player);
+			this.add(_enemies_front);
 			this.add(_bullets);
 			this.add(_particles);
 			this.add(_powerups);
@@ -202,15 +204,8 @@ package {
 				}
 			}
 			
-			for (var i_enemy:int = _enemies.length - 1; i_enemy >= 0; i_enemy-- ) {
-				var itr_enemy:BaseEnemy = _enemies.members[i_enemy];
-				itr_enemy.enemy_update(this);
-				
-				if (itr_enemy.should_remove()) {
-					itr_enemy.do_remove();
-					_enemies.remove(itr_enemy, true);
-				}
-			}
+			update_enemy_group(_enemies);
+			update_enemy_group(_enemies_front);
 			
 			if (_bullets.length > 0) {
 				for (var i_bullet:int = _bullets.length - 1; i_bullet >= 0; i_bullet-- ) {
@@ -268,6 +263,18 @@ package {
 						}
 					}
 				});
+			}
+		}
+		
+		private function update_enemy_group(e:FlxGroup):void {
+			for (var i_enemy:int = e.length - 1; i_enemy >= 0; i_enemy-- ) {
+				var itr_enemy:BaseEnemy = e.members[i_enemy];
+				itr_enemy.enemy_update(this);
+				
+				if (itr_enemy.should_remove()) {
+					itr_enemy.do_remove();
+					e.remove(itr_enemy, true);
+				}
 			}
 		}
 		
