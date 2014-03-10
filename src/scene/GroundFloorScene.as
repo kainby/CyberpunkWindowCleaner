@@ -4,6 +4,9 @@ package scene {
 	import particle.CableParticle;
 	public class GroundFloorScene extends Scene {
 		
+		public override function get_bg1():Number { return -100; }
+		public override function get_bg2():Number { return -160; }
+		
 		private static var SCRIPT:Array = [
 			{PERCENT:0, CHARACTER:CHARACTER_CLEANER, POSITION:[350, 390], ID:0  },
 			{PERCENT:0, CHARACTER:CHARACTER_CLEANER, POSITION:[550, 390], ID:1  },

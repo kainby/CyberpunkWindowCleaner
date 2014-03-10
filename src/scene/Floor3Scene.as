@@ -8,6 +8,9 @@ package scene {
 	import enemies.*;
 	public class Floor3Scene extends Scene {
 		
+		public override function get_bg1():Number { return 50; }
+		public override function get_bg2():Number { return 160; }
+		
 		private static var SCRIPT:Array = [
 			{PERCENT:0.02, CHARACTER:CHARACTER_JULIET, POSITION:[300, 360] },
 			{PERCENT:0.02, CHARACTER:CHARACTER_JULIET, POSITION:[230, 360] },

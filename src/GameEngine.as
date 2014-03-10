@@ -25,6 +25,8 @@ package {
 	
 	public class GameEngine extends FlxState {
 		
+		public static var ALWAYS_CONTINUE:Boolean = false;
+		
 		public var _is_moving:Boolean = false;
 		public var _is_falling:Boolean = false;
 		private static var MOVE_SPEED:Number = 1;
@@ -54,7 +56,7 @@ package {
 			
 			
 			_scene_list = Vector.<Scene>([
-				new Floor4Scene(this),
+				//new Floor4Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -115,6 +117,10 @@ package {
 				_transition_from_scene.add_offset_to_groups(5);
 				_transition_ct -= 5;
 				_player.y(5);
+				
+				_bgobjs.members[1].y = (_transition_ct / 500) * (_transition_from_scene.get_bg1() - _cur_scene.get_bg1()) + _cur_scene.get_bg1();
+				_bgobjs.members[2].y = (_transition_ct / 500) * (_transition_from_scene.get_bg2() - _cur_scene.get_bg2()) + _cur_scene.get_bg2();
+				
 				if (_transition_ct <= 0) {
 					_transition_from_scene.remove_groups_from_parent(_bgobjs);
 					_transition_from_scene = null;
@@ -123,13 +129,15 @@ package {
 				}
 				return;
 			}
+			_bgobjs.members[1].y = _cur_scene.get_bg1();
+			_bgobjs.members[2].y = _cur_scene.get_bg2();
 			
 			_ui.ui_update();
 			_player.update_player(this);
 			_is_moving = false;
 			_is_falling = false;
 			
-			if (_cur_scene.can_continue() && _player.y() <= 0) {
+			if ( (_cur_scene.can_continue() || ALWAYS_CONTINUE) && _player.y() <= 0) {
 				next_scene();
 				_player._body.play(Scene.ANIM_STAND);
 			}

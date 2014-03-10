@@ -45,6 +45,8 @@ package scene {
 		public function get_player_x_max():Number { return 800; }
 		public function get_player_y_min():Number { return 0; }
 		public function get_player_y_max():Number { return 450; }
+		public function get_bg1():Number { return 0; }
+		public function get_bg2():Number { return 0; }
 		
 		public function set_bg_y(y:Number):void {
 			var groups:Array = [_bg_group, _character_group, _text_group, _internals_group, _window_group];
@@ -94,8 +96,6 @@ package scene {
 		}
 		
 		public function eval_event(evt:Object):void {
-			trace("event at", evt[PERCENT], _g.get_cleaned_pct());
-			
 			var unique_name:String = evt[CHARACTER] + (evt[ID] == null ? "_0" : "_" + evt[ID]);
 			
 			if (_characters[unique_name] == null) {

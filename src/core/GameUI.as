@@ -135,7 +135,7 @@ package core {
 			if (_g._cur_scene.can_continue()) {
 				_continue_flash_ct++;
 				if (_continue_flash_ct % 30 == 0) _continue.visible = !_continue.visible;
-				if (_continue_flash_ct % 60 == 0) FlxG.play(Resource.IMPORT_SOUND_CONTINUE, 0.8);
+				if (_continue_flash_ct % 60 == 0 && !(_g._cur_scene is GroundFloorScene)) FlxG.play(Resource.IMPORT_SOUND_CONTINUE, 0.8);
 				
 			} else {
 				_continue.visible = false;

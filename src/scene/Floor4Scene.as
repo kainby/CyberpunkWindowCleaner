@@ -8,10 +8,11 @@ package scene {
 	import enemies.*;
 	public class Floor4Scene extends Scene {
 		
-		private static var SCRIPT:Array = [
+		public override function get_bg1():Number { return 100; }
+		public override function get_bg2():Number { return 260; }
+		public override function get_player_y_min():Number { return 105; }
 		
-			//{PERCENT:0.06, CHARACTER:CHARACTER_ROMEO, TEXT:"But, soft! what light through yonder window breaks?" },
-			//{PERCENT:0.0, CHARACTER:CHARACTER_THUG_RED, ID:1, POSITION:[780, 95]  },
+		private static var SCRIPT:Array = [
 			
 			{PERCENT:0.0, CHARACTER:CHARACTER_ROMEO, POSITION:[760, 460] },
 			{PERCENT:0.0, CHARACTER:CHARACTER_THUG_RED, POSITION:[300, 460] },
@@ -79,15 +80,6 @@ package scene {
 			for (var i:int = 0; i < 50; i++) {
 				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(200, 750), Util.float_random(150, 450)));
 			}
-			
-
-			create_sniper_enemy(0, 100, 1,_g);
-			create_sniper_enemy(0, 200, 1,_g);
-			create_sniper_enemy(0, 300, 1,_g);
-			create_sniper_enemy(934, 150, 2,_g);
-			create_sniper_enemy(934, 250, 2,_g);
-			create_sniper_enemy(934, 350, 2,_g);
-			
 			return this;
 		}
 		
@@ -95,6 +87,33 @@ package scene {
 			var enemy:SniperEnemy = new SniperEnemy(team_no,g);
 			enemy.set_position(x, y);
 			_g._enemies.add(enemy);
+		}
+		
+		public function create_jetpack_enemy(x:Number, team_no:Number, g:GameEngine):void {
+			var enemy:JetPackEnemy = new JetPackEnemy(team_no, x, g);
+			_g._enemies.add(enemy);
+		}
+		
+		private var _last_cleaned_pct:Number = -1;
+		public override function update():void {
+			super.update();
+			
+			if (passed_mark(0.0)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);
+			if (passed_mark(0.02)) this.create_jetpack_enemy(Util.float_random(840, 870), 2, _g);
+			if (passed_mark(0.1)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);
+			if (passed_mark(0.15)) this.create_jetpack_enemy(Util.float_random(840, 870), 2, _g);
+			if (passed_mark(0.25)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);
+			if (passed_mark(0.35)) this.create_jetpack_enemy(Util.float_random(840, 870), 2, _g);
+			if (passed_mark(0.4)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);
+			if (passed_mark(0.5)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);
+			if (passed_mark(0.55)) this.create_jetpack_enemy(Util.float_random(840, 870), 2, _g);
+			if (passed_mark(0.7)) this.create_jetpack_enemy(Util.float_random(110, 150), 1, _g);
+			if (passed_mark(0.75)) this.create_jetpack_enemy(Util.float_random(840, 870), 2, _g);
+			
+			_last_cleaned_pct = _g.get_cleaned_pct();
+		}
+		private function passed_mark(pct:Number):Boolean {
+			return _last_cleaned_pct < pct && _g.get_cleaned_pct() >= pct;
 		}
 		
 		public override function show_hp_bar():Boolean {
