@@ -59,7 +59,7 @@ package core {
 		}
 		
 		private var _cur_anim:String = "NONE";
-		private function continue_animation(anim:String):void {
+		public function continue_animation(anim:String):void {
 			if (anim != _cur_anim) {
 				_cur_anim = anim;
 				_body.play(anim);

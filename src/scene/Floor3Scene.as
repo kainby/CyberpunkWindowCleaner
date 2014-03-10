@@ -149,7 +149,7 @@ package scene {
 		
 		public function create_jetpack_enemy(x:Number, team_no:Number, g:GameEngine):void {
 			var enemy:JetPackEnemy = new JetPackEnemy(team_no, x, g);
-			_g._enemies.add(enemy);
+			_g._enemies_front.add(enemy);
 		}
 		
 		public override function show_hp_bar():Boolean {

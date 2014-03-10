@@ -33,6 +33,8 @@ package core {
 		public var _tag:FlxSprite;
 		public var _continue:FlxSprite = new FlxSprite();
 		
+		public var _fadeout:FlxSprite = new FlxSprite();
+		
 		public var _g:GameEngine;
 		
 		public function GameUI(g:GameEngine) {
@@ -73,6 +75,11 @@ package core {
 			this.add(_cleaning_bar);
 			this.add(_tag);
 			this.add(_score);
+			
+			_fadeout.makeGraphic(Util.WID, Util.HEI, 0xFF000000);
+			_fadeout.visible = false;
+			_fadeout.alpha = 0;
+			this.add(_fadeout);
 		}
 		
 		private function cons_hpbar_icon(x:Number,y:Number):FlxSprite {

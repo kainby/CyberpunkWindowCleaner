@@ -3,7 +3,7 @@ package {
 	import enemies.BaseEnemy;
 	import enemies.SniperEnemy;
 	import flash.geom.Rectangle;
-	import flash.utils.Timer;
+	import flash.utils.*;
 	import gameobj.BasicBullet;
 	import gameobj.BasicStain;
 	import gameobj.HealthPack;
@@ -43,6 +43,8 @@ package {
 		public var _enemies_front:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
 		public var _powerups:FlxGroup = new FlxGroup();
+		
+		public var _death_fadeout:Boolean = false, _death_fadein = false;
 		
 		public var _cur_scene:Scene;
 		public var _transition_from_scene:Scene = null;
@@ -86,29 +88,22 @@ package {
 			_bgobjs.add(new BGObj(Resource.IMPORT_BG_2));
 		}
 		
-		private var _transition_ct:Number = 0;
-		private function next_scene():void {
-			if (_scene_list.length == 0) return;
-			var next:Scene = _scene_list.shift();
-			if (_cur_scene == null) {
-				_cur_scene = next;
-				_cur_scene.init();
-				
-			} else {
-				_stains.clear();
-				_enemies.clear();
-				_bullets.clear();
-				_particles.clear();
-				_powerups.clear();
-				_behind.clear();
-				
-				_transition_from_scene = _cur_scene;
-				_cur_scene = next;
-				_cur_scene.init();
-				_cur_scene.add_offset_to_groups( -500);
-				_transition_ct = 500;
-				_stains.visible = false;
-			}
+		private function reset_current_scene():void {
+			_stains.clear();
+			_enemies.clear();
+			_bullets.clear();
+			_particles.clear();
+			_powerups.clear();
+			_behind.clear();
+			_enemies_front.clear();
+			_sceneobjs.clear();
+			
+			
+			var cur_scene_class:Class = Class(getDefinitionByName(getQualifiedClassName(_cur_scene))); //lel
+			_cur_scene = new cur_scene_class(this);
+			_cur_scene.init();
+			_hp = Player.MAX_HP;
+			_player.set_pos(Util.WID / 2, 390);
 		}
 		
 		public override function update():void {
@@ -130,44 +125,41 @@ package {
 					_player.y( -20);
 				}
 				return;
+			} else if (_death_fadeout) {
+				_player.continue_animation(Player.ANIM_HURT);
+				_player._cable.visible = false;
+				_player.y(5);
+				_ui._fadeout.visible = true;
+				if (_ui._fadeout.alpha < 1) {
+					_ui._fadeout.alpha += 0.01;
+				} else {
+					_death_fadeout = false;
+					_death_fadein = true;
+					reset_current_scene();
+				}
+				return;
+				
+			} else if (_death_fadein) {
+				_player.continue_animation(Player.ANIM_STAND);
+				_player._cable.visible = true;
+				if (_ui._fadeout.alpha > 0) {
+					_ui._fadeout.alpha -= 0.01;
+				} else {
+					_ui._fadeout.alpha = 0;
+					_death_fadein = false;
+				}
+				return;
+			} else {
+				_player._cable.visible = true;
+				_ui._fadeout.visible = false;
 			}
 			_bgobjs.members[1].y = _cur_scene.get_bg1();
 			_bgobjs.members[2].y = _cur_scene.get_bg2();
 			
 			_ui.ui_update();
 			_player.update_player(this);
-			_is_moving = false;
-			_is_falling = false;
 			
-			if ( (_cur_scene.can_continue() || ALWAYS_CONTINUE) && _player.y() <= 0) {
-				next_scene();
-				_player._body.play(Scene.ANIM_STAND);
-			}
-			
-			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > _cur_scene.get_player_x_min()) {
-				_player.x( -MOVE_SPEED);
-				_is_moving = true;
-				
-			} else if (Util.is_key(Util.MOVE_RIGHT) && _player.x() < _cur_scene.get_player_x_max()) {
-				_player.x(MOVE_SPEED);
-				_is_moving = true;
-				
-			} 
-			
-			if (Util.is_key(Util.MOVE_JUMP) && _player.y() < _cur_scene.get_player_y_max()) {
-				_player.y(JUMP_SPEED);
-				_is_falling = true;
-				
-			} else if (Util.is_key(Util.MOVE_UP) && _player.y() > _cur_scene.get_player_y_min()) {
-				_player.y( -MOVE_SPEED);
-				_is_moving = true;
-				
-			} else if (Util.is_key(Util.MOVE_DOWN) && _player.y() < _cur_scene.get_player_y_max()) {
-				_player.y(MOVE_SPEED);
-				_is_moving = true;
-				
-			}
-			
+			update_control();
 			_stains.update();
 			_cur_scene.update();
 			
@@ -218,25 +210,28 @@ package {
 					}
 				}
 				
-				if (_player._hurt_ct <= 0) {
-					FlxG.overlap(_bullets, _player._body_hit_box, function(bullet:BasicBullet, body:FlxSprite):void {
-						if (_player._hurt_ct <= 0) {
-							if (_hp <= 0 || _hp - 1 >= _ui._hp_ui.members.length) {
-								trace("HP ERROR");
-								return;
-							}
-							_particles.add(new BloodParticle(bullet.x, bullet.y));
-							FlxG.play(Resource.IMPORT_SOUND_HIT);
-							
-							_ui._hp_ui.members[_hp-1].offset.y = 15;
-							_hp--;
-							_player._hurt_ct = 50;
-							if (_hp <= 0) die();
+				FlxG.overlap(_bullets, _player._body_hit_box, function(bullet:BasicBullet, body:FlxSprite):void {
+					if (_player._hurt_ct <= 0) {
+						if (_hp <= 0 || _hp - 1 >= _ui._hp_ui.members.length) {
+							trace("HP ERROR");
+							return;
 						}
-						bullet.do_remove();
-						_bullets.remove(bullet, true);
-					});
-				}
+						_particles.add(new BloodParticle(bullet.x, bullet.y));
+						FlxG.play(Resource.IMPORT_SOUND_HIT);
+						
+						_ui._hp_ui.members[_hp-1].offset.y = 15;
+						_hp--;
+						_player._hurt_ct = 50;
+						if (_hp <= 0) {
+							FlxG.play(Resource.IMPORT_SOUND_GAME_OVER, 1.25);
+							_death_fadeout = true;
+							return;
+						}
+					}
+					bullet.do_remove();
+					_bullets.remove(bullet, true);
+				});
+				
 			}
 			
 			if (Util.int_random(0,1500) == 0 && _hp != Player.MAX_HP) {
@@ -266,6 +261,65 @@ package {
 			}
 		}
 		
+		private function update_control():void {
+			_is_moving = false;
+			_is_falling = false;
+			if ( (_cur_scene.can_continue() || ALWAYS_CONTINUE) && _player.y() <= 0) {
+				next_scene();
+				_player._body.play(Scene.ANIM_STAND);
+			}
+			
+			if (Util.is_key(Util.MOVE_LEFT) && _player.x() > _cur_scene.get_player_x_min()) {
+				_player.x( -MOVE_SPEED);
+				_is_moving = true;
+				
+			} else if (Util.is_key(Util.MOVE_RIGHT) && _player.x() < _cur_scene.get_player_x_max()) {
+				_player.x(MOVE_SPEED);
+				_is_moving = true;
+				
+			} 
+			
+			if (Util.is_key(Util.MOVE_JUMP) && _player.y() < _cur_scene.get_player_y_max()) {
+				_player.y(JUMP_SPEED);
+				_is_falling = true;
+				
+			} else if (Util.is_key(Util.MOVE_UP) && _player.y() > _cur_scene.get_player_y_min()) {
+				_player.y( -MOVE_SPEED);
+				_is_moving = true;
+				
+			} else if (Util.is_key(Util.MOVE_DOWN) && _player.y() < _cur_scene.get_player_y_max()) {
+				_player.y(MOVE_SPEED);
+				_is_moving = true;
+				
+			}
+		}
+		
+		private var _transition_ct:Number = 0;
+		private function next_scene():void {
+			if (_scene_list.length == 0) return;
+			var next:Scene = _scene_list.shift();
+			if (_cur_scene == null) {
+				_cur_scene = next;
+				_cur_scene.init();
+				
+			} else {
+				_stains.clear();
+				_enemies.clear();
+				_bullets.clear();
+				_particles.clear();
+				_powerups.clear();
+				_behind.clear();
+				_enemies_front.clear();
+				
+				_transition_from_scene = _cur_scene;
+				_cur_scene = next;
+				_cur_scene.init();
+				_cur_scene.add_offset_to_groups( -500);
+				_transition_ct = 500;
+				_stains.visible = false;
+			}
+		}
+		
 		private function update_enemy_group(e:FlxGroup):void {
 			for (var i_enemy:int = e.length - 1; i_enemy >= 0; i_enemy-- ) {
 				var itr_enemy:BaseEnemy = e.members[i_enemy];
@@ -288,10 +342,5 @@ package {
 			}
 			return ct/_stains.length;
 		}
-		
-		public function die():void {
-			FlxG.play(Resource.IMPORT_SOUND_GAME_OVER, 1.25);
-			trace("Poor cleaner just died!");
-		}	
 	}
 }
