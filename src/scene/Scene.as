@@ -71,9 +71,9 @@ package scene {
 		public function init():Scene {
 			_g._sceneobjs.add(_bg_group);
 			_g._sceneobjs.add(_character_group);
-			_g._sceneobjs.add(_text_group);
 			_g._sceneobjs.add(_internals_group);
 			_g._sceneobjs.add(_window_group);
+			_g._sceneobjs.add(_text_group);
 			return this;
 		}
 		

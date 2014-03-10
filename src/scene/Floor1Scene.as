@@ -76,22 +76,16 @@ package scene {
 				_g._stains.add((new BasicStain(_g)).set_position(Util.float_random(180, 800), Util.float_random(50, 450)));
 			}
 			
-
-			//create_sniper_enemy(0, 100, 1,_g);
 			create_sniper_enemy(1, _g, [
 				72, 94, 
 				72, 234, 
 				72, 382
 			]);
-			//create_sniper_enemy(0, 300, 1,_g);
-			//create_sniper_enemy(934, 150, 2,_g);
 			create_sniper_enemy(2, _g, [
 				915, 382, 
 				915, 234,
 				915, 94
 			]);
-			//create_sniper_enemy(934, 350, 2, _g);
-			//create_jetpack_enemy(72, 1, _g);
 			//create_jetpack_enemy(863, 2, _g);
 			
 			return this;
