@@ -1,4 +1,5 @@
 package scene {
+	import core.Player;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	import org.flixel.FlxGroup;
@@ -17,6 +18,7 @@ package scene {
 		public static var CHARACTER_JULIET:String = "CHARACTER_JULIET";
 		public static var CHARACTER_THUG_RED:String = "CHARACTER_THUG_RED";
 		public static var CHARACTER_THUG_BLUE:String = "CHARACTER_THUG_BLUE";
+		public static var CHARACTER_CLEANER:String = "CHARACTER_CLEANER";
 		
 		public static var ANIM_STAND:String = "ANIM_STAND";
 		public static var ANIM_WALK:String = "ANIM_WALK";
@@ -208,12 +210,21 @@ package scene {
 				rtv.play(ANIM_WALK);
 				rtv.offset.x = 57.0 / 2;
 				rtv.offset.y = 69;
+				
+			} else if (name == CHARACTER_CLEANER) {
+				rtv.loadGraphic(Resource.IMPORT_CLEANER_GUY, true, true, 35, 69);
+				rtv.addAnimation(ANIM_STAND, [4], 0);
+				rtv.addAnimation(ANIM_WALK, [2, 1, 0, 1], 10);
+				rtv.addAnimation(Player.ANIM_SALUTEFRONT, [4, 3], 2);
+				rtv.play(ANIM_STAND);
 			}
 			
-			var scale:Number = 0.8;
-			rtv.set_scale(scale);
-			rtv.offset.x *= scale;
-			rtv.offset.y *= scale;
+			if (name != CHARACTER_CLEANER) {
+				var scale:Number = 0.8;
+				rtv.set_scale(scale);
+				rtv.offset.x *= scale;
+				rtv.offset.y *= scale;
+			}
 			return rtv;
 		}
 		

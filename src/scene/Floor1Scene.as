@@ -77,16 +77,16 @@ package scene {
 			}
 			
 
-			create_sniper_enemy(0, 100, 1,_g);
+			//create_sniper_enemy(0, 100, 1,_g);
 			create_sniper_enemy(0, 200, 1,_g);
-			create_sniper_enemy(0, 300, 1,_g);
-			create_sniper_enemy(934, 150, 2,_g);
+			//create_sniper_enemy(0, 300, 1,_g);
+			//create_sniper_enemy(934, 150, 2,_g);
 			create_sniper_enemy(934, 250, 2,_g);
-			create_sniper_enemy(934, 350, 2, _g);
+			//create_sniper_enemy(934, 350, 2, _g);
 			
 			
-			create_jetpack_enemy(72, 1, _g);
-			create_jetpack_enemy(863, 2, _g);
+			//create_jetpack_enemy(72, 1, _g);
+			//create_jetpack_enemy(863, 2, _g);
 			
 			return this;
 		}
