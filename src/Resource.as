@@ -20,6 +20,8 @@ package  {
 			return GAME_BITMAP_FONT;
 		}
 		
+		[Embed( source = "../resc/title.png" )] public static var IMPORT_TITLE:Class;
+		[Embed( source = "../resc/title_flash.png" )] public static var IMPORT_TITLE_FLASH:Class;
 		[Embed( source = "../resc/lastpicture.png" )] public static var IMPORT_LASTPICTURE:Class;
 		
 		[Embed( source = "../resc/bg/bg_0.png" )] public static var IMPORT_BG_0:Class;
@@ -82,8 +84,14 @@ package  {
 		[Embed( source = "../resc/sound/powerup.mp3" )] public static var IMPORT_SOUND_POWER_UP:Class;
 		[Embed( source = "../resc/sound/continue.mp3" )] public static var IMPORT_SOUND_CONTINUE:Class;
 		
+		[Embed( source = "../resc/sound/sfx_explosion.mp3" )] public static var IMPORT_SOUND_EXPLOSION:Class;
 		[Embed( source = "../resc/sound/sfx_pickup_full.mp3" )] public static var IMPORT_SOUND_PICKUP_FULL:Class;
 		
+//music
+		[Embed( source = "../resc/sound/bgm_main.mp3" )] private static var IMPORT_BGM_MAIN:Class;
+		public static var BGM_MAIN:Sound = new IMPORT_BGM_MAIN as Sound;
+		[Embed( source = "../resc/sound/bgm_menu.mp3" )] private static var IMPORT_BGM_MENU:Class;
+		public static var BGM_MENU:Sound = new IMPORT_BGM_MENU as Sound;
 //floor0
 		[Embed( source = "../resc/floor0/bg.png" )] public static var IMPORT_FLOOR0_BG:Class;
 

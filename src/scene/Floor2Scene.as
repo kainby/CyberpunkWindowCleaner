@@ -63,6 +63,7 @@ package scene {
 		
 		public override function init():Scene {
 			super.init();
+			Util.play_bgm(Resource.BGM_MAIN);
 			load_script(SCRIPT);
 			
 			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR2_MAINBLDG_BACK));

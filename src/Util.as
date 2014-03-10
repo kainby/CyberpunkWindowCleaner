@@ -1,5 +1,7 @@
 package  {
 	import flash.display.Sprite;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	import org.flixel.*;
 	import flash.geom.*;
 	import flash.display.*;
@@ -120,6 +122,16 @@ package  {
 		
 		public static function point_dist(ax:Number, ay:Number, bx:Number, by:Number):Number {
 			return Math.sqrt(Math.pow(by - ay, 2) + Math.pow(bx - ax, 2));
+		}
+		
+		private static var _cur_song:Sound;
+		private static var _cur_play:SoundChannel;
+		public static function play_bgm(o:Sound):void {
+			if (o != _cur_song) {
+				if (_cur_song != null) _cur_play.stop();
+				_cur_song = o;
+				_cur_play = _cur_song.play(0, int.MAX_VALUE);
+			}
 		}
 	}
 

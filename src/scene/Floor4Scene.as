@@ -69,6 +69,7 @@ package scene {
 		
 		public override function init():Scene {
 			super.init();
+			Util.play_bgm(Resource.BGM_MENU);
 			load_script(SCRIPT);
 			
 			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR4_MAINBLDG_BACK));
@@ -102,7 +103,7 @@ package scene {
 		public override function update():void {
 			super.update();
 			
-			if (passed_mark(0.02)) {
+			if (passed_mark(0.8)) {
 				_heli1.crash(new FlxPoint(Util.WID / 2, 0));
 				_heli2.crash(new FlxPoint(Util.WID / 2, 0));
 			}

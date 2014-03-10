@@ -2,6 +2,7 @@ package scene {
 	import core.*;
 	import misc.ScrollingTextBubble;
 	import particle.CableParticle;
+	import particle.Particle;
 	public class GroundFloorScene extends Scene {
 		
 		public override function get_bg1():Number { return -100; }
@@ -24,8 +25,13 @@ package scene {
 			_boss = _character_group.members[0];
 			_cleaner1 = _character_group.members[1];
 			_cleaner2 = _character_group.members[2];
-			_g.add_particle(new CableParticle(_cleaner1));
-			_g.add_particle(new CableParticle(_cleaner2));
+			
+			var p:Particle = new CableParticle(_cleaner1);
+			p.particle_update(_g);
+			_g.add_particle(p);
+			p = new CableParticle(_cleaner2);
+			p.particle_update(_g);
+			_g.add_particle(p);
 			return this;
 		}
 		

@@ -78,6 +78,7 @@ package scene {
 		
 		public override function init():Scene {
 			super.init();
+			Util.play_bgm(Resource.BGM_MENU);
 			load_script(SCRIPT);
 			
 			_bg_group.add(new BGObj(Resource.IMPORT_FLOOR3_MAINBLDG_BACK));

@@ -54,12 +54,10 @@ package {
 		public var _ui:GameUI;
 		
 		public override function create():void {
-			trace("game_init");
 			super.create();
 			
-			
 			_scene_list = Vector.<Scene>([
-				new Floor4Scene(this),
+				//new Floor4Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -68,7 +66,6 @@ package {
 			]);
 			
 			next_scene();
-			
 			_ui = new GameUI(this);
 			
 			this.add(_bgobjs);
@@ -86,6 +83,14 @@ package {
 			_bgobjs.add(new BGObj(Resource.IMPORT_BG_0));
 			_bgobjs.add(new BGObj(Resource.IMPORT_BG_1));
 			_bgobjs.add(new BGObj(Resource.IMPORT_BG_2));
+			
+			_death_fadein = true;
+			_ui._fadeout.alpha = 1;
+			_ui._fadeout.visible = true;
+			_player.continue_animation(Player.ANIM_STANDFRONT);
+			
+			_bgobjs.members[1].y = _cur_scene.get_bg1();
+			_bgobjs.members[2].y = _cur_scene.get_bg2();
 		}
 		
 		private function reset_current_scene():void {
@@ -149,11 +154,11 @@ package {
 					_death_fadeout = false;
 					_death_fadein = true;
 					reset_current_scene();
+					_player.continue_animation(Player.ANIM_STAND);
 				}
 				return;
 				
 			} else if (_death_fadein) {
-				_player.continue_animation(Player.ANIM_STAND);
 				_player._cable.visible = true;
 				if (_ui._fadeout.alpha > 0) {
 					_ui._fadeout.alpha -= 0.01;
