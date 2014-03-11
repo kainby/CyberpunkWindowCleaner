@@ -9,6 +9,7 @@ package enemies {
 	import org.flixel.FlxSprite;
 	import particle.RocketParticle;
 	import org.flixel.FlxParticle;
+	import particle.SpeechParticle;
 	
 	public class JetPackEnemy extends BaseEnemy {
 		public var _shoot_timer:int;
@@ -61,6 +62,26 @@ package enemies {
 			}
 			emitter.start(false, 1, 0.01);
 			g._behind.add(_emitter);
+			
+			if (Util.int_random(0,4) == 0) {
+				var seed:Number = Util.int_random(0, 4);
+				var text:String = "top kek";
+				if (seed == 0) {
+					text = "Say hello to my little friend!";
+				} else if (seed == 1) { 
+					text = "U wot m8";
+				} else if (seed == 2) {
+					text = "Spray and pray, baby!";
+				} else {
+					text = "How do you work this thing?!";
+				}
+				if (this._team_no == 1) {
+					g.add_particle(new SpeechParticle(this, text, g, 20, -15));
+				} else  {
+					g.add_particle(new SpeechParticle(this, text, g, 20, -15));
+				}
+				
+			}
 		}
 		
 		override public function do_remove():void {

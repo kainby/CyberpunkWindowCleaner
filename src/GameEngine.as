@@ -109,6 +109,8 @@ package {
 			_cur_scene.init();
 			_hp = Player.MAX_HP;
 			_player.set_pos(Util.WID / 2, 390);
+			_ui.ui_update();
+			_ui.reset_hp_offset();
 		}
 		
 		public function end_out():void {

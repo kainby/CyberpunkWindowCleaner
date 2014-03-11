@@ -149,6 +149,14 @@ package core {
 			}
 		}
 		
+		public function reset_hp_offset():void {
+			for (var i:int = 0; i < Player.MAX_HP; i++) {
+				var itr:FlxSprite = _hp_ui.members[i];
+				itr.play(i + 1 <= _g._hp?HPICON_FULL:HPICON_EMPTY);
+				_hp_ui.members[i].offset.y = 0;
+			}
+		}
+		
 	}
 
 }

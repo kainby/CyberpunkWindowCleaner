@@ -99,14 +99,14 @@ package scene {
 		
 		public function create_jetpack_enemy(x:Number, team_no:Number, g:GameEngine):void {
 			var enemy:JetPackEnemy = new JetPackEnemy(team_no, x, g);
-			_g._enemies.add(enemy);
+			_g._enemies_front.add(enemy);
 		}
 		
 		private var _last_cleaned_pct:Number = -1;
 		public override function update():void {
 			super.update();
 			
-			if (passed_mark(0.8)) {
+			if (passed_mark(0.8) || (GameEngine.ALWAYS_CONTINUE && passed_mark(0.02))) {
 				_heli1.crash(new FlxPoint(Util.WID / 2, 0));
 				_heli2.crash(new FlxPoint(Util.WID / 2, 0));
 				_explosion.set_location(Util.WID / 2 - 53, 0).explode();

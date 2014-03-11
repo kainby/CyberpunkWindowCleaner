@@ -7,6 +7,7 @@ package enemies {
 	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import particle.LaserSight;
+	import particle.SpeechParticle;
 	
 	public class SniperEnemy extends BaseEnemy {
 		
@@ -153,6 +154,7 @@ package enemies {
 				} else {	// hide for some time
 					this.visible = false;
 					if (_hide_timer >= _hide_timer_limit) {
+						add_speech_bubble(game);
 						_hiding = false;
 						reset_hide_timer();
 					} else {
@@ -160,6 +162,42 @@ package enemies {
 					}
 				}
 			}
+		}
+		
+		private function add_speech_bubble(g:GameEngine):void {
+			if (Util.int_random(0, 10) != 0) return;
+			var text:String = "top kek";
+			var offsetx:Number = 0;
+			var offsety:Number = 0;
+			var seed:Number = Util.int_random(0, 4);
+			if (_team_no == 1) {
+				offsetx = 10;
+				offsety = -15;
+				if (seed == 0) {
+					text = "I love you mommy!";
+				} else if (seed == 1) {
+					text = "Do you even lift bro?";
+				} else if (seed == 2) {
+					text = "For the motherland!";
+				} else {
+					text = "Die, Montague scum!";
+				}
+				
+			} else if (_team_no == 2) {
+				offsetx = 20;
+				offsety = -15;
+				if (seed == 0) {
+					text = "This is so kawaii!";
+				} else if (seed == 1) {
+					text = "If it's red it's dead!";
+				} else if (seed == 2) {
+					text = "Cover me!";
+				} else {
+					text = "Die, Capulet scum!";
+				}
+			}
+			
+			g.add_particle(new SpeechParticle(this, text, g, offsetx, offsety));
 		}
 		
 		public function retreat(enemies_group:FlxGroup):void {

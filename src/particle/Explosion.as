@@ -8,7 +8,10 @@ package particle {
 		
 		public function Explosion(x:Number = 0, y:Number = 0, delay:Number = 0) {
 			this.loadGraphic(Resource.IMPORT_EXPLOSION, true, false, 192, 96);
-			this.addAnimation("boom", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 15, false);
+			this.addAnimation("boom", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 15, false);
+			this.scale.x = 2;
+			this.scale.y = 2.4;
+			this.alpha = 0.8;
 			this.set_position(x, y);
 			this.visible = false;
 			this._delay = delay;
