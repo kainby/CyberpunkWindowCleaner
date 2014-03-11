@@ -87,6 +87,7 @@ package {
 			_death_fadein = true;
 			_ui._fadeout.alpha = 1;
 			_ui._fadeout.visible = true;
+			_ui.ui_update();
 			_player.continue_animation(Player.ANIM_STANDFRONT);
 			
 			_bgobjs.members[1].y = _cur_scene.get_bg1();
