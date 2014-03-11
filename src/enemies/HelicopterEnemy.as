@@ -20,8 +20,8 @@ package enemies {
 		
 		public var _reassign_countdown:Number;
 		public var _debut:Boolean;
-		public var _dx:Number;
-		public var _dy:Number;
+		private var _dx:Number;
+		private var _dy:Number;
 		public var _vy:Number;
 		private var y0:Number;
 		private var _dfloat:Number;
@@ -29,7 +29,7 @@ package enemies {
 		
 		public var RPM:int = 6;		// 600 RPM
 		public var MAG:int = 12;	// adjust this for the number of bullets
-		public const SPD:Number = 2;
+		public const SPD:Number = 1.6;
 		public const GRAVITY:Number = 0.25;
 		public var DELAY:Number = 90;
 		
@@ -129,7 +129,7 @@ package enemies {
 								}
 							}
 						}
-						var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 84, _angle + Util.float_random(-6,6));
+						var bullet:RoundBullet = new RoundBullet(this.x + dx, this.y + 84, _angle + Util.float_random(-8,8));
 						game._bullets.add(bullet);
 						_mag--;
 						_rpm = RPM;
@@ -147,10 +147,26 @@ package enemies {
 			// re-assign location
 			if (_reassign_countdown <= 0) {
 				_reassign_countdown = Util.int_random(1, 3);
-				var sign:Number = (Util.int_random(0, 1) == 1) ? ( -1):1;
+				
 				var new_x:Number = this.x + Util.float_random(-_dx, _dx);
-				var new_y:Number = this.y0 + Util.float_random(-_dx, _dy);
+				var new_y:Number = this.y0 + Util.float_random( -_dx, _dy);
+				var sign:Number = (_team_no == 1) ? ( -1):1;
+				if ((_team_no == 1 && this.x > Util.WID / 2 - this.width - _dx) || (_team_no != 1 && this.x < Util.WID / 2 + _dx)) {
+					// has the danger to cross each other
+					new_x = this.x + sign * Util.float_random(_dx / 2, _dx);
+				} else if ((_team_no == 1 && this.x < _dx) || (_team_no != 1 && this.x > Util.WID - _dx - this.width)) {
+					// too sided
+					new_x = this.x - sign * Util.float_random(_dx / 3, _dx * 2 / 3);
+				}
+				if (this.y0 <= _dy * 1.6) {
+					// too top
+					new_y = this.y0 + Util.float_random(_dy / 2, _dy);
+				} else if (this.y0 >= Util.HEI * 2/3 - this.height ) {
+					// too bottom
+					new_y = this.y0 - Util.float_random(_dy * 3/4, _dy);
+				}
 				if ((new_x <= 0 || new_y <= 0 || new_x >= 900 || new_y >= 400)) {
+					// final prevention of bad new position
 					new_x = this.x;
 					new_y = this.y0;
 				}
@@ -174,9 +190,13 @@ package enemies {
 		public function set_move_range(dx:Number, dy:Number):HelicopterEnemy {
 			if (dx < 10) {
 				dx = 10;
+			} else if (dx > Util.WID / 4) {
+				dx = Util.WID / 4;
 			}
 			if (dy < 10) {
 				dy = 10;
+			} else if (dy > Util.HEI / 2.5) {
+				dy = Util.HEI / 2.5;
 			}
 			this._dx = dx;
 			this._dy = dy;
