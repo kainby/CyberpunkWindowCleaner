@@ -43,6 +43,7 @@ package {
 		public var _enemies_front:FlxGroup = new FlxGroup();
 		public var _bullets:FlxGroup = new FlxGroup();
 		public var _powerups:FlxGroup = new FlxGroup();
+		public var _enemy_speech:FlxGroup = new FlxGroup();
 		
 		public var _death_fadeout:Boolean = false, _death_fadein = false, _end_out = false;
 		
@@ -57,7 +58,7 @@ package {
 			super.create();
 			
 			_scene_list = Vector.<Scene>([
-				//new Floor4Scene(this),
+				//new Floor3Scene(this),
 				new GroundFloorScene(this), 
 				new Floor1Scene(this),
 				new Floor2Scene(this),
@@ -75,6 +76,7 @@ package {
 			this.add(_stains);
 			this.add(_player);
 			this.add(_enemies_front);
+			this.add(_enemy_speech);
 			this.add(_bullets);
 			this.add(_particles);
 			this.add(_powerups);
@@ -94,6 +96,33 @@ package {
 			_bgobjs.members[2].y = _cur_scene.get_bg2();
 		}
 		
+		private var _transition_ct:Number = 0;
+		private function next_scene():void {
+			if (_scene_list.length == 0) return;
+			var next:Scene = _scene_list.shift();
+			if (_cur_scene == null) {
+				_cur_scene = next;
+				_cur_scene.init();
+				
+			} else {
+				_stains.clear();
+				_enemies.clear();
+				_bullets.clear();
+				_particles.clear();
+				_powerups.clear();
+				_behind.clear();
+				_enemies_front.clear();
+				_enemy_speech.clear();
+				
+				_transition_from_scene = _cur_scene;
+				_cur_scene = next;
+				_cur_scene.init();
+				_cur_scene.add_offset_to_groups( -500);
+				_transition_ct = 500;
+				_stains.visible = false;
+			}
+		}
+		
 		private function reset_current_scene():void {
 			_stains.clear();
 			_enemies.clear();
@@ -102,8 +131,8 @@ package {
 			_powerups.clear();
 			_behind.clear();
 			_enemies_front.clear();
+			_enemy_speech.clear();
 			_sceneobjs.clear();
-			
 			
 			var cur_scene_class:Class = Class(getDefinitionByName(getQualifiedClassName(_cur_scene))); //lel
 			_cur_scene = new cur_scene_class(this);
@@ -313,32 +342,6 @@ package {
 				_player.y(MOVE_SPEED);
 				_is_moving = true;
 				
-			}
-		}
-		
-		private var _transition_ct:Number = 0;
-		private function next_scene():void {
-			if (_scene_list.length == 0) return;
-			var next:Scene = _scene_list.shift();
-			if (_cur_scene == null) {
-				_cur_scene = next;
-				_cur_scene.init();
-				
-			} else {
-				_stains.clear();
-				_enemies.clear();
-				_bullets.clear();
-				_particles.clear();
-				_powerups.clear();
-				_behind.clear();
-				_enemies_front.clear();
-				
-				_transition_from_scene = _cur_scene;
-				_cur_scene = next;
-				_cur_scene.init();
-				_cur_scene.add_offset_to_groups( -500);
-				_transition_ct = 500;
-				_stains.visible = false;
 			}
 		}
 		

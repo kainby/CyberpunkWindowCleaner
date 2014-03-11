@@ -16,7 +16,7 @@ package particle {
 			_offsety = offsety;
 			_bubble = new ScrollingTextBubble(text);
 			_bubble.set_pos(follow.x + _offsetx, follow.y+_offsety);
-			g._sceneobjs.add(_bubble);
+			g._enemy_speech.add(_bubble);
 			this.visible = false;
 			
 		}
@@ -32,7 +32,7 @@ package particle {
 		}
 		
 		public override function do_remove():void {
-			_g._sceneobjs.remove(_bubble);
+			_g._enemy_speech.remove(_bubble);
 			_bubble.end();
 		}
 		
