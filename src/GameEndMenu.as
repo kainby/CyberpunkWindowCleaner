@@ -4,6 +4,7 @@ package
 	import flash.events.TextEvent;
 	import misc.ScrollingTextBubble;
 	import org.flixel.FlxBasic;
+	import org.flixel.FlxG;
 	import org.flixel.FlxState;
 	import org.flixel.FlxSprite
 	import scene.Scene;
@@ -12,6 +13,7 @@ package
 		private var _cleaner1:Player = new Player(), _cleaner2:Player = new Player(), _cleaner3:Player = new Player();
 		private var _boss:FlxSprite = new FlxSprite();
 		private var _fadeout:FlxSprite = new FlxSprite(), _lastpicture:FlxSprite = new FlxSprite(0, 0, Resource.IMPORT_LASTPICTURE);
+		private var _mainmenu_button:FlxSprite = new FlxSprite(Util.WID*0.82, Util.HEI*0.02, Resource.IMPORT_MAIN_MENU_BUTTON);
 		
 		public function GameEndMenu() {
 			Util.play_bgm(Resource.BGM_MAIN);
@@ -35,7 +37,11 @@ package
 			this.add(_cleaner3);
 			
 			this.add(_lastpicture);
+			this.add(_mainmenu_button);
+			_mainmenu_button.visible = false;
 			this.add(_fadeout);
+			
+			
 			_lastpicture.visible = false;
 			_fadeout.makeGraphic(Util.WID, Util.HEI, 0xFF000000);
 			_fadeout.alpha = 0;
@@ -112,7 +118,25 @@ package
 				}
 				
 			} else if (_mode == 5) {
-				if (_fadeout.alpha > 0) _fadeout.alpha -= 0.01;
+				_mainmenu_button.visible = true;
+				if (_fadeout.alpha > 0) { 
+					_fadeout.alpha -= 0.01;
+				} else {
+					_fadeout.alpha = 0;
+					_mode = 6;
+				}
+				
+			} else if (_mode == 6) {
+				if (FlxG.keys.justPressed("M")) {
+					_mode = 7;
+				}
+				
+			} else if (_mode == 7) {
+				if (_fadeout.alpha < 1) {
+					_fadeout.alpha += 0.01;
+				} else {
+					FlxG.switchState(new MainMenu());
+				}
 			}
 		}
 		

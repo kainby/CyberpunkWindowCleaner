@@ -1,5 +1,6 @@
 package  
 {
+	import org.flixel.FlxButton;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxG;
@@ -17,8 +18,10 @@ package
 		
 		public function MainMenu() {
 			add(new FlxSprite(0, 0, Resource.IMPORT_TITLE));
+			add(new FlxSprite(Util.WID*0.82, Util.HEI*0.02, Resource.IMPORT_MAIN_MUTE_BUTTON));
 			add(_flash);
 			add(_fadeout);
+			
 			_fadeout.makeGraphic(Util.WID, Util.HEI, 0xFF000000);
 			_fadeout.alpha = 0;
 			Util.play_bgm(Resource.BGM_MAIN);
@@ -26,6 +29,15 @@ package
 		
 		public override function update():void {
 			super.update();
+			
+			if (_begin_game) {
+				_fadeout.alpha += 0.01;
+				if (_fadeout.alpha >= 1) {
+					FlxG.switchState(new GameEngine());
+				}
+				return;
+			}
+			
 			if (Util.is_key(Util.MOVE_DOWN) || 
 				Util.is_key(Util.MOVE_UP) || 
 				Util.is_key(Util.MOVE_LEFT) || 
@@ -35,11 +47,8 @@ package
 				_begin_game = true;
 			}
 			
-			if (_begin_game) {
-				_fadeout.alpha += 0.01;
-				if (_fadeout.alpha >= 1) {
-					FlxG.switchState(new GameEngine());
-				}
+			if (FlxG.keys.justPressed("M")) {
+				Util.mute_toggle();
 			}
 			
 			_ct++;

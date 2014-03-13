@@ -44,7 +44,7 @@ package scene {
 		
 		public override function update():void {
 			if (_mode == 0) {
-				cons_text_bubble("Alright boys, we've got a job to do here.");
+				cons_text_bubble("All right boys, we've got a job to do here.");
 				_mode = 1;
 			} else if (_mode == 1) {
 				_boss_text.scroll_tick();

@@ -127,11 +127,24 @@ package  {
 		private static var _cur_song:Sound;
 		private static var _cur_play:SoundChannel;
 		public static function play_bgm(o:Sound):void {
+			if (_mute) return;
 			if (o != _cur_song) {
-				if (_cur_song != null) _cur_play.stop();
+				if (_cur_song != null && _cur_play != null ) _cur_play.stop();
 				_cur_song = o;
 				_cur_play = _cur_song.play(0, int.MAX_VALUE);
 			}
+		}
+		
+		private static var _mute:Boolean = false;
+		public static function mute_toggle():void {
+			_mute = !_mute;
+			FlxG.mute = _mute;
+			if (_mute && _cur_play != null) {
+				_cur_play.stop();
+			} else if (!_mute && _cur_song != null) {
+				_cur_play = _cur_song.play(0, int.MAX_VALUE);
+			}
+			
 		}
 	}
 

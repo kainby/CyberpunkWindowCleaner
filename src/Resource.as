@@ -20,6 +20,9 @@ package  {
 			return GAME_BITMAP_FONT;
 		}
 		
+		[Embed( source = "../resc/main_menu.png" )] public static var IMPORT_MAIN_MENU_BUTTON:Class;
+		[Embed( source = "../resc/mute.png" )] public static var IMPORT_MAIN_MUTE_BUTTON:Class;
+		
 		[Embed( source = "../resc/title.png" )] public static var IMPORT_TITLE:Class;
 		[Embed( source = "../resc/title_flash.png" )] public static var IMPORT_TITLE_FLASH:Class;
 		[Embed( source = "../resc/lastpicture.png" )] public static var IMPORT_LASTPICTURE:Class;
