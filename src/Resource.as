@@ -22,6 +22,7 @@ package  {
 		
 		[Embed( source = "../resc/main_menu.png" )] public static var IMPORT_MAIN_MENU_BUTTON:Class;
 		[Embed( source = "../resc/mute.png" )] public static var IMPORT_MAIN_MUTE_BUTTON:Class;
+		[Embed( source = "../resc/ingame_ui_btn.png" )] public static var IMPORT_INGAME_UI_BTN:Class;
 		
 		[Embed( source = "../resc/title.png" )] public static var IMPORT_TITLE:Class;
 		[Embed( source = "../resc/title_flash.png" )] public static var IMPORT_TITLE_FLASH:Class;

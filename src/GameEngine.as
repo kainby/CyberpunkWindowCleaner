@@ -3,6 +3,7 @@ package {
 	import enemies.BaseEnemy;
 	import enemies.SniperEnemy;
 	import flash.geom.Rectangle;
+	import org.flixel.system.input.Keyboard;
 	import flash.utils.*;
 	import gameobj.BasicBullet;
 	import gameobj.BasicStain;
@@ -151,10 +152,19 @@ package {
 			}
 		}
 		
+		private var _esc_out:Boolean = false;
 		public override function update():void {
 			super.update();
 			
-			if (_end_out) {
+			if (_esc_out) {
+				_ui._fadeout.visible = true;
+				_ui._fadeout.alpha += 0.01;
+				if (_ui._fadeout.alpha >= 1) {
+					FlxG.switchState(new MainMenu());
+				}
+				return;
+				
+			} else if (_end_out) {
 				_ui._fadeout.alpha += 0.005;
 				if (_ui._fadeout.alpha >= 1) {
 					FlxG.switchState(new GameEndMenu());
@@ -205,6 +215,15 @@ package {
 			}
 			_bgobjs.members[1].y = _cur_scene.get_bg1();
 			_bgobjs.members[2].y = _cur_scene.get_bg2();
+			
+			if (FlxG.keys.justPressed("ESCAPE")) {
+				if (_ui._show_ui_btn_count > 0) {
+					_esc_out = true;
+					_ui._fadeout.alpha = 0;
+				} else {
+					_ui._show_ui_btn_count = 100;
+				}
+			}
 			
 			_ui.ui_update();
 			_player.update_player(this);

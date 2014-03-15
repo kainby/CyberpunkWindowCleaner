@@ -9,8 +9,6 @@ package {
 	[SWF(backgroundColor = "#FFFFFF", frameRate = "60", width = "1000", height = "500")]
 	[Frame(factoryClass="Preloader")]
 	
-	//TODO--
-	//sniperenemy say stuff
 	
 	public class Main extends FlxGame {
 		

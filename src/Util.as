@@ -127,10 +127,13 @@ package  {
 		private static var _cur_song:Sound;
 		private static var _cur_play:SoundChannel;
 		public static function play_bgm(o:Sound):void {
-			if (_mute) return;
-			if (o != _cur_song) {
-				if (_cur_song != null && _cur_play != null ) _cur_play.stop();
+			if (_mute) {
 				_cur_song = o;
+				return;
+			}
+			if (o != _cur_song) {
+				_cur_song = o;
+				if (_cur_song != null && _cur_play != null ) _cur_play.stop();
 				_cur_play = _cur_song.play(0, int.MAX_VALUE);
 			}
 		}

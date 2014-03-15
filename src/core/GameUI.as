@@ -37,6 +37,8 @@ package core {
 		
 		public var _g:GameEngine;
 		
+		public var _ui_btn:FlxSprite = new FlxSprite(Util.WID * 0.925, Util.HEI * 0.01,Resource.IMPORT_INGAME_UI_BTN);
+		
 		public function GameUI(g:GameEngine) {
 			super();
 			
@@ -76,6 +78,8 @@ package core {
 			this.add(_tag);
 			this.add(_score);
 			
+			this.add(_ui_btn);
+			
 			_fadeout.makeGraphic(Util.WID, Util.HEI, 0xFF000000);
 			_fadeout.visible = false;
 			_fadeout.alpha = 0;
@@ -114,6 +118,8 @@ package core {
 			_score.x = _tag.x;
 		}
 		
+		public var _show_ui_btn_count:Number = 0;
+		
 		private var _continue_flash_ct:uint = 0;
 		public function ui_update():void {
 			if (_g._cur_scene.can_continue()) {
@@ -128,6 +134,20 @@ package core {
 				_tag.visible = _g._cur_scene.show_hp_bar();
 			}
 			
+			if (_show_ui_btn_count > 0) {
+				_show_ui_btn_count--;
+				_ui_btn.alpha = 1;
+				
+			} else {
+				if (_ui_btn.alpha > 0.2) {
+					_ui_btn.alpha -= 0.01;
+				}
+			}
+			
+			if (FlxG.keys.justPressed("M")) {
+				Util.mute_toggle();
+				_show_ui_btn_count = 100;
+			}
 			
 			var pct:Number = _g.get_cleaned_pct();
 			_score.text = int(pct * 100) + "%";

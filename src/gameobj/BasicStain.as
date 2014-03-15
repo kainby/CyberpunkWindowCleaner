@@ -13,11 +13,12 @@ package gameobj {
 			super(STAINS[Util.int_random(0, STAINS.length)]);
 			_g = g;
 			_cleaned = false;
+			this.color = 0xCCCCCC;
 		}
 		
 		public function clean_step():void {
-			_pct -= 1/(width*5);
-			this.alpha = 0.2 +  _pct * 0.8;
+			_pct -= 1/(width*3);
+			this.alpha = 0.3 +  _pct * 0.7;
 			
 			if (this._pct <= 0) {
 				this.visible = false;
