@@ -15,6 +15,8 @@ package  {
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.net.*;
+	import flash.external.ExternalInterface;
 	
 	public class Util {
 
@@ -29,6 +31,33 @@ package  {
 		public static var MOVE_UP:Vector.<String> = Vector.<String>(["W", "UP"]);
 		public static var MOVE_DOWN:Vector.<String> = Vector.<String>(["S", "DOWN"]);
 		public static var MOVE_JUMP:Vector.<String> = Vector.<String>(["SPACE"]);
+		
+		public static function isUrl(urls:Array, stage:Stage):Boolean {
+			var url:String = stage.loaderInfo.loaderURL;
+			var urlStart:Number = url.indexOf("://")+3;
+			var urlEnd:Number = url.indexOf("/", urlStart);
+			var domain:String = url.substring(urlStart, urlEnd);
+			var k1:Boolean = false;
+			for (var i:int = 0; i < urls.length; i++) {
+				if (domain.indexOf(urls[i]) == -1 || !(domain.indexOf(urls[i]) == domain.length -
+					urls[i].length)) {
+				} else {
+					k1 = true;
+				}
+			}
+			return k1;
+		}
+		
+		public static function more_games():void {
+			//top fucking kek
+			try {
+				var url:String = "http://www.ppllaayy.com";
+				ExternalInterface.call('(function (){var f = document.createElement("form");document.body.appendChild(f);f.style.display="none";f.setAttribute("target","_blank");f.setAttribute("method","POST");f.setAttribute("action","'+url+'");f.submit(); })()');
+			} catch (e:Error) {
+				var request = new URLRequest("http://www.ppllaayy.com");
+				navigateToURL(request,"_self");
+			}
+		}
 		
 		public static function float_random(min:Number, max:Number):Number {
 			return min + Math.random() * (max - min);

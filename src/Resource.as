@@ -5,6 +5,8 @@ package  {
 	import org.flixel.plugin.photonstorm.FlxBitmapFont;
 	public class Resource {
 		
+		[Embed(source = "../resc/ads/play_logo.png")] public static var IMPORT_PLAY_LOGO_OPEN:Class;
+		[Embed(source = "../resc/ads/more_games.png")] public static var IMPORT_MAIN_MENU_MORE_GAMES:Class;
 		
 		[Embed(source = '../resc/mozart_nbp.ttf', embedAsCFF="false", fontName='gamefont', fontFamily="gamefont", mimeType='application/x-font')]
 		private var IMPORT_GAME_FONT_TTF:Class;

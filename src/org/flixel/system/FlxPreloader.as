@@ -149,6 +149,7 @@ package org.flixel.system
 			var time:uint = getTimer();
             if((framesLoaded >= totalFrames) && (time > _min))
             {
+				
                 removeEventListener(Event.ENTER_FRAME, onEnterFrame);
                 nextFrame();
                 var mainClass:Class = Class(getDefinitionByName(className));
@@ -158,6 +159,7 @@ package org.flixel.system
 	                addChild(app as DisplayObject);
 	            }
                 destroy();
+				
             }
             else
 			{

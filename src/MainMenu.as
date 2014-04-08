@@ -13,12 +13,19 @@ package
 		private var _flash:FlxSprite = new FlxSprite(Util.WID / 2 - 583 / 2, Util.HEI * 0.83, Resource.IMPORT_TITLE_FLASH);
 		private var _ct:Number = 0;
 		private var _fadeout:FlxSprite = new FlxSprite();
+		private var _playlogo:FlxSprite = new FlxSprite(0, 0, Resource.IMPORT_PLAY_LOGO_OPEN);
 		
 		private var _begin_game:Boolean = false;
 		
 		public function MainMenu() {
 			add(new FlxSprite(0, 0, Resource.IMPORT_TITLE));
-			add(new FlxSprite(Util.WID*0.82, Util.HEI*0.02, Resource.IMPORT_MAIN_MUTE_BUTTON));
+			add(new FlxSprite(Util.WID * 0.82, Util.HEI * 0.02, Resource.IMPORT_MAIN_MUTE_BUTTON));
+			add(new FlxSprite(Util.WID * 0.82, Util.HEI * 0.145, Resource.IMPORT_MAIN_MENU_MORE_GAMES));
+			
+			_playlogo.x = Util.WID - _playlogo.width;
+			_playlogo.y = Util.HEI - _playlogo.height;
+			_playlogo.alpha = 0.75;
+			add(_playlogo);
 			add(_flash);
 			add(_fadeout);
 			
@@ -49,6 +56,8 @@ package
 			
 			if (FlxG.keys.justPressed("M")) {
 				Util.mute_toggle();
+			} else if (FlxG.keys.justPressed("P")) {
+				Util.more_games();
 			}
 			
 			_ct++;
