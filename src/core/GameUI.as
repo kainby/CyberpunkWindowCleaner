@@ -38,7 +38,7 @@ package core {
 		public var _g:GameEngine;
 		
 		public var _ui_btn:FlxSprite = new FlxSprite(Util.WID * 0.9, Util.HEI * 0.01, Resource.IMPORT_INGAME_UI_BTN);
-		private var _playlogo:FlxSprite = new FlxSprite(0, 0, Resource.IMPORT_PLAY_LOGO_OPEN);
+		private var _playlogo:FlxSprite = new PlayLogo();
 		
 		public function GameUI(g:GameEngine) {
 			super();
@@ -79,9 +79,6 @@ package core {
 			this.add(_tag);
 			this.add(_score);
 			
-			_playlogo.x = Util.WID - _playlogo.width;
-			_playlogo.y = Util.HEI - _playlogo.height;
-			_playlogo.alpha = 0.75;
 			add(_playlogo);
 			
 			this.add(_ui_btn);
@@ -143,12 +140,10 @@ package core {
 			if (_show_ui_btn_count > 0) {
 				_show_ui_btn_count--;
 				_ui_btn.alpha = 1;
-				_playlogo.alpha = 1;
 				
 			} else {
-				if (_ui_btn.alpha > 0.2) {
+				if (_ui_btn.alpha > 0.75) {
 					_ui_btn.alpha -= 0.01;
-					_playlogo.alpha = Math.max(0.15,_playlogo.alpha-0.01);
 				}
 			}
 			

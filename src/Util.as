@@ -50,11 +50,11 @@ package  {
 		
 		public static function more_games():void {
 			//top fucking kek
+			var url:String = "http://www.ppllaayy.com/?utm_source=sponsorship&utm_campaign=windcleaner";
 			try {
-				var url:String = "http://www.ppllaayy.com";
 				ExternalInterface.call('(function (){var f = document.createElement("form");document.body.appendChild(f);f.style.display="none";f.setAttribute("target","_blank");f.setAttribute("method","POST");f.setAttribute("action","'+url+'");f.submit(); })()');
 			} catch (e:Error) {
-				var request = new URLRequest("http://www.ppllaayy.com");
+				var request = new URLRequest(url);
 				navigateToURL(request,"_self");
 			}
 		}

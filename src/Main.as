@@ -5,6 +5,7 @@ package {
 	import flash.media.Sound;
 	import org.flixel.FlxGame;
 	import org.flixel.FlxG
+	import org.flixel.system.input.Mouse;
 	
 	[SWF(backgroundColor = "#FFFFFF", frameRate = "60", width = "1000", height = "500")]
 	[Frame(factoryClass="Preloader")]
