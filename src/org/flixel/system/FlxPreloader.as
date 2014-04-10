@@ -147,19 +147,21 @@ package org.flixel.system
 			}
             graphics.clear();
 			var time:uint = getTimer();
-            if((framesLoaded >= totalFrames) && (time > _min))
+            if((framesLoaded >= totalFrames) /*&& (time > _min)*/)
             {
-				
-                removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-                nextFrame();
-                var mainClass:Class = Class(getDefinitionByName(className));
-	            if(mainClass)
-	            {
-	                var app:Object = new mainClass();
-	                addChild(app as DisplayObject);
-	            }
-                destroy();
-				
+				update(1);
+				done_loading();
+				if (can_cont) {
+					removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+					nextFrame();
+					var mainClass:Class = Class(getDefinitionByName(className));
+					if(mainClass)
+					{
+						var app:Object = new mainClass();
+						addChild(app as DisplayObject);
+					}
+					destroy();
+				}
             }
             else
 			{
@@ -170,12 +172,16 @@ package org.flixel.system
 			}
         }
 		
+		public function done_loading():void {}
+		
+		[Embed(source = "../../../../resc/clicktoplay.png")] public static var IMPORT_CLICKTOPLAY:Class;
+		
 		/**
 		 * Override this to create your own preloader objects.
 		 * Highly recommended you also override update()!
 		 */
 		protected function create():void
-		{
+		{			
 			_min = 0;
 			if(!FlxG.debug)
 				_min = minDisplayTime*1000;
@@ -236,6 +242,13 @@ package org.flixel.system
 			_buffer.addChild(bitmap);
 		}
 		
+		public var can_cont:Boolean = false;
+		
+		public function cont():void {
+			can_cont = true;
+			onEnterFrame(null);
+		}
+		
 		protected function destroy():void
 		{
 			removeChild(_buffer);
@@ -288,7 +301,7 @@ package org.flixel.system
 			}
 			else if(Percent > 0.9)
 			{
-				_buffer.alpha = 1-(Percent-0.9)/0.1;
+				_buffer.alpha = 1 - (Percent - 0.9) / 0.1;
 			}
 		}
 	}
