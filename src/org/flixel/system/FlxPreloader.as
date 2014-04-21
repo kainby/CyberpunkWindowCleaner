@@ -246,7 +246,7 @@ package org.flixel.system
 		
 		public function cont():void {
 			can_cont = true;
-			onEnterFrame(null);
+			//onEnterFrame(null);
 		}
 		
 		protected function destroy():void

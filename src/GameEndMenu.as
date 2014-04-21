@@ -48,6 +48,10 @@ package
 			
 		}
 		
+		public override function create():void {
+			Util.zoom_camera();
+		}
+		
 		private var _mode:Number = 0;
 		private var _boss_text:ScrollingTextBubble;
 		private var _c1_text:ScrollingTextBubble, _c2_text:ScrollingTextBubble, _c3_text:ScrollingTextBubble;

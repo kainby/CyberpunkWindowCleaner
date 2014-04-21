@@ -7,7 +7,8 @@ package {
 	import org.flixel.FlxG
 	import org.flixel.system.input.Mouse;
 	
-	[SWF(backgroundColor = "#FFFFFF", frameRate = "60", width = "1000", height = "500")]
+	[SWF(frameRate = "60", width = "1000", height = "500")]
+	//[SWF(frameRate = "60", width = "800", height = "400")]
 	[Frame(factoryClass="Preloader")]
 	
 	

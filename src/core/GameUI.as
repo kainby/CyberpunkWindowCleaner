@@ -151,7 +151,7 @@ package core {
 				Util.mute_toggle();
 				_show_ui_btn_count = 100;
 			} else if (FlxG.keys.justPressed("P")) {
-				Util.more_games();
+				Util.more_games(false);
 				_show_ui_btn_count = 100;
 			}
 			

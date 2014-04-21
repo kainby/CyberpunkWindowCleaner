@@ -1,6 +1,7 @@
 package  
 {
 	import org.flixel.FlxButton;
+	import org.flixel.FlxCamera;
 	import org.flixel.FlxGame;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
@@ -20,7 +21,6 @@ package
 		
 		public function MainMenu() {
 			
-			
 			add(new FlxSprite(0, 0, Resource.IMPORT_TITLE));
 			add(new FlxSprite(Util.WID * 0.82, Util.HEI * 0.02, Resource.IMPORT_MAIN_MUTE_BUTTON));
 			//add(new FlxSprite(Util.WID * 0.82, Util.HEI * 0.145, Resource.IMPORT_MAIN_MENU_MORE_GAMES));
@@ -33,6 +33,10 @@ package
 			_fadeout.makeGraphic(Util.WID, Util.HEI, 0xFF000000);
 			_fadeout.alpha = 0;
 			Util.play_bgm(Resource.BGM_MAIN);
+		}
+		
+		public override function create():void {
+			Util.zoom_camera();
 		}
 		
 		public override function update():void {

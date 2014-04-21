@@ -58,6 +58,8 @@ package {
 		public override function create():void {
 			super.create();
 			
+			Util.zoom_camera();
+			
 			_scene_list = Vector.<Scene>([
 				//new Floor4Scene(this),
 				new GroundFloorScene(this), 

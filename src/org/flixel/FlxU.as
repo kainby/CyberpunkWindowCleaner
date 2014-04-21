@@ -1,5 +1,7 @@
 package org.flixel
 {
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.utils.getDefinitionByName;
@@ -14,9 +16,21 @@ package org.flixel
 		 * 
 		 * @param	URL		The address of the web page.
 		 */
-		static public function openURL(URL:String):void
+		static public function openURL(URL:String, click:Boolean = true):void
 		{
-			navigateToURL(new URLRequest(URL), "_blank");
+			if (click) {
+				var evt = function(e:MouseEvent) {
+					navigateToURL(new URLRequest(URL));
+					FlxG.stage.removeEventListener(MouseEvent.CLICK, evt);
+				};
+				FlxG.stage.addEventListener(MouseEvent.CLICK, evt);
+			} else {
+				var evt = function(e:KeyboardEvent) {
+					navigateToURL(new URLRequest(URL));
+					FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, evt);
+				};
+				FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, evt);
+			}
 		}
 		
 		/**

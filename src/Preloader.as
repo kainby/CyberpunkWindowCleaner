@@ -4,6 +4,8 @@ package{
 	import flash.display.*;
 	import flash.events.*;
 	import flash.ui.*;
+	import flash.net.*;
+	
 	
 	public class Preloader extends FlxPreloader
 	{
@@ -21,20 +23,27 @@ package{
 		
 		override protected function create():void {
 			super.create();
-
-			adContainer.graphics.beginFill(0);
-			adContainer.graphics.drawRect(0, 0, 300, 250);
-			adContainer.graphics.endFill();
-
-			adContainer.width = Util.WID-200;
-			adContainer.height = Util.HEI-125;
-			adContainer.x = 100;
-			adContainer.y = 50;
 			
+				
+			Util.WID = stage.stageWidth;
+			Util.HEI = stage.stageHeight;
 			
 			if (Util.isUrl(["kongregate.com"],stage)) {
-				trace("kongregate.com no ads");
+				//adContainer.addChild(testAd);
+				//addChild(adContainer);
+				cont();
+				
 			} else {
+				
+				adContainer.graphics.beginFill(0);
+				adContainer.graphics.drawRect(0, 0, 300, 250);
+				adContainer.graphics.endFill();
+
+				adContainer.width = Util.WID-200;
+				adContainer.height = Util.HEI-125;
+				adContainer.x = 100;
+				adContainer.y = 50;
+				
 				adContainer.addChild(testAd);
 				addChild(adContainer);
 			}
@@ -52,10 +61,18 @@ package{
 			click.addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
 				cover.visible = true;
 				cont();
+				//navigateToURL(new URLRequest("http://www.ppllaayy.com/?utm_source=sponsorship&utm_campaign=windcleaner"));
+				
 			});
-			click.y = Util.HEI - click.height;
+			click.y = Util.HEI - click.height * (Util.WID / 1000);
+			
+			click.scaleX = click.scaleY = Util.WID / 1000;
+			
 			addChild(click);
 			addChild(cover);
+			
+			Util.WID = 1000;
+			Util.HEI = 500;
 		}
 		
 		var click:Sprite;
@@ -75,7 +92,8 @@ package{
 		
 		override protected function destroy():void {
 			super.destroy();
-			removeChild(adContainer);
+			if (adContainer.parent == this) removeChild(adContainer);
+			if (click.parent == this) removeChild(click);
 			
 		}
 		

@@ -19,9 +19,13 @@ package
 		}
 
 		public function hover(x:Number, y:Number, width:int, height:int):Boolean {
-		  var mx:int = FlxG.mouse.screenX;
-		  var my:int = FlxG.mouse.screenY;
-		  return ( (mx > x) && (mx < x + width) ) && ( (my > y) && (my < y + height) );
+			var mx:int = FlxG.mouse.screenX;
+			var my:int = FlxG.mouse.screenY;
+			
+			x -= (FlxG.stage.stageWidth-Util.WID)/2;
+			y -= (FlxG.stage.stageHeight-Util.HEI)/2;
+			
+			return ( (mx > x) && (mx < x + width) ) && ( (my > y) && (my < y + height) );
 		}
 
 		public function updateAnimationOnClick() {

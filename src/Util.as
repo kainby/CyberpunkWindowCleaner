@@ -48,15 +48,17 @@ package  {
 			return k1;
 		}
 		
-		public static function more_games():void {
-			//top fucking kek
-			var url:String = "http://www.ppllaayy.com/?utm_source=sponsorship&utm_campaign=windcleaner";
-			try {
-				ExternalInterface.call('(function (){var f = document.createElement("form");document.body.appendChild(f);f.style.display="none";f.setAttribute("target","_blank");f.setAttribute("method","POST");f.setAttribute("action","'+url+'");f.submit(); })()');
-			} catch (e:Error) {
-				var request = new URLRequest(url);
-				navigateToURL(request,"_self");
-			}
+		public static function zoom_camera():void {
+			FlxG.camera.zoom = FlxG.stage.stageWidth / 1000;
+			FlxG.camera.x = (FlxG.stage.stageWidth-Util.WID)/2;
+			FlxG.camera.y = (FlxG.stage.stageHeight - Util.HEI) / 2;
+			FlxG.camera.antialiasing = true;
+		}
+		
+		public static function more_games(click:Boolean = true):void {
+			//navigateToURL(new URLRequest("http://www.flashegames.net/"));
+			//navigateToURL(new URLRequest("http://www.ppllaayy.com/?utm_source=sponsorship&utm_campaign=windcleaner"),"_self");
+			FlxU.openURL("http://www.ppllaayy.com/?utm_source=sponsorship&utm_campaign=windcleaner",click);
 		}
 		
 		public static function float_random(min:Number, max:Number):Number {
